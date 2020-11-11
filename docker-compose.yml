@@ -4,9 +4,9 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    command: --default-authentication-plugin=mysql_native_password
     ports:
       - "4306:3306"
-    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -14,25 +14,41 @@ services:
     build: .
     command: >
       bash -c "rm -f tmp/pids/server.pid
-      && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      && bundle exec puma -C config/puma.rb"
     tty: true
     stdin_open: true
     volumes:
       - .:/sparkle
-    ports:
-      - "3000:3000"
+      - public-data:/sparkle/public
+      - tmp-data:/sparkle/tmp
+      - log-data:/sparkle/log
     depends_on:
       - db
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    volumes:
+      - public-data:/sparkle/public
+      - tmp-data:/sparkle/tmp
+    depends_on:
+      - api
 
   frontend:
     build: ./frontend
     command: sh -c "yarn start"
     tty: true
     stdin_open: true
-    volumes:
-      - ./frontend:/frontend
     ports:
       - "8000:3000"
+    volumes:
+      - ./frontend:/frontend
+    depends_on:
+      - nginx
 
 volumes:
   mysql-data:
+  public-data:
+  tmp-data:
+  log-data:

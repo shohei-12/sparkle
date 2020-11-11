@@ -36,7 +36,7 @@ const SignUp: React.FC = () => {
   const signUp = () => {
     axios({
       method: "POST",
-      url: "http://localhost:3000/users",
+      url: "http://localhost:80/users",
       data: { name: name, email: email },
     })
       .then(() => {})
