@@ -57,6 +57,7 @@ GEM
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
     ast (2.4.1)
+    bcrypt (3.1.16)
     bootsnap (1.5.0)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -206,6 +207,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
   dotenv-rails
@@ -222,7 +224,6 @@ DEPENDENCIES
   rubocop-rspec
   spring
   spring-watcher-listen (~> 2.0.0)
-  tzinfo-data
 
 RUBY VERSION
    ruby 2.7.2p137
