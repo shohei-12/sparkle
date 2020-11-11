@@ -16,7 +16,7 @@ type Props = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextInput: React.FC<Props> = (props) => {
+const TextInput: React.FC<Props> = React.memo((props) => {
   return (
     <TextField
       fullWidth={props.fullWidth}
@@ -34,6 +34,6 @@ const TextInput: React.FC<Props> = (props) => {
       onChange={props.onChange}
     />
   );
-};
+});
 
 export default TextInput;

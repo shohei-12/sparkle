@@ -7,7 +7,7 @@ type Props = {
   onClick: () => any;
 };
 
-const SecondaryButton: React.FC<Props> = (props) => {
+const SecondaryButton: React.FC<Props> = React.memo((props) => {
   const handleSubmit = useCallback(() => {
     props.onClick();
   }, [props]);
@@ -22,6 +22,6 @@ const SecondaryButton: React.FC<Props> = (props) => {
       {props.text}
     </Button>
   );
-};
+});
 
 export default SecondaryButton;
