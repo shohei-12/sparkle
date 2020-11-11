@@ -57,7 +57,12 @@ const SignUp: React.FC = () => {
     axios({
       method: "POST",
       url: "http://localhost:80/users",
-      data: { name: name, email: email },
+      data: {
+        name: name,
+        email: email,
+        password: password,
+        password_confirmation: confirmPassword,
+      },
     })
       .then(() => {})
       .catch((error) => {
