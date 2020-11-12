@@ -22,6 +22,7 @@ const SignUp: React.FC = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [duplicateEmail, setDuplicateEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -64,7 +65,11 @@ const SignUp: React.FC = () => {
         password_confirmation: confirmPassword,
       },
     })
-      .then(() => {})
+      .then((result) => {
+        if (result) {
+          setDuplicateEmail(result.data.email);
+        }
+      })
       .catch((error) => {
         throw new Error(error);
       });
@@ -75,7 +80,7 @@ const SignUp: React.FC = () => {
       <h2>新規ユーザー登録</h2>
       <TextInput
         fullWidth={true}
-        label="ユーザー名（10文字以内）"
+        label="ユーザー名（20文字以内）"
         multiline={false}
         required={true}
         rows="1"
@@ -84,8 +89,8 @@ const SignUp: React.FC = () => {
         inputRef={register({
           required: "入力必須です。",
           maxLength: {
-            value: 10,
-            message: "10文字以内で入力してください。",
+            value: 20,
+            message: "20文字以内で入力してください。",
           },
         })}
         error={Boolean(errors.name)}
@@ -106,14 +111,25 @@ const SignUp: React.FC = () => {
             value: /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/,
             message: "メールアドレスの形式が正しくありません。",
           },
+          validate: (value) =>
+            value !== duplicateEmail ||
+            "このメールアドレスはすでに存在します。",
         })}
-        error={Boolean(errors.email)}
-        helperText={errors.email && errors.email.message}
+        error={
+          Boolean(errors.email) ||
+          (Boolean(duplicateEmail) && email === duplicateEmail)
+        }
+        helperText={
+          (errors.email && errors.email.message) ||
+          (duplicateEmail &&
+            email === duplicateEmail &&
+            "このメールアドレスはすでに存在します。")
+        }
         onChange={inputEmail}
       />
       <TextInput
         fullWidth={true}
-        label="パスワード"
+        label="パスワード（6文字以上）"
         multiline={false}
         required={true}
         rows="1"
@@ -135,7 +151,7 @@ const SignUp: React.FC = () => {
         helperText={
           errors.password
             ? errors.password.message
-            : "6文字以上で入力してください。半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。"
+            : "半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。"
         }
         onChange={inputPassword}
       />
@@ -164,7 +180,7 @@ const SignUp: React.FC = () => {
       <SecondaryButton
         text="登録する"
         disabled={name && email && password && confirmPassword ? false : true}
-        onClick={handleSubmit(() => signUp())}
+        onClick={handleSubmit(signUp)}
       />
     </div>
   );
