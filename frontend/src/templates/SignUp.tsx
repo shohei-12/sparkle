@@ -107,6 +107,10 @@ const SignUp: React.FC = () => {
         name="email"
         inputRef={register({
           required: "入力必須です。",
+          maxLength: {
+            value: 256,
+            message: "256文字以内で入力してください。",
+          },
           pattern: {
             value: /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/,
             message: "メールアドレスの形式が正しくありません。",
