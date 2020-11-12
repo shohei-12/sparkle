@@ -11,7 +11,7 @@ type Props = {
   name: string;
   inputRef: any;
   error: boolean;
-  helperText: string | undefined;
+  helperText: string | false | undefined;
   disabled?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
