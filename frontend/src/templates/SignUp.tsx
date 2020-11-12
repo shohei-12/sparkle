@@ -112,7 +112,7 @@ const SignUp: React.FC = () => {
             message: "256文字以内で入力してください。",
           },
           pattern: {
-            value: /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/,
+            value: /^[\w+.-]+@[a-z\d.-]+\.[a-z]+$/i,
             message: "メールアドレスの形式が正しくありません。",
           },
           validate: (value) =>
@@ -146,7 +146,7 @@ const SignUp: React.FC = () => {
             message: "6文字以上で入力してください。",
           },
           pattern: {
-            value: /^[a-zA-Z0-9_-]+$/,
+            value: /^[\w-]+$/,
             message:
               "半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。",
           },
