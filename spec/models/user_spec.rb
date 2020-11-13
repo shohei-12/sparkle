@@ -107,6 +107,7 @@ RSpec.describe User, type: :model do
           'gal^e3'
         ].each do |invalid_password|
           user1.password = invalid_password
+          user1.password_confirmation = invalid_password
           expect(user1.valid?).to eq false
         end
       end
