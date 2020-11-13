@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when over 256 characters' do
-      before { user1.email = 'a' * 245 + '@example.com' }
+      before { user1.email = "#{'a' * 245}@example.com" }
 
       it 'return false' do
         expect(user1.valid?).to eq false

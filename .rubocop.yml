@@ -13,6 +13,10 @@ AllCops:
     - "tmp/**/*"
     - "vendor/**/*"
 
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
 Rails:
   Enabled: true
 
@@ -20,4 +24,10 @@ Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
   Enabled: false
