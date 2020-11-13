@@ -44,8 +44,6 @@ services:
       - "8000:3000"
     volumes:
       - ./frontend:/frontend
-    depends_on:
-      - nginx
 
 volumes:
   mysql-data:

@@ -1,5 +1,37 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
+RSpec.describe 'Users', type: :request do
+  describe 'POST /users' do
+    context 'when valid user' do
+      before do
+        @valid_user = {
+          name: 'test',
+          email: 'test@example.com',
+          password: 'password',
+          password_confirmation: 'password'
+        }
+      end
 
+      it 'sign up new user' do
+        expect { post '/users', params: @valid_user }.to change(User, :count).by(1)
+        expect(response.status).to eq 204
+      end
+    end
+
+    context 'when invalid user' do
+      before do
+        @invalid_user = {
+          name: '',
+          email: 'test@example.com',
+          password: 'password',
+          password_confirmation: 'password'
+        }
+      end
+
+      it 'do not sign up user' do
+        expect { post '/users', params: @invalid_user }.to change(User, :count).by(0)
+        expect(response.status).to eq 200
+      end
+    end
+  end
 end
