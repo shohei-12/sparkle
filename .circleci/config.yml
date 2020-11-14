@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.7.2-node-browsers
         environment:
-          - RAILS_ENV: "test"
+          RAILS_ENV: test
       - image: circleci/mysql:8.0
         command: [--default-authentication-plugin=mysql_native_password]
         environment:
@@ -24,20 +24,9 @@ jobs:
           name: install dependencies
           command: bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
-          paths:
-            - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-      - restore_cache:
-          keys:
-            - v1-yarn-{{ checksum "yarn.lock" }}
-            - v1-yarn-
-      - run:
-          name: install yarn
-          command: yarn install --cache-folder ~/.cache/yarn
-      - save_cache:
           paths:
-            - ~/.cache/yarn
-          key: v1-yarn-{{ checksum "yarn.lock" }}
+            - vendor/bundle
       - run: mv config/database.yml.ci config/database.yml
       - run: bundle exec rails db:create
       - run: bundle exec rails db:schema:load
@@ -46,18 +35,4 @@ jobs:
           command: bundle exec rubocop
       - run:
           name: RSpec
-          command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
-            bundle exec rspec \
-              --format progress \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+          command: bundle exec rspec
