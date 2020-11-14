@@ -27,9 +27,15 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - run: mv config/database.yml.ci config/database.yml
-      - run: bundle exec rails db:create
-      - run: bundle exec rails db:schema:load
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
+      - run:
+          name: Setup DB
+          command: |
+            mv config/database.yml.ci config/database.yml
+            bundle exec rails db:create
+            bundle exec rails db:schema:load
       - run:
           name: RuboCop
           command: bundle exec rubocop
