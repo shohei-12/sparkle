@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { push } from "connected-react-router";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -50,17 +51,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const DrawerMenu = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
   }, [setMobileOpen, mobileOpen]);
 
-  const closeLessThanMd = useCallback(() => {
-    if (window.innerWidth < 960) {
-      handleDrawerToggle();
-    }
-  }, [handleDrawerToggle]);
+  const closeLessThanMd = useCallback(
+    (path: string) => {
+      dispatch(push(path));
+      if (window.innerWidth < 960) {
+        handleDrawerToggle();
+      }
+    },
+    [dispatch, handleDrawerToggle]
+  );
 
   const notSignInList = [
     {
@@ -76,12 +82,14 @@ const DrawerMenu = () => {
       <Divider />
       <List>
         {notSignInList.map((item, index) => (
-          <Link key={index} to={item.path}>
-            <ListItem button onClick={closeLessThanMd}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          </Link>
+          <ListItem
+            key={index}
+            button
+            onClick={() => closeLessThanMd(item.path)}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
         ))}
       </List>
     </div>
@@ -101,9 +109,9 @@ const DrawerMenu = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Link to="/">
-            <Typography variant="h6">Sparkle</Typography>
-          </Link>
+          <Typography variant="h6" onClick={() => dispatch(push("/"))}>
+            Sparkle
+          </Typography>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="navigation">

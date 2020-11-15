@@ -1,8 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { DrawerMenu } from "./components/Drawer";
-import { SignUp } from "./templates";
+import Router from "./Router";
 import "./assets/style.css";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,14 +19,12 @@ const App: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Router>
+    <>
       <DrawerMenu />
       <main className={classes.main}>
-        <Switch>
-          <Route exact path="/signup" component={SignUp} />
-        </Switch>
+        <Router />
       </main>
-    </Router>
+    </>
   );
 };
 
