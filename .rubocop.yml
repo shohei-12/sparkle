@@ -20,14 +20,23 @@ Metrics/BlockLength:
 Rails:
   Enabled: true
 
+Rails/Validation:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
 RSpec/ExampleLength:
   Enabled: false
 
 RSpec/MultipleExpectations:
+  Enabled: false
+
+ClassAndModuleChildren:
   Enabled: false
