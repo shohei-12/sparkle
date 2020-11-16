@@ -1,6 +1,6 @@
 export type UserState = {
   isSignedIn: boolean;
-  uid: string;
+  id: string;
   name: string;
   email: string;
 };
