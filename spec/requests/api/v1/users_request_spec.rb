@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe 'Users', type: :request do
-  describe 'POST /users' do
+RSpec.describe 'Api::V1::Users', type: :request do
+  describe 'POST /api/v1/auth' do
     context 'when valid user' do
       let(:valid_user) do
         {
@@ -13,7 +13,7 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'sign up new user' do
-        expect { post '/v1/auth', params: valid_user }.to change(User, :count).by(1)
+        expect { post '/api/v1/auth', params: valid_user }.to change(User, :count).by(1)
         expect(response.status).to eq 200
       end
     end
@@ -29,7 +29,7 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'do not sign up user' do
-        expect { post '/v1/auth', params: invalid_user }.to change(User, :count).by(0)
+        expect { post '/api/v1/auth', params: invalid_user }.to change(User, :count).by(0)
         expect(response.status).to eq 422
       end
     end
