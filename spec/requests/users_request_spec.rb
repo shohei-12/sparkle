@@ -13,8 +13,8 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'sign up new user' do
-        expect { post '/users', params: valid_user }.to change(User, :count).by(1)
-        expect(response.status).to eq 204
+        expect { post '/v1/auth', params: valid_user }.to change(User, :count).by(1)
+        expect(response.status).to eq 200
       end
     end
 
@@ -29,8 +29,8 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'do not sign up user' do
-        expect { post '/users', params: invalid_user }.to change(User, :count).by(0)
-        expect(response.status).to eq 200
+        expect { post '/v1/auth', params: invalid_user }.to change(User, :count).by(0)
+        expect(response.status).to eq 422
       end
     end
   end
