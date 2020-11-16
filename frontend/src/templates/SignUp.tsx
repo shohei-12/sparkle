@@ -57,21 +57,24 @@ const SignUp: React.FC = () => {
   const signUp = () => {
     axios({
       method: "POST",
-      url: "http://localhost:80/users",
+      url: "http://localhost:80/v1/auth",
       data: {
-        name: name,
-        email: email,
-        password: password,
+        name,
+        email,
+        password,
         password_confirmation: confirmPassword,
       },
     })
-      .then((result) => {
-        if (result) {
-          setDuplicateEmail(result.data.email);
-        }
-      })
+      .then(() => {})
       .catch((error) => {
-        throw new Error(error);
+        const errorData = error.response.data;
+        if (
+          errorData.errors.full_messages.includes(
+            "Email has already been taken"
+          )
+        ) {
+          setDuplicateEmail(errorData.data.email);
+        }
       });
   };
 

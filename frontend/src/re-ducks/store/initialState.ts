@@ -2,7 +2,7 @@ import { UserState } from "../users/types";
 
 const initialUserState: UserState = {
   isSignedIn: false,
-  uid: "",
+  id: "",
   name: "",
   email: "",
 };
