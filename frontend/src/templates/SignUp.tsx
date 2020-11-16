@@ -57,7 +57,7 @@ const SignUp: React.FC = () => {
   const signUp = () => {
     axios({
       method: "POST",
-      url: "http://localhost:80/v1/auth",
+      url: "http://localhost:80/api/v1/auth",
       data: {
         name,
         email,

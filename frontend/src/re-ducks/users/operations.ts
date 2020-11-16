@@ -6,7 +6,7 @@ export const signIn = (email: string, password: string) => {
   return async (dispatch: any) => {
     axios({
       method: "POST",
-      url: "http://localhost:80/v1/auth/sign_in",
+      url: "http://localhost:80/api/v1/auth/sign_in",
       data: {
         email,
         password,
