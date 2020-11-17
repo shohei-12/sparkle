@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
+import { DrawerMenuListItem } from ".";
+import { getIsSignedIn } from "../../re-ducks/users/selectors";
+import { Store } from "../../re-ducks/store/types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -9,9 +12,6 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -52,21 +52,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const DrawerMenu = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: Store) => state);
+  const isSignedIn = getIsSignedIn(selector);
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
   }, [setMobileOpen, mobileOpen]);
 
-  const closeLessThanMd = useCallback(
-    (path: string) => {
-      dispatch(push(path));
-      if (window.innerWidth < 960) {
-        handleDrawerToggle();
-      }
-    },
-    [dispatch, handleDrawerToggle]
-  );
+  const goTop = useCallback(() => {
+    dispatch(push("/"));
+  }, [dispatch]);
 
   const notSignInList = [
     {
@@ -81,16 +77,21 @@ const DrawerMenu = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {notSignInList.map((item, index) => (
-          <ListItem
-            key={index}
-            button
-            onClick={() => closeLessThanMd(item.path)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
+        {isSignedIn ? (
+          <></>
+        ) : (
+          <>
+            {notSignInList.map((item, index) => (
+              <DrawerMenuListItem
+                key={index}
+                text={item.text}
+                icon={item.icon}
+                path={item.path}
+                handleDrawerToggle={handleDrawerToggle}
+              />
+            ))}
+          </>
+        )}
       </List>
     </div>
   );
@@ -109,7 +110,7 @@ const DrawerMenu = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" onClick={() => dispatch(push("/"))}>
+          <Typography className="pointer-h" variant="h6" onClick={goTop}>
             Sparkle
           </Typography>
         </Toolbar>
