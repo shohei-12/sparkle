@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { SecondaryButton, TextInput } from "../components/UIkit";
+import { signIn } from "../re-ducks/users/operations";
 
 type Inputs = {
   name: string;
@@ -19,6 +21,8 @@ const SignUp: React.FC = () => {
       confirmPassword: "",
     },
   });
+
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -65,7 +69,9 @@ const SignUp: React.FC = () => {
         password_confirmation: confirmPassword,
       },
     })
-      .then(() => {})
+      .then(() => {
+        dispatch(signIn(email, password));
+      })
       .catch((error) => {
         const errorData = error.response.data;
         if (
