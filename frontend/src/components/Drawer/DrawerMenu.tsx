@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { DrawerMenuListItem } from ".";
 import { getIsSignedIn } from "../../re-ducks/users/selectors";
+import { signOut } from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,7 +12,11 @@ import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -64,6 +69,13 @@ const DrawerMenu = () => {
     dispatch(push("/"));
   }, [dispatch]);
 
+  const dispatchSignOut = useCallback(() => {
+    dispatch(signOut());
+    if (window.innerWidth < 960) {
+      handleDrawerToggle();
+    }
+  }, [dispatch, handleDrawerToggle]);
+
   const notSignInList = [
     {
       text: "ユーザーの登録",
@@ -78,7 +90,14 @@ const DrawerMenu = () => {
       <Divider />
       <List>
         {isSignedIn ? (
-          <></>
+          <List>
+            <ListItem button onClick={dispatchSignOut}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="ログアウト" />
+            </ListItem>
+          </List>
         ) : (
           <>
             {notSignInList.map((item, index) => (
