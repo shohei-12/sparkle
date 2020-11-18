@@ -12,6 +12,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -76,6 +77,14 @@ const DrawerMenu = () => {
     }
   }, [dispatch, handleDrawerToggle]);
 
+  const signInList = [
+    {
+      text: "ユーザーの編集",
+      icon: <EditIcon />,
+      path: "/user/edit",
+    },
+  ];
+
   const notSignInList = [
     {
       text: "ユーザーの登録",
@@ -90,14 +99,23 @@ const DrawerMenu = () => {
       <Divider />
       <List>
         {isSignedIn ? (
-          <List>
+          <>
+            {signInList.map((item, index) => (
+              <DrawerMenuListItem
+                key={index}
+                text={item.text}
+                icon={item.icon}
+                path={item.path}
+                handleDrawerToggle={handleDrawerToggle}
+              />
+            ))}
             <ListItem button onClick={dispatchSignOut}>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
               <ListItemText primary="ログアウト" />
             </ListItem>
-          </List>
+          </>
         ) : (
           <>
             {notSignInList.map((item, index) => (

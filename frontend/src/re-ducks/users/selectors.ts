@@ -9,3 +9,13 @@ export const getIsSignedIn = createSelector(
 );
 
 export const getUserId = createSelector([usersSelector], (state) => state.id);
+
+export const getUserName = createSelector(
+  [usersSelector],
+  (state) => state.name
+);
+
+export const getUserEmail = createSelector(
+  [usersSelector],
+  (state) => state.email
+);
