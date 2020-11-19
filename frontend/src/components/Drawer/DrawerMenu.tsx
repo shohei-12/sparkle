@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { DrawerMenuListItem } from ".";
 import { getIsSignedIn } from "../../re-ducks/users/selectors";
-import { signOut } from "../../re-ducks/users/operations";
+import { signOut, deleteUser } from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import WarningIcon from "@material-ui/icons/Warning";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -77,6 +78,15 @@ const DrawerMenu = () => {
     }
   }, [dispatch, handleDrawerToggle]);
 
+  const dispatchDeleteUser = useCallback(() => {
+    if (window.confirm("アカウントを削除しますか？")) {
+      dispatch(deleteUser());
+      if (window.innerWidth < 960) {
+        handleDrawerToggle();
+      }
+    }
+  }, [dispatch, handleDrawerToggle]);
+
   const signInList = [
     {
       text: "ユーザーの編集",
@@ -90,6 +100,11 @@ const DrawerMenu = () => {
       text: "ユーザーの登録",
       icon: <PersonAddIcon />,
       path: "/signup",
+    },
+    {
+      text: "ログイン",
+      icon: <ExitToAppIcon />,
+      path: "/signin",
     },
   ];
 
@@ -114,6 +129,12 @@ const DrawerMenu = () => {
                 <ExitToAppIcon />
               </ListItemIcon>
               <ListItemText primary="ログアウト" />
+            </ListItem>
+            <ListItem button onClick={dispatchDeleteUser}>
+              <ListItemIcon>
+                <WarningIcon />
+              </ListItemIcon>
+              <ListItemText primary="アカウントの削除" />
             </ListItem>
           </>
         ) : (
