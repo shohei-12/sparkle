@@ -42,30 +42,46 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
     end
 
     context 'when user is valid' do
-      let(:valid_user) do
-        { name: 'user1 update', email: 'user1update@example.com' }
+      let(:valid_data) do
+        {
+          name: 'user1update',
+          email: 'user1update@example.com',
+          password: 'passwordupdate',
+          password_confirmation: 'passwordupdate',
+          current_password: 'password'
+        }
       end
 
       it 'update user' do
-        update_user(valid_user, @token)
+        update_user(valid_data, @token)
+        expect(response.status).to eq 200
         @user1.reload
-        expect(@user1.name).to eq 'user1 update'
+        expect(@user1.name).to eq 'user1update'
         expect(@user1.email).to eq 'user1update@example.com'
+        expect(sign_in({ email: 'user1update@example.com', password: 'passwordupdate' })).to be_truthy
         expect(response.status).to eq 200
       end
     end
 
     context 'when user is invalid' do
-      let(:invalid_user) do
-        { name: '', email: '' }
+      let(:invalid_data) do
+        {
+          name: '',
+          email: '',
+          password: '',
+          password_confirmation: '',
+          current_password: ''
+        }
       end
 
       it 'not update user' do
-        update_user(invalid_user, @token)
+        update_user(invalid_data, @token)
+        expect(response.status).to eq 422
         @user1.reload
         expect(@user1.name).to eq 'user1'
         expect(@user1.email).to eq 'user1@example.com'
-        expect(response.status).to eq 422
+        expect(sign_in({ email: 'user1@example.com', password: 'password' })).to be_truthy
+        expect(response.status).to eq 200
       end
     end
   end

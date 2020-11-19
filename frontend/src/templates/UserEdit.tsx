@@ -10,6 +10,8 @@ import { updateUserAction } from "../re-ducks/users/actions";
 type Inputs = {
   name: string;
   email: string;
+  password: string;
+  confirmPassword: string;
 };
 
 const UserEdit: React.FC = () => {
@@ -22,12 +24,17 @@ const UserEdit: React.FC = () => {
     defaultValues: {
       name: uname,
       email: uemail,
+      password: "",
+      confirmPassword: "",
     },
   });
 
   const [name, setName] = useState(uname);
   const [email, setEmail] = useState(uemail);
   const [duplicateEmail, setDuplicateEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState<string | boolean>("");
 
   const inputName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +50,27 @@ const UserEdit: React.FC = () => {
     [setEmail]
   );
 
+  const inputPassword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value);
+    },
+    [setPassword]
+  );
+
+  const inputConfirmPassword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setConfirmPassword(event.target.value);
+    },
+    [setConfirmPassword]
+  );
+
+  const inputCurrentPassword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCurrentPassword(event.target.value);
+    },
+    [setCurrentPassword]
+  );
+
   const updateUser = () => {
     axios({
       method: "PUT",
@@ -50,6 +78,9 @@ const UserEdit: React.FC = () => {
       data: {
         name,
         email,
+        password,
+        password_confirmation: confirmPassword,
+        current_password: currentPassword,
       },
       params: {
         uid: localStorage.getItem("uid"),
@@ -69,6 +100,13 @@ const UserEdit: React.FC = () => {
           )
         ) {
           setDuplicateEmail(email);
+        }
+        if (
+          errorData.errors.full_messages.includes(
+            "Current password can't be blank"
+          )
+        ) {
+          setCurrentPassword(false);
         }
       });
   };
@@ -129,10 +167,75 @@ const UserEdit: React.FC = () => {
         }
         onChange={inputEmail}
       />
+      <TextInput
+        fullWidth={true}
+        label="パスワード"
+        multiline={false}
+        required={false}
+        rows="1"
+        type="password"
+        name="password"
+        inputRef={register({
+          minLength: {
+            value: 6,
+            message: "6文字以上で入力してください。",
+          },
+          pattern: {
+            value: /^[\w-]+$/,
+            message:
+              "半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。",
+          },
+        })}
+        error={Boolean(errors.password)}
+        helperText={errors.password && errors.password.message}
+        placeholder="パスワードを変更しない場合は空白にしてください"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={inputPassword}
+      />
+      <TextInput
+        fullWidth={true}
+        label="パスワード（確認）"
+        multiline={false}
+        required={false}
+        rows="1"
+        type="password"
+        name="confirmPassword"
+        inputRef={register({
+          minLength: {
+            value: 6,
+            message: "6文字以上で入力してください。",
+          },
+          validate: (value) =>
+            value === password || "パスワードが一致しません。",
+        })}
+        error={Boolean(errors.confirmPassword)}
+        helperText={errors.confirmPassword && errors.confirmPassword.message}
+        placeholder="パスワードを変更しない場合は空白にしてください"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={inputConfirmPassword}
+      />
+      <TextInput
+        fullWidth={true}
+        label="現在のパスワード"
+        multiline={false}
+        required={true}
+        rows="1"
+        type="password"
+        name="currentPassword"
+        error={currentPassword === false ? true : false}
+        helperText={
+          currentPassword === false ? "パスワードが違います。" : undefined
+        }
+        onChange={inputCurrentPassword}
+      />
       <div className="space-m"></div>
       <SecondaryButton
         text="更新する"
-        disabled={name && email ? false : true}
+        disabled={name && email && currentPassword ? false : true}
         onClick={handleSubmit(updateUser)}
       />
     </div>

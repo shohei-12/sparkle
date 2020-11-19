@@ -9,10 +9,12 @@ type Props = {
   rows: string;
   type: string;
   name: string;
-  inputRef: any;
+  inputRef?: any;
   error: boolean;
   helperText: string | false | undefined;
   disabled?: boolean;
+  placeholder?: string;
+  InputLabelProps?: object;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -31,6 +33,8 @@ const TextInput: React.FC<Props> = React.memo((props) => {
       error={props.error}
       helperText={props.helperText}
       disabled={props.disabled}
+      placeholder={props.placeholder}
+      InputLabelProps={props.InputLabelProps}
       onChange={props.onChange}
     />
   );
