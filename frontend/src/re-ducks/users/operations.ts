@@ -84,3 +84,26 @@ export const signOut = () => {
       });
   };
 };
+
+export const deleteUser = () => {
+  return async (dispatch: any) => {
+    axios({
+      method: "DELETE",
+      url: "http://localhost:80/api/v1/auth",
+      params: {
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then(() => {
+        localStorage.removeItem("uid");
+        localStorage.removeItem("client");
+        localStorage.removeItem("access_token");
+        dispatch(signOutAction());
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  };
+};
