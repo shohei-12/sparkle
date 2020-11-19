@@ -79,7 +79,7 @@ const SignUp: React.FC = () => {
             "Email has already been taken"
           )
         ) {
-          setDuplicateEmail(errorData.data.email);
+          setDuplicateEmail(email);
         }
       });
   };

@@ -5,6 +5,7 @@ import axios from "axios";
 import { SecondaryButton, TextInput } from "../components/UIkit";
 import { getUserName, getUserEmail } from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
+import { updateUserAction } from "../re-ducks/users/actions";
 
 type Inputs = {
   name: string;
@@ -42,7 +43,35 @@ const UserEdit: React.FC = () => {
     [setEmail]
   );
 
-  const updateUser = () => {};
+  const updateUser = () => {
+    axios({
+      method: "PUT",
+      url: "http://localhost:80/api/v1/auth",
+      data: {
+        name,
+        email,
+      },
+      params: {
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then(() => {
+        localStorage.setItem("uid", email);
+        dispatch(updateUserAction({ name, email }));
+      })
+      .catch((error) => {
+        const errorData = error.response.data;
+        if (
+          errorData.errors.full_messages.includes(
+            "Email has already been taken"
+          )
+        ) {
+          setDuplicateEmail(email);
+        }
+      });
+  };
 
   return (
     <div className="wrap">
