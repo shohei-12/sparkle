@@ -4,7 +4,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
   before { create(:user1) }
 
   describe 'POST /api/v1/auth/sign_in' do
-    context 'when user exist' do
+    context 'when user exists' do
       let(:user) do
         {
           email: 'user1@example.com',
@@ -18,7 +18,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
       end
     end
 
-    context 'when user not exist' do
+    context 'when user does not exist' do
       let(:user) do
         {
           email: 'user1@example.com',
