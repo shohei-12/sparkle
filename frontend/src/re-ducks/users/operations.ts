@@ -67,7 +67,7 @@ export const signOut = () => {
     axios({
       method: "DELETE",
       url: "http://localhost:80/api/v1/auth/sign_out",
-      data: {
+      params: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
