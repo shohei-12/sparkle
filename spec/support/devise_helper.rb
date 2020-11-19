@@ -15,4 +15,8 @@ module DeviseHelpers
   def update_user(data, token)
     put '/api/v1/auth', params: data, headers: token
   end
+
+  def delete_user(token)
+    delete '/api/v1/auth', headers: token
+  end
 end

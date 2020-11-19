@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
   describe 'POST /api/v1/auth' do
-    context 'when valid user' do
+    context 'when user is valid' do
       let(:valid_user) do
         {
           name: 'test',
@@ -18,7 +18,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
       end
     end
 
-    context 'when invalid user' do
+    context 'when user is invalid' do
       let(:invalid_user) do
         {
           name: '',
@@ -41,7 +41,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
       @token = sign_in({ email: @user1.email, password: 'password' })
     end
 
-    context 'when valid user' do
+    context 'when user is valid' do
       let(:valid_user) do
         { name: 'user1 update', email: 'user1update@example.com' }
       end
@@ -55,7 +55,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
       end
     end
 
-    context 'when invalid user' do
+    context 'when user is invalid' do
       let(:invalid_user) do
         { name: '', email: '' }
       end
@@ -66,6 +66,29 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         expect(@user1.name).to eq 'user1'
         expect(@user1.email).to eq 'user1@example.com'
         expect(response.status).to eq 422
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/auth' do
+    before do
+      @user1 = create(:user1)
+      @token = sign_in({ email: @user1.email, password: 'password' })
+    end
+
+    context 'when token is valid' do
+      it 'delete user' do
+        expect { delete_user(@token) }.to change(User, :count).by(-1)
+        expect(response.status).to eq 200
+      end
+    end
+
+    context 'when token is invalid' do
+      before { @token['access_token'] = 'invalid' }
+
+      it 'not delete user' do
+        expect { delete_user(@token) }.to change(User, :count).by(0)
+        expect(response.status).to eq 404
       end
     end
   end
