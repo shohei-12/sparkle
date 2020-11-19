@@ -9,6 +9,10 @@ module DeviseHelpers
   end
 
   def sign_out(token)
-    delete '/api/v1/auth/sign_out', params: token
+    delete '/api/v1/auth/sign_out', headers: token
+  end
+
+  def update_user(data, token)
+    put '/api/v1/auth', params: data, headers: token
   end
 end
