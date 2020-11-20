@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { SecondaryButton, TextInput } from "../components/UIkit";
 import { signIn } from "../re-ducks/users/operations";
+import { flashAction } from "../re-ducks/flash/actions";
 
 type Inputs = {
   name: string;
@@ -70,6 +71,9 @@ const SignUp: React.FC = () => {
       },
     })
       .then(() => {
+        dispatch(
+          flashAction({ type: "success", msg: "アカウントを登録しました！" })
+        );
         dispatch(signIn(email, password));
       })
       .catch((error) => {
