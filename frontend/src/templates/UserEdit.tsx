@@ -98,6 +98,7 @@ const UserEdit: React.FC = () => {
       })
       .catch((error) => {
         const errorData = error.response.data;
+        console.log(errorData);
         if (
           errorData.errors.full_messages.includes(
             "Email has already been taken"
@@ -106,9 +107,7 @@ const UserEdit: React.FC = () => {
           setDuplicateEmail(email);
         }
         if (
-          errorData.errors.full_messages.includes(
-            "Current password can't be blank"
-          )
+          errorData.errors.full_messages.includes("Current password is invalid")
         ) {
           setCurrentPassword(false);
         }
