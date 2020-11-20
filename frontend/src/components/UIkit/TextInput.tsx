@@ -10,8 +10,8 @@ type Props = {
   type: string;
   name: string;
   inputRef?: any;
-  error: boolean;
-  helperText: string | false | undefined;
+  error?: boolean;
+  helperText?: string | false;
   disabled?: boolean;
   placeholder?: string;
   InputLabelProps?: object;
