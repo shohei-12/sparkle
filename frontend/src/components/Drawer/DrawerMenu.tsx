@@ -5,6 +5,8 @@ import { DrawerMenuListItem } from ".";
 import { getIsSignedIn } from "../../re-ducks/users/selectors";
 import { signOut, deleteUser } from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
+import { flashAction } from "../../re-ducks/flash/actions";
+import { getFlashMessageType } from "../../re-ducks/flash/selectors";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -61,6 +63,7 @@ const DrawerMenu = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const isSignedIn = getIsSignedIn(selector);
+  const type = getFlashMessageType(selector);
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -68,24 +71,27 @@ const DrawerMenu = () => {
   }, [setMobileOpen, mobileOpen]);
 
   const goTop = useCallback(() => {
+    type && dispatch(flashAction({ type: "", msg: "" }));
     dispatch(push("/"));
-  }, [dispatch]);
+  }, [dispatch, type]);
 
   const dispatchSignOut = useCallback(() => {
+    type && dispatch(flashAction({ type: "", msg: "" }));
     dispatch(signOut());
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
-  }, [dispatch, handleDrawerToggle]);
+  }, [dispatch, handleDrawerToggle, type]);
 
   const dispatchDeleteUser = useCallback(() => {
     if (window.confirm("アカウントを削除しますか？")) {
+      type && dispatch(flashAction({ type: "", msg: "" }));
       dispatch(deleteUser());
       if (window.innerWidth < 960) {
         handleDrawerToggle();
       }
     }
-  }, [dispatch, handleDrawerToggle]);
+  }, [dispatch, handleDrawerToggle, type]);
 
   const signInList = [
     {
