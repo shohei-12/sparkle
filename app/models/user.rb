@@ -9,9 +9,8 @@ class User < ApplicationRecord
             uniqueness: true,
             format: { with: /\A[\w+.-]+@[a-z\d.-]+\.[a-z]+\z/i }
   validates :password,
-            presence: true,
+            presence: true, on: :create,
             length: { minimum: 6 },
-            format: { with: /\A[\w-]+\z/ },
-            on: :create
+            format: { with: /\A[\w-]+\z/ }
   validates_confirmation_of :password
 end

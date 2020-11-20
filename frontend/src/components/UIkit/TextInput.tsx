@@ -15,6 +15,7 @@ type Props = {
   disabled?: boolean;
   placeholder?: string;
   InputLabelProps?: object;
+  value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -35,6 +36,7 @@ const TextInput: React.FC<Props> = React.memo((props) => {
       disabled={props.disabled}
       placeholder={props.placeholder}
       InputLabelProps={props.InputLabelProps}
+      value={props.value}
       onChange={props.onChange}
     />
   );
