@@ -21,7 +21,7 @@ const UserEdit: React.FC = () => {
   const uname = getUserName(selector);
   const uemail = getUserEmail(selector);
 
-  const { register, handleSubmit, errors } = useForm<Inputs>({
+  const { register, handleSubmit, reset, errors } = useForm<Inputs>({
     defaultValues: {
       name: uname,
       email: uemail,
@@ -35,7 +35,8 @@ const UserEdit: React.FC = () => {
   const [duplicateEmail, setDuplicateEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [currentPassword, setCurrentPassword] = useState<string | boolean>("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [differentPassword, setDifferentPassword] = useState(false);
 
   const inputName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +91,8 @@ const UserEdit: React.FC = () => {
       },
     })
       .then(() => {
+        password && reset({ password: "", confirmPassword: "" });
+        setCurrentPassword("");
         dispatch(
           flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
         );
@@ -98,7 +101,6 @@ const UserEdit: React.FC = () => {
       })
       .catch((error) => {
         const errorData = error.response.data;
-        console.log(errorData);
         if (
           errorData.errors.full_messages.includes(
             "Email has already been taken"
@@ -109,7 +111,7 @@ const UserEdit: React.FC = () => {
         if (
           errorData.errors.full_messages.includes("Current password is invalid")
         ) {
-          setCurrentPassword(false);
+          setDifferentPassword(true);
         }
       });
   };
@@ -190,7 +192,11 @@ const UserEdit: React.FC = () => {
           },
         })}
         error={Boolean(errors.password)}
-        helperText={errors.password && errors.password.message}
+        helperText={
+          errors.password
+            ? errors.password.message
+            : "半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。"
+        }
         placeholder="パスワードを変更しない場合は空白にしてください"
         InputLabelProps={{
           shrink: true,
@@ -229,10 +235,9 @@ const UserEdit: React.FC = () => {
         rows="1"
         type="password"
         name="currentPassword"
-        error={currentPassword === false ? true : false}
-        helperText={
-          currentPassword === false ? "パスワードが違います。" : undefined
-        }
+        error={differentPassword ? true : false}
+        helperText={differentPassword ? "パスワードが違います。" : undefined}
+        value={currentPassword}
         onChange={inputCurrentPassword}
       />
       <div className="space-m"></div>
