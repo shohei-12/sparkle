@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
+import { Store } from "../../re-ducks/store/types";
+import { flashAction } from "../../re-ducks/flash/actions";
+import { getFlashMessageType } from "../../re-ducks/flash/selectors";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -14,13 +17,16 @@ type Props = {
 
 const DrawerMenuListItem: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
+  const selector = useSelector((state: Store) => state);
+  const type = getFlashMessageType(selector);
 
   const goPath = useCallback(() => {
+    type && dispatch(flashAction({ type: "", msg: "" }));
     dispatch(push(props.path));
     if (window.innerWidth < 960) {
       props.handleDrawerToggle();
     }
-  }, [dispatch, props]);
+  }, [dispatch, props, type]);
 
   return (
     <ListItem button onClick={goPath}>

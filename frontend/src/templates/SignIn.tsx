@@ -50,7 +50,7 @@ const SignIn: React.FC = () => {
       <SecondaryButton
         text="ログインする"
         disabled={email && password ? false : true}
-        onClick={() => dispatch(signIn(email, password))}
+        onClick={() => dispatch(signIn(email, password, false))}
       />
     </div>
   );

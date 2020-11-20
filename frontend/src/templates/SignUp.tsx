@@ -74,7 +74,7 @@ const SignUp: React.FC = () => {
         dispatch(
           flashAction({ type: "success", msg: "アカウントを登録しました！" })
         );
-        dispatch(signIn(email, password));
+        dispatch(signIn(email, password, true));
       })
       .catch((error) => {
         const errorData = error.response.data;

@@ -31,7 +31,7 @@ export const listenAuthState = () => {
   };
 };
 
-export const signIn = (email: string, password: string) => {
+export const signIn = (email: string, password: string, newUser: boolean) => {
   return async (dispatch: any) => {
     axios({
       method: "POST",
@@ -42,7 +42,8 @@ export const signIn = (email: string, password: string) => {
       },
     })
       .then((response) => {
-        dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
+        newUser ||
+          dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
         const responseData = response.data.data;
         const responseHeaders = response.headers;
         localStorage.setItem("uid", responseHeaders.uid);
