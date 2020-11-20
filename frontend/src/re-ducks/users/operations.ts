@@ -1,6 +1,7 @@
 import axios from "axios";
 import { push } from "connected-react-router";
 import { signInAction, signOutAction } from "./actions";
+import { flashAction } from "../flash/actions";
 
 export const listenAuthState = () => {
   return async (dispatch: any) => {
@@ -41,6 +42,7 @@ export const signIn = (email: string, password: string) => {
       },
     })
       .then((response) => {
+        dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
         const responseData = response.data.data;
         const responseHeaders = response.headers;
         localStorage.setItem("uid", responseHeaders.uid);
@@ -57,7 +59,12 @@ export const signIn = (email: string, password: string) => {
         dispatch(push("/"));
       })
       .catch(() => {
-        alert("入力されたメールアドレスまたはパスワードに誤りがあります。");
+        dispatch(
+          flashAction({
+            type: "error",
+            msg: "入力されたメールアドレスまたはパスワードに誤りがあります。",
+          })
+        );
       });
   };
 };
@@ -74,6 +81,7 @@ export const signOut = () => {
       },
     })
       .then(() => {
+        dispatch(flashAction({ type: "success", msg: "ログアウトしました！" }));
         localStorage.removeItem("uid");
         localStorage.removeItem("client");
         localStorage.removeItem("access_token");
@@ -97,6 +105,12 @@ export const deleteUser = () => {
       },
     })
       .then(() => {
+        dispatch(
+          flashAction({
+            type: "success",
+            msg: "アカウントを削除しました。またのご利用をお待ちしております。",
+          })
+        );
         localStorage.removeItem("uid");
         localStorage.removeItem("client");
         localStorage.removeItem("access_token");

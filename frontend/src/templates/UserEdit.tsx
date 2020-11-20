@@ -6,6 +6,7 @@ import { SecondaryButton, TextInput } from "../components/UIkit";
 import { getUserName, getUserEmail } from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
 import { updateUserAction } from "../re-ducks/users/actions";
+import { flashAction } from "../re-ducks/flash/actions";
 
 type Inputs = {
   name: string;
@@ -89,6 +90,9 @@ const UserEdit: React.FC = () => {
       },
     })
       .then(() => {
+        dispatch(
+          flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
+        );
         localStorage.setItem("uid", email);
         dispatch(updateUserAction({ name, email }));
       })

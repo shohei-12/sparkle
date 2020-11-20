@@ -3,7 +3,12 @@ import { Store } from "../store/types";
 
 const flashSelector = (state: Store) => state.flash;
 
-export const getFlashMsg = createSelector(
+export const getFlashMessage = createSelector(
   [flashSelector],
   (state) => state.msg
+);
+
+export const getFlashMessageType = createSelector(
+  [flashSelector],
+  (state) => state.type
 );

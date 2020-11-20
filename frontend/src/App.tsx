@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { DrawerMenu } from "./components/Drawer";
+import FlashMessage from "./components/FlashMessage";
 import Router from "./Router";
 import "./assets/style.css";
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
     <>
       <DrawerMenu />
       <main className={classes.main}>
+        <FlashMessage />
         <Router />
       </main>
     </>
