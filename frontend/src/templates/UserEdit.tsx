@@ -169,7 +169,7 @@ const UserEdit: React.FC = () => {
       />
       <TextInput
         fullWidth={true}
-        label="パスワード"
+        label="新しいパスワード"
         multiline={false}
         required={false}
         rows="1"
@@ -196,7 +196,7 @@ const UserEdit: React.FC = () => {
       />
       <TextInput
         fullWidth={true}
-        label="パスワード（確認）"
+        label="新しいパスワード（確認）"
         multiline={false}
         required={false}
         rows="1"
