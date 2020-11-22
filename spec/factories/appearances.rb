@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :appearance do
-    image { "MyString" }
+    image { 'MyString' }
     record { nil }
   end
 end
