@@ -1,4 +1,5 @@
 FROM ruby:2.7.2
+ENV TZ Asia/Tokyo
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   build-essential \
   nodejs \
