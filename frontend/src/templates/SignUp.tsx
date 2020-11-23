@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { SecondaryButton, TextInput } from "../components/UIkit";
+import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { signIn } from "../re-ducks/users/operations";
 import { flashAction } from "../re-ducks/flash/actions";
 
@@ -25,6 +25,7 @@ const SignUp: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const [profile, setProfile] = useState<string>("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [duplicateEmail, setDuplicateEmail] = useState("");
@@ -32,29 +33,29 @@ const SignUp: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const inputName = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setName(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setName(e.target.value);
     },
     [setName]
   );
 
   const inputEmail = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
     },
     [setEmail]
   );
 
   const inputPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
     },
     [setPassword]
   );
 
   const inputConfirmPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setConfirmPassword(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setConfirmPassword(e.target.value);
     },
     [setConfirmPassword]
   );
@@ -64,6 +65,7 @@ const SignUp: React.FC = () => {
       method: "POST",
       url: "http://localhost:80/api/v1/auth",
       data: {
+        profile,
         name,
         email,
         password,
@@ -91,6 +93,12 @@ const SignUp: React.FC = () => {
   return (
     <div className="wrap">
       <h2>新規ユーザー登録</h2>
+      <ImageField
+        text="プロフィール画像（任意）"
+        sheets={0}
+        profile={true}
+        setProfile={setProfile}
+      />
       <TextInput
         fullWidth={true}
         label="ユーザー名（20文字以内）"

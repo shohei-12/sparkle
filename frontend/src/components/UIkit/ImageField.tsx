@@ -69,6 +69,7 @@ type Props = {
   text: string;
   sheets: number;
   profile: boolean;
+  setProfile?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ImageField: React.FC<Props> = (props) => {
@@ -79,6 +80,7 @@ const ImageField: React.FC<Props> = (props) => {
     const imageFile = e.target.files;
     if (imageFile) {
       const imageUrl = URL.createObjectURL(imageFile[0]);
+      props.setProfile && props.setProfile(imageUrl);
       setImages((prev) => [...prev, imageUrl]);
     }
   };
