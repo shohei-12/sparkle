@@ -44,6 +44,6 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+gem 'carrierwave', '~> 2.0'
 gem 'devise'
 gem 'devise_token_auth'
-gem 'carrierwave', '~> 2.0'
