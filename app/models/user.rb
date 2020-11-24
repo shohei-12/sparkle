@@ -2,6 +2,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable
   include DeviseTokenAuth::Concerns::User
 
+  mount_uploader :profile, ProfileUploader
+
   validates :name, presence: true, length: { maximum: 20 }
   validates :email,
             presence: true,

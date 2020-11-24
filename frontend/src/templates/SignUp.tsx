@@ -25,7 +25,7 @@ const SignUp: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const [profile, setProfile] = useState<string>("");
+  const [profile, setProfile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [duplicateEmail, setDuplicateEmail] = useState("");
@@ -61,17 +61,18 @@ const SignUp: React.FC = () => {
   );
 
   const signUp = () => {
-    axios({
-      method: "POST",
-      url: "http://localhost:80/api/v1/auth",
-      data: {
-        profile,
-        name,
-        email,
-        password,
-        password_confirmation: confirmPassword,
-      },
-    })
+    const data = new FormData();
+    profile && data.append("profile", profile);
+    data.append("name", name);
+    data.append("email", email);
+    data.append("password", password);
+    data.append("password_confirmation", confirmPassword);
+    axios
+      .post("http://localhost:80/api/v1/auth", data, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
       .then(() => {
         dispatch(
           flashAction({ type: "success", msg: "アカウントを登録しました！" })
