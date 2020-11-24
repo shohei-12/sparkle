@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { DrawerMenuListItem } from ".";
-import { getIsSignedIn } from "../../re-ducks/users/selectors";
+import { getIsSignedIn, getUserProfile } from "../../re-ducks/users/selectors";
 import { signOut, deleteUser } from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
 import { flashAction } from "../../re-ducks/flash/actions";
@@ -63,6 +63,7 @@ const DrawerMenu = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const isSignedIn = getIsSignedIn(selector);
+  const profile = getUserProfile(selector);
   const type = getFlashMessageType(selector);
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -98,6 +99,11 @@ const DrawerMenu = () => {
       text: "ユーザーの編集",
       icon: <EditIcon />,
       path: "/user/edit",
+    },
+    {
+      text: "My Page",
+      icon: <img src={profile} alt="プロフィール画像" width="50" height="50" />,
+      path: "/user/details",
     },
   ];
 

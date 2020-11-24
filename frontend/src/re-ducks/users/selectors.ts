@@ -17,3 +17,8 @@ export const getUserEmail = createSelector(
   [usersSelector],
   (state) => state.email
 );
+
+export const getUserProfile = createSelector(
+  [usersSelector],
+  (state) => state.profile
+);
