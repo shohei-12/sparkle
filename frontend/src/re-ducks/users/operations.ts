@@ -22,6 +22,7 @@ export const listenAuthState = () => {
             id: String(responseData.id),
             name: responseData.name,
             email: responseData.email,
+            profile: responseData.profile,
           })
         );
       })
@@ -55,6 +56,7 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
             id: String(responseData.id),
             name: responseData.name,
             email: responseData.email,
+            profile: responseData.profile,
           })
         );
         dispatch(push("/"));

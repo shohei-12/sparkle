@@ -6,6 +6,7 @@ const initialUserState: UserState = {
   id: "",
   name: "",
   email: "",
+  profile: "",
 };
 
 const initialFlashState: FlashState = {

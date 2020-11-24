@@ -3,6 +3,7 @@ export type UserState = {
   id: string;
   name: string;
   email: string;
+  profile: string;
 };
 
 export type UserUpdate = {

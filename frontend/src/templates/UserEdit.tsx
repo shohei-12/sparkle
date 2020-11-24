@@ -39,36 +39,36 @@ const UserEdit: React.FC = () => {
   const [differentPassword, setDifferentPassword] = useState(false);
 
   const inputName = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setName(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setName(e.target.value);
     },
     [setName]
   );
 
   const inputEmail = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
     },
     [setEmail]
   );
 
   const inputPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
     },
     [setPassword]
   );
 
   const inputConfirmPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setConfirmPassword(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setConfirmPassword(e.target.value);
     },
     [setConfirmPassword]
   );
 
   const inputCurrentPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCurrentPassword(event.target.value);
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCurrentPassword(e.target.value);
     },
     [setCurrentPassword]
   );

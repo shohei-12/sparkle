@@ -19,6 +19,7 @@ export const signOutAction = () => {
       id: "",
       name: "",
       email: "",
+      profile: "",
     },
   };
 };
