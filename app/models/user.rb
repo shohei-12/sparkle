@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   mount_uploader :profile, ProfileUploader
 
+  has_many :records, dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 20 }
   validates :email,
             presence: true,

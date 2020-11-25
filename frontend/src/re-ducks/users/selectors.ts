@@ -8,6 +8,8 @@ export const getIsSignedIn = createSelector(
   (state) => state.isSignedIn
 );
 
+export const getUserId = createSelector([usersSelector], (state) => state.id);
+
 export const getUserName = createSelector(
   [usersSelector],
   (state) => state.name
