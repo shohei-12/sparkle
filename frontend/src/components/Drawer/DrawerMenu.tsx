@@ -14,7 +14,6 @@ import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import WarningIcon from "@material-ui/icons/Warning";
 import List from "@material-ui/core/List";
@@ -54,6 +53,11 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
+    },
+    profile: {
+      width: 30,
+      height: 30,
+      borderRadius: "50%",
     },
   })
 );
@@ -96,13 +100,14 @@ const DrawerMenu = () => {
 
   const signInList = [
     {
-      text: "ユーザーの編集",
-      icon: <EditIcon />,
-      path: "/user/edit",
-    },
-    {
       text: "My Page",
-      icon: <img src={profile} alt="プロフィール画像" width="50" height="50" />,
+      icon: (
+        <img
+          className={classes.profile}
+          src={`http://localhost${profile}`}
+          alt="プロフィール画像"
+        />
+      ),
       path: "/user/details",
     },
   ];
