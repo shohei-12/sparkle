@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const UserDetails = () => {
+const UserDetails: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
@@ -30,9 +30,11 @@ const UserDetails = () => {
   }, [dispatch]);
 
   const goDailyRecordPage = useCallback(
-    (value: any) => {
-      console.log(value);
-      dispatch(push("/daily-record"));
+    (date: Date) => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      dispatch(push(`/daily-record/${year}/${month}/${day}`));
     },
     [dispatch]
   );
