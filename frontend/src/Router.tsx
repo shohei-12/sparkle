@@ -15,7 +15,11 @@ const Router: React.FC = () => {
       <Route exact path="/signin" component={SignIn} />
       <Route exact path="/signup" component={SignUp} />
       <Auth>
-        <Route exact path="/daily-record" component={DailyRecord} />
+        <Route
+          exact
+          path="/daily-record/:year/:month/:day"
+          component={DailyRecord}
+        />
         <Route exact path="/user/details" component={UserDetails} />
         <Route exact path="/user/edit" component={UserEdit} />
       </Auth>
