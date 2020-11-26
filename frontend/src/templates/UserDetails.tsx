@@ -7,6 +7,7 @@ import { getUserName, getUserProfile } from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
 import { SecondaryButton } from "../components/UIkit";
 import "react-calendar/dist/Calendar.css";
+import NoProfile from "../assets/img/no-profile.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,7 +43,7 @@ const UserDetails: React.FC = () => {
       <h2>My Page</h2>
       <img
         className={classes.profile}
-        src={`http://localhost${profile}`}
+        src={profile ? `http://localhost${profile}` : NoProfile}
         alt="プロフィール画像"
       />
       <span>{name}</span>
