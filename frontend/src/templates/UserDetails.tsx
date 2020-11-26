@@ -11,8 +11,6 @@ import "react-calendar/dist/Calendar.css";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     profile: {
-      width: 200,
-      height: 200,
       borderRadius: "50%",
     },
   })
@@ -46,8 +44,6 @@ const UserDetails: React.FC = () => {
         className={classes.profile}
         src={`http://localhost${profile}`}
         alt="プロフィール画像"
-        width="100"
-        height="100"
       />
       <span>{name}</span>
       <SecondaryButton text="ユーザー情報を編集する" onClick={goUserEditPage} />

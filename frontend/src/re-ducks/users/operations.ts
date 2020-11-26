@@ -14,8 +14,8 @@ export const listenAuthState = () => {
         access_token: localStorage.getItem("access_token"),
       },
     })
-      .then((response) => {
-        const responseData = response.data.data;
+      .then((res) => {
+        const responseData = res.data.data;
         dispatch(
           signInAction({
             isSignedIn: true,
@@ -42,11 +42,11 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
         password,
       },
     })
-      .then((response) => {
+      .then((res) => {
         newUser ||
           dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
-        const responseData = response.data.data;
-        const responseHeaders = response.headers;
+        const responseData = res.data.data;
+        const responseHeaders = res.headers;
         localStorage.setItem("uid", responseHeaders.uid);
         localStorage.setItem("client", responseHeaders.client);
         localStorage.setItem("access_token", responseHeaders.access_token);

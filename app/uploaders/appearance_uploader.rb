@@ -1,9 +1,9 @@
-class ProfileUploader < CarrierWave::Uploader::Base
+class AppearanceUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
 
-  process resize_to_fit: [200, 200]
+  process resize_to_fit: [300, 400]
 
   # Choose what kind of storage to use for this uploader:
   storage :file
