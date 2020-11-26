@@ -75,19 +75,22 @@ type Props = {
 
 const ImageField: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<[File, string][]>([]);
 
   const preview = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files;
     if (imageFile) {
-      const imageUrl = URL.createObjectURL(imageFile[0]);
       props.setProfile && props.setProfile(imageFile[0]);
       props.setImages && props.setImages((prev) => [...prev, imageFile[0]]);
-      setImages((prev) => [...prev, imageUrl]);
+      const imageUrl = URL.createObjectURL(imageFile[0]);
+      setImages((prev) => [...prev, [imageFile[0], imageUrl]]);
     }
   };
 
-  const deletePreview = (image: string) => {
+  const deletePreview = async (image: [File, string]) => {
+    props.setProfile && props.setProfile(null);
+    props.setImages &&
+      props.setImages((prev) => prev.filter((ele) => ele !== image[0]));
     const result = images.filter((ele) => ele !== image);
     setImages(result);
   };
@@ -117,13 +120,13 @@ const ImageField: React.FC<Props> = (props) => {
                     " " +
                     classes.profile
                   }
-                  src={ele}
+                  src={ele[1]}
                   alt="プレビュー"
                 />
               ) : (
                 <img
                   className={classes.image + " " + classes.imageSize}
-                  src={ele}
+                  src={ele[1]}
                   alt="プレビュー"
                 />
               )}
