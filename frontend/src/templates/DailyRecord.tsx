@@ -15,7 +15,11 @@ const DailyRecord: React.FC = () => {
   const month = Number(window.location.pathname.split("/")[3]);
   const day = Number(window.location.pathname.split("/")[4]);
 
-  const [images, setImages] = useState<File[]>([]);
+  const [appearances, setAppearances] = useState<File[]>([]);
+  const [breakfasts, setBreakfasts] = useState<File[]>([]);
+  const [lunchs, setLunchs] = useState<File[]>([]);
+  const [dinners, setDinners] = useState<File[]>([]);
+  const [snacks, setSnacks] = useState<File[]>([]);
 
   const createRecord = useCallback(() => {
     axios({
@@ -30,10 +34,78 @@ const DailyRecord: React.FC = () => {
         const recordId = String(res.data.id);
         const data = new FormData();
         data.append("record_id", recordId);
-        for (const ele of images) {
+        for (const ele of appearances) {
           data.append("image", ele);
           await axios
             .post("http://localhost:80/api/v1/appearances", data, {
+              headers: {
+                "content-type": "multipart/form-data",
+              },
+            })
+            .then(() => {
+              data.delete("image");
+            })
+            .catch((error) => {
+              throw new Error(error);
+            });
+        }
+        data.append("eating_time_id", "1");
+        for (const ele of breakfasts) {
+          console.log(ele);
+          data.append("image", ele);
+          await axios
+            .post("http://localhost:80/api/v1/meals", data, {
+              headers: {
+                "content-type": "multipart/form-data",
+              },
+            })
+            .then(() => {
+              data.delete("image");
+            })
+            .catch((error) => {
+              throw new Error(error);
+            });
+        }
+        data.delete("eating_time_id");
+        data.append("eating_time_id", "2");
+        for (const ele of lunchs) {
+          data.append("image", ele);
+          await axios
+            .post("http://localhost:80/api/v1/meals", data, {
+              headers: {
+                "content-type": "multipart/form-data",
+              },
+            })
+            .then(() => {
+              data.delete("image");
+            })
+            .catch((error) => {
+              throw new Error(error);
+            });
+        }
+        data.delete("eating_time_id");
+        data.append("eating_time_id", "3");
+        for (const ele of dinners) {
+          data.append("image", ele);
+          await axios
+            .post("http://localhost:80/api/v1/meals", data, {
+              headers: {
+                "content-type": "multipart/form-data",
+              },
+            })
+            .then(() => {
+              data.delete("image");
+            })
+            .catch((error) => {
+              throw new Error(error);
+            });
+        }
+        data.delete("eating_time_id");
+        data.append("eating_time_id", "4");
+        for (const ele of snacks) {
+          data.append("image", ele);
+          await axios
+            .post("http://localhost:80/api/v1/meals", data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -51,7 +123,18 @@ const DailyRecord: React.FC = () => {
       .catch((error) => {
         throw new Error(error);
       });
-  }, [uid, year, month, day, images, dispatch]);
+  }, [
+    uid,
+    year,
+    month,
+    day,
+    appearances,
+    breakfasts,
+    lunchs,
+    dinners,
+    snacks,
+    dispatch,
+  ]);
 
   return (
     <div className="wrap">
@@ -60,12 +143,32 @@ const DailyRecord: React.FC = () => {
         text="見た目を記録する（最大5枚）"
         sheets={4}
         profile={false}
-        setImages={setImages}
+        setAppearances={setAppearances}
       />
-      <ImageField text="朝食を記録する（最大3枚）" sheets={2} profile={false} />
-      <ImageField text="昼食を記録する（最大3枚）" sheets={2} profile={false} />
-      <ImageField text="夕食を記録する（最大3枚）" sheets={2} profile={false} />
-      <ImageField text="間食を記録する（最大3枚）" sheets={2} profile={false} />
+      <ImageField
+        text="朝食を記録する（最大3枚）"
+        sheets={2}
+        profile={false}
+        setBreakfasts={setBreakfasts}
+      />
+      <ImageField
+        text="昼食を記録する（最大3枚）"
+        sheets={2}
+        profile={false}
+        setLunchs={setLunchs}
+      />
+      <ImageField
+        text="夕食を記録する（最大3枚）"
+        sheets={2}
+        profile={false}
+        setDinners={setDinners}
+      />
+      <ImageField
+        text="間食を記録する（最大3枚）"
+        sheets={2}
+        profile={false}
+        setSnacks={setSnacks}
+      />
       <SecondaryButton text="記録する" onClick={createRecord} />
     </div>
   );

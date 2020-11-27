@@ -70,7 +70,11 @@ type Props = {
   sheets: number;
   profile: boolean;
   setProfile?: React.Dispatch<React.SetStateAction<File | null>>;
-  setImages?: React.Dispatch<React.SetStateAction<File[]>>;
+  setAppearances?: React.Dispatch<React.SetStateAction<File[]>>;
+  setBreakfasts?: React.Dispatch<React.SetStateAction<File[]>>;
+  setLunchs?: React.Dispatch<React.SetStateAction<File[]>>;
+  setDinners?: React.Dispatch<React.SetStateAction<File[]>>;
+  setSnacks?: React.Dispatch<React.SetStateAction<File[]>>;
 };
 
 const ImageField: React.FC<Props> = (props) => {
@@ -81,7 +85,13 @@ const ImageField: React.FC<Props> = (props) => {
     const imageFile = e.target.files;
     if (imageFile) {
       props.setProfile && props.setProfile(imageFile[0]);
-      props.setImages && props.setImages((prev) => [...prev, imageFile[0]]);
+      props.setAppearances &&
+        props.setAppearances((prev) => [...prev, imageFile[0]]);
+      props.setBreakfasts &&
+        props.setBreakfasts((prev) => [...prev, imageFile[0]]);
+      props.setLunchs && props.setLunchs((prev) => [...prev, imageFile[0]]);
+      props.setDinners && props.setDinners((prev) => [...prev, imageFile[0]]);
+      props.setSnacks && props.setSnacks((prev) => [...prev, imageFile[0]]);
       const imageUrl = URL.createObjectURL(imageFile[0]);
       setImages((prev) => [...prev, [imageFile[0], imageUrl]]);
     }
@@ -89,8 +99,16 @@ const ImageField: React.FC<Props> = (props) => {
 
   const deletePreview = async (image: [File, string]) => {
     props.setProfile && props.setProfile(null);
-    props.setImages &&
-      props.setImages((prev) => prev.filter((ele) => ele !== image[0]));
+    props.setAppearances &&
+      props.setAppearances((prev) => prev.filter((ele) => ele !== image[0]));
+    props.setBreakfasts &&
+      props.setBreakfasts((prev) => prev.filter((ele) => ele !== image[0]));
+    props.setLunchs &&
+      props.setLunchs((prev) => prev.filter((ele) => ele !== image[0]));
+    props.setDinners &&
+      props.setDinners((prev) => prev.filter((ele) => ele !== image[0]));
+    props.setSnacks &&
+      props.setSnacks((prev) => prev.filter((ele) => ele !== image[0]));
     const result = images.filter((ele) => ele !== image);
     setImages(result);
   };
