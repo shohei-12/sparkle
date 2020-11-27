@@ -51,7 +51,6 @@ const DailyRecord: React.FC = () => {
         }
         data.append("eating_time_id", "1");
         for (const ele of breakfasts) {
-          console.log(ele);
           data.append("image", ele);
           await axios
             .post("http://localhost:80/api/v1/meals", data, {

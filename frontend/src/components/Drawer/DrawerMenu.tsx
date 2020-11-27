@@ -21,6 +21,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -61,6 +62,11 @@ const useStyles = makeStyles((theme: Theme) =>
       objectFit: "contain",
       borderRadius: "50%",
     },
+    close: {
+      position: "relative",
+      top: 4,
+      left: 3,
+    },
   })
 );
 
@@ -71,6 +77,7 @@ const DrawerMenu = () => {
   const isSignedIn = getIsSignedIn(selector);
   const profile = getUserProfile(selector);
   const type = getFlashMessageType(selector);
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -129,6 +136,11 @@ const DrawerMenu = () => {
 
   const drawer = (
     <div>
+      <Hidden mdUp>
+        <IconButton className={classes.close} onClick={handleDrawerToggle}>
+          <ArrowBackIcon />
+        </IconButton>
+      </Hidden>
       <div className={classes.toolbar} />
       <Divider />
       <List>
