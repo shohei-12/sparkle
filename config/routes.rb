@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/records', to: 'records#create'
       post '/appearances', to: 'appearances#create'
+      post '/meals', to: 'meals#create'
       resources :users
     end
   end

@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_115812) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_records_on_user_id"
+    t.index ["user_id", "date"], name: "index_records_on_user_id_and_date", unique: true
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|

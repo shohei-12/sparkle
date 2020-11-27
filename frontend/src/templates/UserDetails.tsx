@@ -12,6 +12,9 @@ import NoProfile from "../assets/img/no-profile.png";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     profile: {
+      width: 200,
+      height: 200,
+      objectFit: "contain",
       borderRadius: "50%",
     },
   })
