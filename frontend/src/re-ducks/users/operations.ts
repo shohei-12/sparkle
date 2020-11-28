@@ -1,6 +1,6 @@
 import axios from "axios";
 import { push } from "connected-react-router";
-import { signInAction, signOutAction } from "./actions";
+import { signInAction, signOutAction, toggleThemeAction } from "./actions";
 import { flashAction } from "../flash/actions";
 
 export const listenAuthState = () => {
@@ -23,6 +23,7 @@ export const listenAuthState = () => {
             name: responseData.name,
             email: responseData.email,
             profile: responseData.profile.url,
+            theme: responseData.theme,
           })
         );
       })
@@ -57,6 +58,7 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
             name: responseData.name,
             email: responseData.email,
             profile: responseData.profile.url,
+            theme: responseData.theme,
           })
         );
         dispatch(push("/"));
@@ -118,6 +120,29 @@ export const deleteUser = () => {
         localStorage.removeItem("client");
         localStorage.removeItem("access_token");
         dispatch(signOutAction());
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  };
+};
+
+export const toggleTheme = (uid: string, theme: "light" | "dark") => {
+  return async (dispatch: any) => {
+    axios({
+      method: "PUT",
+      url: "http://localhost:80/api/v1/toggle-theme",
+      params: {
+        id: uid,
+        theme,
+      },
+    })
+      .then(() => {
+        dispatch(
+          toggleThemeAction({
+            theme,
+          })
+        );
       })
       .catch((error) => {
         throw new Error(error);
