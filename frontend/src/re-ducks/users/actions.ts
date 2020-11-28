@@ -1,4 +1,4 @@
-import { UserState, UserUpdate } from "./types";
+import { UserState, UserUpdate, ThemeToggle } from "./types";
 
 export const SIGN_IN = "SIGN_IN";
 export const signInAction = (userState: UserState) => {
@@ -30,6 +30,16 @@ export const updateUserAction = (data: UserUpdate) => {
     type: "USER_UPDATE",
     payload: {
       ...data,
+    },
+  };
+};
+
+export const THEME_TOGGLE = "THEME_TOGGLE";
+export const toggleThemeAction = (theme: ThemeToggle) => {
+  return {
+    type: "THEME_TOGGLE",
+    payload: {
+      ...theme,
     },
   };
 };

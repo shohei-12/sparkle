@@ -24,3 +24,5 @@ export const getUserProfile = createSelector(
   [usersSelector],
   (state) => state.profile
 );
+
+export const getTheme = createSelector([usersSelector], (state) => state.theme);

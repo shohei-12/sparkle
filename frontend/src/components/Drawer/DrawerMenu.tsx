@@ -2,8 +2,17 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { DrawerMenuListItem } from ".";
-import { getIsSignedIn, getUserProfile } from "../../re-ducks/users/selectors";
-import { signOut, deleteUser } from "../../re-ducks/users/operations";
+import {
+  getIsSignedIn,
+  getUserId,
+  getUserProfile,
+  getTheme,
+} from "../../re-ducks/users/selectors";
+import {
+  signOut,
+  deleteUser,
+  toggleTheme,
+} from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
 import { flashAction } from "../../re-ducks/flash/actions";
 import { getFlashMessageType } from "../../re-ducks/flash/selectors";
@@ -22,6 +31,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -67,6 +78,12 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 4,
       left: 3,
     },
+    light: {
+      color: "#ff9800",
+    },
+    dark: {
+      color: "#ffd600",
+    },
   })
 );
 
@@ -75,7 +92,9 @@ const DrawerMenu = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const isSignedIn = getIsSignedIn(selector);
+  const uid = getUserId(selector);
   const profile = getUserProfile(selector);
+  const theme = getTheme(selector);
   const type = getFlashMessageType(selector);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -96,6 +115,20 @@ const DrawerMenu = () => {
       handleDrawerToggle();
     }
   }, [dispatch, handleDrawerToggle, type]);
+
+  const dispatchToggleLightTheme = useCallback(() => {
+    dispatch(toggleTheme(uid, "light"));
+    if (window.innerWidth < 960) {
+      handleDrawerToggle();
+    }
+  }, [dispatch, handleDrawerToggle, uid]);
+
+  const dispatchToggleDarkTheme = useCallback(() => {
+    dispatch(toggleTheme(uid, "dark"));
+    if (window.innerWidth < 960) {
+      handleDrawerToggle();
+    }
+  }, [dispatch, handleDrawerToggle, uid]);
 
   const dispatchDeleteUser = useCallback(() => {
     if (window.confirm("アカウントを削除しますか？")) {
@@ -134,6 +167,26 @@ const DrawerMenu = () => {
     },
   ];
 
+  const themeListItem = (
+    <>
+      {theme === "light" ? (
+        <ListItem button onClick={dispatchToggleDarkTheme}>
+          <ListItemIcon>
+            <Brightness3Icon className={classes.dark} />
+          </ListItemIcon>
+          <ListItemText primary="ダークモード" />
+        </ListItem>
+      ) : (
+        <ListItem button onClick={dispatchToggleLightTheme}>
+          <ListItemIcon>
+            <BrightnessHighIcon className={classes.light} />
+          </ListItemIcon>
+          <ListItemText primary="ライトモード" />
+        </ListItem>
+      )}
+    </>
+  );
+
   const drawer = (
     <div>
       <Hidden mdUp>
@@ -161,6 +214,7 @@ const DrawerMenu = () => {
               </ListItemIcon>
               <ListItemText primary="ログアウト" />
             </ListItem>
+            {themeListItem}
             <ListItem button onClick={dispatchDeleteUser}>
               <ListItemIcon>
                 <WarningIcon />
@@ -179,6 +233,7 @@ const DrawerMenu = () => {
                 handleDrawerToggle={handleDrawerToggle}
               />
             ))}
+            {themeListItem}
           </>
         )}
       </List>

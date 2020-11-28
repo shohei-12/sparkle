@@ -13,9 +13,15 @@ export const UsersReducer = (
       };
     case Actions.SIGN_OUT:
       return {
+        ...state,
         ...action.payload,
       };
     case Actions.USER_UPDATE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.THEME_TOGGLE:
       return {
         ...state,
         ...action.payload,
