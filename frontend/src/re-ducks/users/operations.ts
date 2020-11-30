@@ -2,7 +2,7 @@ import axios from "axios";
 import { push } from "connected-react-router";
 import { signInAction, signOutAction, toggleThemeAction } from "./actions";
 import { flashAction } from "../flash/actions";
-import { baseURL } from "../../../config";
+import { baseURL } from "../../config";
 
 export const listenAuthState = () => {
   return async (dispatch: any) => {

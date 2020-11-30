@@ -2,12 +2,17 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { SecondaryButton, TextInput } from "../components/UIkit";
-import { getUserName, getUserEmail } from "../re-ducks/users/selectors";
+import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
+import {
+  getUserName,
+  getUserEmail,
+  getUserProfile,
+} from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
 import { updateUserAction } from "../re-ducks/users/actions";
 import { flashAction } from "../re-ducks/flash/actions";
-import { baseURL } from "../../config";
+import NoProfile from "../assets/img/no-profile.png";
+import { baseURL } from "../config";
 
 type Inputs = {
   name: string;
@@ -21,6 +26,7 @@ const UserEdit: React.FC = () => {
   const selector = useSelector((state: Store) => state);
   const uname = getUserName(selector);
   const uemail = getUserEmail(selector);
+  const uprofile = getUserProfile(selector);
 
   const { register, handleSubmit, reset, errors } = useForm<Inputs>({
     defaultValues: {
@@ -31,6 +37,7 @@ const UserEdit: React.FC = () => {
     },
   });
 
+  const [profile, setProfile] = useState<File | null>(null);
   const [name, setName] = useState(uname);
   const [email, setEmail] = useState(uemail);
   const [duplicateEmail, setDuplicateEmail] = useState("");
@@ -75,6 +82,58 @@ const UserEdit: React.FC = () => {
   );
 
   const updateUser = () => {
+    if (profile) {
+      const data = new FormData();
+      data.append("profile", profile);
+      data.append("name", name);
+      data.append("email", email);
+      data.append("password", password);
+      data.append("password_confirmation", confirmPassword);
+      data.append("current_password", currentPassword);
+      axios({
+        method: "PUT",
+        url: `${baseURL}/api/v1/auth`,
+        data,
+        params: {
+          uid: localStorage.getItem("uid"),
+          client: localStorage.getItem("client"),
+          access_token: localStorage.getItem("access_token"),
+        },
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          const imageURL = res.data.data.profile.url as string;
+          password && reset({ password: "", confirmPassword: "" });
+          setCurrentPassword("");
+          dispatch(
+            flashAction({
+              type: "success",
+              msg: "ユーザー情報を更新しました！",
+            })
+          );
+          localStorage.setItem("uid", email);
+          dispatch(updateUserAction({ name, email, profile: imageURL }));
+        })
+        .catch((error) => {
+          const errorData = error.response.data;
+          if (
+            errorData.errors.full_messages.includes(
+              "Email has already been taken"
+            )
+          ) {
+            setDuplicateEmail(email);
+          }
+          if (
+            errorData.errors.full_messages.includes(
+              "Current password is invalid"
+            )
+          ) {
+            setDifferentPassword(true);
+          }
+        });
+    }
     axios({
       method: "PUT",
       url: `${baseURL}/api/v1/auth`,
@@ -120,6 +179,13 @@ const UserEdit: React.FC = () => {
   return (
     <div className="wrap">
       <h2>ユーザー編集</h2>
+      <ImageField
+        text="プロフィール画像（任意）"
+        sheets={0}
+        profile={true}
+        uprofile={uprofile ? baseURL + uprofile : NoProfile}
+        setProfile={setProfile}
+      />
       <TextInput
         fullWidth={true}
         label="ユーザー名（20文字以内）"

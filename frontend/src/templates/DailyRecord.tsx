@@ -6,7 +6,7 @@ import { flashAction } from "../re-ducks/flash/actions";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton } from "../components/UIkit";
-import { baseURL } from "../../config";
+import { baseURL } from "../config";
 
 const DailyRecord: React.FC = () => {
   const dispatch = useDispatch();
