@@ -37,15 +37,15 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
 
   describe 'PUT /api/v1/auth' do
     before do
-      @user1 = create(:user1)
-      @token = sign_in({ email: @user1.email, password: 'password' })
+      @user = create(:user)
+      @token = sign_in({ email: @user.email, password: 'password' })
     end
 
     context 'when user is valid' do
       let(:valid_data) do
         {
-          name: 'user1update',
-          email: 'user1update@example.com',
+          name: 'testupdate',
+          email: 'testupdate@example.com',
           password: 'passwordupdate',
           password_confirmation: 'passwordupdate',
           current_password: 'password'
@@ -55,10 +55,10 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
       it 'update user' do
         update_user(valid_data, @token)
         expect(response.status).to eq 200
-        @user1.reload
-        expect(@user1.name).to eq 'user1update'
-        expect(@user1.email).to eq 'user1update@example.com'
-        expect(sign_in({ email: 'user1update@example.com', password: 'passwordupdate' })).to be_truthy
+        @user.reload
+        expect(@user.name).to eq 'testupdate'
+        expect(@user.email).to eq 'testupdate@example.com'
+        expect(sign_in({ email: 'testupdate@example.com', password: 'passwordupdate' })).to be_truthy
         expect(response.status).to eq 200
       end
     end
@@ -77,10 +77,10 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
       it 'not update user' do
         update_user(invalid_data, @token)
         expect(response.status).to eq 422
-        @user1.reload
-        expect(@user1.name).to eq 'user1'
-        expect(@user1.email).to eq 'user1@example.com'
-        expect(sign_in({ email: 'user1@example.com', password: 'password' })).to be_truthy
+        @user.reload
+        expect(@user.name).to eq 'test'
+        expect(@user.email).to eq @user.email
+        expect(sign_in({ email: @user.email, password: 'password' })).to be_truthy
         expect(response.status).to eq 200
       end
     end
@@ -88,8 +88,8 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
 
   describe 'DELETE /api/v1/auth' do
     before do
-      @user1 = create(:user1)
-      @token = sign_in({ email: @user1.email, password: 'password' })
+      @user = create(:user)
+      @token = sign_in({ email: @user.email, password: 'password' })
     end
 
     context 'when token is valid' do

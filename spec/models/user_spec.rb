@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user1) { build(:user1) }
+  let(:user1) { build(:user) }
+  let(:user2) { create(:user) }
+
+  it 'return true' do
+    expect(user1.valid?).to eq true
+  end
 
   describe 'name' do
     context 'when empty' do
@@ -39,10 +44,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when duplication' do
-      before do
-        create(:user2)
-        user1.email = 'user2@example.com'
-      end
+      before { user1.email = user2.email }
 
       it 'return false' do
         expect(user1.valid?).to eq false

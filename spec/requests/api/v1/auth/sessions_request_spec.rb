@@ -1,33 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
-  before { create(:user1) }
+  let(:user) { create(:user) }
 
   describe 'POST /api/v1/auth/sign_in' do
     context 'when user exists' do
-      let(:user) do
+      let(:exist_user) do
         {
-          email: 'user1@example.com',
+          email: user.email,
           password: 'password'
         }
       end
 
       it 'sign in' do
-        sign_in(user)
+        sign_in(exist_user)
         expect(response.status).to eq 200
       end
     end
 
     context 'when user does not exist' do
-      let(:user) do
+      let(:non_existent_user) do
         {
-          email: 'user1@example.com',
+          email: user.email,
           password: 'passwor'
         }
       end
 
       it 'not sign in' do
-        sign_in(user)
+        sign_in(non_existent_user)
         expect(response.status).to eq 401
       end
     end
@@ -36,7 +36,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
   describe 'DELETE /api/v1/auth/sign_out' do
     let(:token) do
       sign_in({
-                email: 'user1@example.com',
+                email: user.email,
                 password: 'password'
               })
     end
