@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :meal do
-    image { 'MyString' }
+    image { 'test.png' }
     time { '2020-11-22 15:18:23' }
-    record { nil }
-    eating_time { nil }
+    association :record
+    association :eating_time
   end
 end

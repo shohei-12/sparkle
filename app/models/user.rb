@@ -15,6 +15,6 @@ class User < ApplicationRecord
   validates :password,
             presence: true, on: :create,
             length: { minimum: 6 },
-            format: { with: /\A[\w-]+\z/ }
-  validates_confirmation_of :password
+            format: { with: /\A[\w-]+\z/ },
+            confirmation: true
 end

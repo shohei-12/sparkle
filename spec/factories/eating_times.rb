@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :eating_time do
-    name { 'MyString' }
+    name { 'test' }
   end
 end
