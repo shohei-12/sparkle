@@ -10,6 +10,7 @@ export type UserState = {
 export type UserUpdate = {
   name: string;
   email: string;
+  profile?: string;
 };
 
 export type ThemeToggle = {

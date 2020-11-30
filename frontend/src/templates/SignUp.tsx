@@ -5,7 +5,7 @@ import axios from "axios";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { signIn } from "../re-ducks/users/operations";
 import { flashAction } from "../re-ducks/flash/actions";
-import { baseURL } from "../../config";
+import { baseURL } from "../config";
 
 type Inputs = {
   name: string;

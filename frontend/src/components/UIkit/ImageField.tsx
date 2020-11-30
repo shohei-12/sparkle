@@ -69,6 +69,7 @@ type Props = {
   text: string;
   sheets: number;
   profile: boolean;
+  uprofile?: string;
   setProfile?: React.Dispatch<React.SetStateAction<File | null>>;
   setAppearances?: React.Dispatch<React.SetStateAction<File[]>>;
   setBreakfasts?: React.Dispatch<React.SetStateAction<File[]>>;
@@ -152,42 +153,64 @@ const ImageField: React.FC<Props> = (props) => {
           ))}
         {images.length > props.sheets || (
           <>
-            {props.profile ? (
-              <div
-                className={
-                  classes.addImage +
-                  " " +
-                  classes.imageSize +
-                  " " +
-                  classes.profile
-                }
-              >
-                <label>
-                  <div className={classes.wrapIcon + " " + classes.imageSize}>
-                    <AddAPhotoIcon className={classes.icon} />
-                  </div>
-                  <input
-                    className={classes.none}
-                    type="file"
-                    accept="image/*"
-                    onChange={preview}
-                  />
-                </label>
-              </div>
+            {props.uprofile ? (
+              <label>
+                <img
+                  className={`${classes.image} ${classes.imageSize} ${classes.profile} pointer-h`}
+                  src={props.uprofile}
+                  alt="プレビュー"
+                />
+                <input
+                  className={classes.none}
+                  type="file"
+                  accept="image/*"
+                  onChange={preview}
+                />
+              </label>
             ) : (
-              <div className={classes.addImage + " " + classes.imageSize}>
-                <label>
-                  <div className={classes.wrapIcon + " " + classes.imageSize}>
-                    <AddAPhotoIcon className={classes.icon} />
+              <>
+                {props.profile ? (
+                  <div
+                    className={
+                      classes.addImage +
+                      " " +
+                      classes.imageSize +
+                      " " +
+                      classes.profile
+                    }
+                  >
+                    <label>
+                      <div
+                        className={classes.wrapIcon + " " + classes.imageSize}
+                      >
+                        <AddAPhotoIcon className={classes.icon} />
+                      </div>
+                      <input
+                        className={classes.none}
+                        type="file"
+                        accept="image/*"
+                        onChange={preview}
+                      />
+                    </label>
                   </div>
-                  <input
-                    className={classes.none}
-                    type="file"
-                    accept="image/*"
-                    onChange={preview}
-                  />
-                </label>
-              </div>
+                ) : (
+                  <div className={classes.addImage + " " + classes.imageSize}>
+                    <label>
+                      <div
+                        className={classes.wrapIcon + " " + classes.imageSize}
+                      >
+                        <AddAPhotoIcon className={classes.icon} />
+                      </div>
+                      <input
+                        className={classes.none}
+                        type="file"
+                        accept="image/*"
+                        onChange={preview}
+                      />
+                    </label>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
