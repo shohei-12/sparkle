@@ -7,6 +7,7 @@ import { getUserName, getUserEmail } from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
 import { updateUserAction } from "../re-ducks/users/actions";
 import { flashAction } from "../re-ducks/flash/actions";
+import { baseURL } from "../../config";
 
 type Inputs = {
   name: string;
@@ -76,7 +77,7 @@ const UserEdit: React.FC = () => {
   const updateUser = () => {
     axios({
       method: "PUT",
-      url: "http://localhost:80/api/v1/auth",
+      url: `${baseURL}/api/v1/auth`,
       data: {
         name,
         email,

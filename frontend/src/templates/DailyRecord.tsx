@@ -6,6 +6,7 @@ import { flashAction } from "../re-ducks/flash/actions";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton } from "../components/UIkit";
+import { baseURL } from "../../config";
 
 const DailyRecord: React.FC = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const DailyRecord: React.FC = () => {
   const createRecord = useCallback(() => {
     axios({
       method: "POST",
-      url: "http://localhost:80/api/v1/records",
+      url: `${baseURL}/api/v1/records`,
       data: {
         id: uid,
         date: new Date(year, month - 1, day + 1),
@@ -37,7 +38,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of appearances) {
           data.append("image", ele);
           await axios
-            .post("http://localhost:80/api/v1/appearances", data, {
+            .post(`${baseURL}api/v1/appearances`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -53,7 +54,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of breakfasts) {
           data.append("image", ele);
           await axios
-            .post("http://localhost:80/api/v1/meals", data, {
+            .post(`${baseURL}/api/v1/meals`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -70,7 +71,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of lunchs) {
           data.append("image", ele);
           await axios
-            .post("http://localhost:80/api/v1/meals", data, {
+            .post(`${baseURL}/api/v1/meals`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -87,7 +88,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of dinners) {
           data.append("image", ele);
           await axios
-            .post("http://localhost:80/api/v1/meals", data, {
+            .post(`${baseURL}/api/v1/meals`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -104,7 +105,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of snacks) {
           data.append("image", ele);
           await axios
-            .post("http://localhost:80/api/v1/meals", data, {
+            .post(`${baseURL}/api/v1/meals`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },

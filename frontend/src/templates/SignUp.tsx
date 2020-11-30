@@ -5,6 +5,7 @@ import axios from "axios";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { signIn } from "../re-ducks/users/operations";
 import { flashAction } from "../re-ducks/flash/actions";
+import { baseURL } from "../../config";
 
 type Inputs = {
   name: string;
@@ -68,7 +69,7 @@ const SignUp: React.FC = () => {
     data.append("password", password);
     data.append("password_confirmation", confirmPassword);
     axios
-      .post("http://localhost:80/api/v1/auth", data, {
+      .post(`${baseURL}/api/v1/auth`, data, {
         headers: {
           "content-type": "multipart/form-data",
         },
