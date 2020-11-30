@@ -2,12 +2,13 @@ import axios from "axios";
 import { push } from "connected-react-router";
 import { signInAction, signOutAction, toggleThemeAction } from "./actions";
 import { flashAction } from "../flash/actions";
+import { baseURL } from "../../../config";
 
 export const listenAuthState = () => {
   return async (dispatch: any) => {
     axios({
       method: "GET",
-      url: "http://localhost:80/api/v1/auth/validate_token",
+      url: `${baseURL}/api/v1/auth/validate_token`,
       params: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
@@ -37,7 +38,7 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
   return async (dispatch: any) => {
     axios({
       method: "POST",
-      url: "http://localhost:80/api/v1/auth/sign_in",
+      url: `${baseURL}/api/v1/auth/sign_in`,
       data: {
         email,
         password,
@@ -78,7 +79,7 @@ export const signOut = () => {
   return async (dispatch: any) => {
     axios({
       method: "DELETE",
-      url: "http://localhost:80/api/v1/auth/sign_out",
+      url: `${baseURL}/api/v1/auth/sign_out`,
       params: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
@@ -102,7 +103,7 @@ export const deleteUser = () => {
   return async (dispatch: any) => {
     axios({
       method: "DELETE",
-      url: "http://localhost:80/api/v1/auth",
+      url: `${baseURL}/api/v1/auth`,
       params: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
@@ -131,7 +132,7 @@ export const toggleTheme = (uid: string, theme: "light" | "dark") => {
   return async (dispatch: any) => {
     axios({
       method: "PUT",
-      url: "http://localhost:80/api/v1/toggle-theme",
+      url: `${baseURL}/api/v1/toggle-theme`,
       params: {
         id: uid,
         theme,
