@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
+  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
+
   describe 'POST /api/v1/auth' do
     context 'when user is valid' do
       let(:valid_user) do
         {
+          profile: image,
           name: 'test',
           email: 'test@example.com',
           password: 'password',
@@ -44,6 +47,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
     context 'when user is valid' do
       let(:valid_data) do
         {
+          profile: image,
           name: 'testupdate',
           email: 'testupdate@example.com',
           password: 'passwordupdate',
@@ -56,6 +60,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         update_user(valid_data, @token)
         expect(response.status).to eq 200
         @user.reload
+        expect(@user.profile_identifier).to eq 'test.jpg'
         expect(@user.name).to eq 'testupdate'
         expect(@user.email).to eq 'testupdate@example.com'
         expect(sign_in({ email: 'testupdate@example.com', password: 'passwordupdate' })).to be_truthy
@@ -66,6 +71,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
     context 'when user is invalid' do
       let(:invalid_data) do
         {
+          profile: image,
           name: '',
           email: '',
           password: '',
@@ -78,6 +84,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         update_user(invalid_data, @token)
         expect(response.status).to eq 422
         @user.reload
+        expect(@user.profile_identifier).to eq nil
         expect(@user.name).to eq 'test'
         expect(@user.email).to eq @user.email
         expect(sign_in({ email: @user.email, password: 'password' })).to be_truthy

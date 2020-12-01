@@ -16,6 +16,7 @@ type Inputs = {
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<Inputs>({
+    mode: "onTouched",
     defaultValues: {
       name: "",
       email: "",
@@ -175,11 +176,7 @@ const SignUp: React.FC = () => {
           },
         })}
         error={Boolean(errors.password)}
-        helperText={
-          errors.password
-            ? errors.password.message
-            : "半角英数字、ハイフン(-)、アンダーバー(_)のみ利用可能です。"
-        }
+        helperText={errors.password && errors.password.message}
         onChange={inputPassword}
       />
       <TextInput
