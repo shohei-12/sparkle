@@ -115,4 +115,22 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'theme' do
+    context 'when empty' do
+      before { user1.theme = '' }
+
+      it 'return false' do
+        expect(user1.valid?).to eq false
+      end
+    end
+
+    context 'when not a specific value' do
+      before { user1.theme = 'lightt' }
+
+      it 'return false' do
+        expect(user1.valid?).to eq false
+      end
+    end
+  end
 end

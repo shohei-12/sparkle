@@ -17,4 +17,5 @@ class User < ApplicationRecord
             length: { minimum: 6 },
             format: { with: /\A[\w-]+\z/ },
             confirmation: true
+  validates :theme, presence: true, inclusion: { in: %w[light dark] }
 end

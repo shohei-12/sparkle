@@ -36,6 +36,7 @@ RSpec.configure do |config|
   config.include DeviseHelpers
   config.include MealHelpers
   config.include RecordHelpers
+  config.include UserHelpers
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
