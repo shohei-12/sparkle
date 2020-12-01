@@ -15,6 +15,7 @@ import {
 } from "../../re-ducks/users/operations";
 import { Store } from "../../re-ducks/store/types";
 import { flashAction } from "../../re-ducks/flash/actions";
+import { toggleThemeAction } from "../../re-ducks/users/actions";
 import { getFlashMessageType } from "../../re-ducks/flash/selectors";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -118,18 +119,22 @@ const DrawerMenu = () => {
   }, [dispatch, handleDrawerToggle, type]);
 
   const dispatchToggleLightTheme = useCallback(() => {
-    dispatch(toggleTheme(uid, "light"));
+    isSignedIn
+      ? dispatch(toggleTheme(uid, "light"))
+      : dispatch(toggleThemeAction({ theme: "light" }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
-  }, [dispatch, handleDrawerToggle, uid]);
+  }, [dispatch, handleDrawerToggle, uid, isSignedIn]);
 
   const dispatchToggleDarkTheme = useCallback(() => {
-    dispatch(toggleTheme(uid, "dark"));
+    isSignedIn
+      ? dispatch(toggleTheme(uid, "dark"))
+      : dispatch(toggleThemeAction({ theme: "dark" }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
-  }, [dispatch, handleDrawerToggle, uid]);
+  }, [dispatch, handleDrawerToggle, uid, isSignedIn]);
 
   const dispatchDeleteUser = useCallback(() => {
     if (window.confirm("アカウントを削除しますか？")) {

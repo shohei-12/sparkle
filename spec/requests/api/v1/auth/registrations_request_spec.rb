@@ -11,7 +11,8 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           name: 'test',
           email: 'test@example.com',
           password: 'password',
-          password_confirmation: 'password'
+          password_confirmation: 'password',
+          theme: 'light'
         }
       end
 
@@ -27,7 +28,8 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           name: '',
           email: 'test@example.com',
           password: 'password',
-          password_confirmation: 'password'
+          password_confirmation: 'password',
+          theme: 'light'
         }
       end
 
