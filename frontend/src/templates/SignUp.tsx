@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
+import { Store } from "../re-ducks/store/types";
+import { getTheme } from "../re-ducks/users/selectors";
 import { signIn } from "../re-ducks/users/operations";
 import { flashAction } from "../re-ducks/flash/actions";
 import { baseURL } from "../config";
@@ -26,6 +28,8 @@ const SignUp: React.FC = () => {
   });
 
   const dispatch = useDispatch();
+  const selector = useSelector((state: Store) => state);
+  const theme = getTheme(selector);
 
   const [profile, setProfile] = useState<File | null>(null);
   const [name, setName] = useState("");
@@ -69,6 +73,7 @@ const SignUp: React.FC = () => {
     data.append("email", email);
     data.append("password", password);
     data.append("password_confirmation", confirmPassword);
+    data.append("theme", theme);
     axios
       .post(`${baseURL}/api/v1/auth`, data, {
         headers: {
