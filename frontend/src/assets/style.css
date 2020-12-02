@@ -47,3 +47,7 @@ body {
 .react-calendar__navigation button:enabled:focus {
   background-color: rgba(4, 0, 255, 0.534);
 }
+
+.react-calendar__month-view__weekdays {
+  color: rgba(0, 0, 0, 0.87);
+}

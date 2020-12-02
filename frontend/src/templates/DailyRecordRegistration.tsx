@@ -8,7 +8,7 @@ import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton } from "../components/UIkit";
 import { baseURL } from "../config";
 
-const DailyRecord: React.FC = () => {
+const DailyRecordRegistration: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const uid = getUserId(selector);
@@ -38,7 +38,7 @@ const DailyRecord: React.FC = () => {
         for (const ele of appearances) {
           data.append("image", ele);
           await axios
-            .post(`${baseURL}api/v1/appearances`, data, {
+            .post(`${baseURL}/api/v1/appearances`, data, {
               headers: {
                 "content-type": "multipart/form-data",
               },
@@ -174,4 +174,4 @@ const DailyRecord: React.FC = () => {
   );
 };
 
-export default DailyRecord;
+export default DailyRecordRegistration;

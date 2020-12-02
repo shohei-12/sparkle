@@ -1,13 +1,8 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import {
-  DailyRecord,
-  SignIn,
-  SignUp,
-  UserDetails,
-  UserEdit,
-} from "./templates";
+import { SignIn, SignUp, UserDetails, UserEdit } from "./templates";
 import Auth from "./Auth";
+import DailyRecord from "./DailyRecord";
 
 const Router: React.FC = () => {
   return (
