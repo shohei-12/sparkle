@@ -6,4 +6,10 @@ class Api::V1::MealsController < ApplicationController
       eating_time_id: params[:eating_time_id]
     )
   end
+
+  def show
+    record = Record.find(params[:id])
+    images = record.meals
+    render json: images
+  end
 end

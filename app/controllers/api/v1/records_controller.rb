@@ -1,13 +1,19 @@
 class Api::V1::RecordsController < ApplicationController
+  before_action :set_user
+
   def create
-    @user = User.find(params[:id])
-    @record = @user.records.create(date: params[:date])
-    render json: @record
+    record = @user.records.create(date: params[:date])
+    render json: record
   end
 
   def show
+    record = @user.records.find_by(date: params[:date])
+    render json: record
+  end
+
+  private
+
+  def set_user
     @user = User.find(params[:id])
-    @record = @user.records.find_by(date: params[:date])
-    render json: @record
   end
 end

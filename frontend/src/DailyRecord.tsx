@@ -20,7 +20,7 @@ const DailyRecord: React.FC = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `${baseURL}/api/v1/record`,
+      url: `${baseURL}/api/v1/records`,
       params: {
         id: uid,
         date: new Date(year, month - 1, day + 1),

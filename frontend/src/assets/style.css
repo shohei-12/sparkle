@@ -51,3 +51,9 @@ body {
 .react-calendar__month-view__weekdays {
   color: rgba(0, 0, 0, 0.87);
 }
+
+/* react-image-gallery */
+.image-gallery {
+  max-width: 500px;
+  margin: 0 auto;
+}
