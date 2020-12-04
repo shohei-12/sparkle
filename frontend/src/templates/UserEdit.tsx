@@ -91,15 +91,16 @@ const UserEdit: React.FC = () => {
       data.append("password", password);
       data.append("password_confirmation", confirmPassword);
       data.append("current_password", currentPassword);
+      data.append("uid", localStorage.getItem("uid") as string);
+      data.append("client", localStorage.getItem("client") as string);
+      data.append(
+        "access_token",
+        localStorage.getItem("access_token") as string
+      );
       axios({
         method: "PUT",
         url: `${baseURL}/api/v1/auth`,
         data,
-        params: {
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
-        },
         headers: {
           "content-type": "multipart/form-data",
         },
