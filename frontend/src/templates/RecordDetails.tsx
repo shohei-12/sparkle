@@ -8,7 +8,7 @@ type Props = {
   recordDate: string;
 };
 
-const DailyRecordDetails: React.FC<Props> = (props) => {
+const RecordDetails: React.FC<Props> = (props) => {
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
   const lunchsContainer: string[] = [];
@@ -87,4 +87,4 @@ const DailyRecordDetails: React.FC<Props> = (props) => {
   );
 };
 
-export default DailyRecordDetails;
+export default RecordDetails;
