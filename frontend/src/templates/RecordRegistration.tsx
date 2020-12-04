@@ -23,14 +23,16 @@ const RecordRegistration: React.FC = () => {
   const [snacks, setSnacks] = useState<File[]>([]);
 
   const createRecord = useCallback(() => {
-    axios({
-      method: "POST",
-      url: `${baseURL}/api/v1/records`,
-      data: {
-        id: uid,
-        date: new Date(year, month - 1, day + 1),
-      },
-    })
+    const data = new FormData();
+    data.append("id", uid);
+    data.append("date", `${year}-${month}-${day}`);
+    data.append("appearance", appearances[0]);
+    axios
+      .post(`${baseURL}/api/v1/records`, data, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
       .then(async (res) => {
         const recordId = String(res.data.id);
         const data = new FormData();

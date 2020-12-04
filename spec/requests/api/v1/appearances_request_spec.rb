@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Appearances', type: :request do
   let(:record) { create(:record) }
-  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
   let(:appearance) { create(:appearance) }
+  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
 
   describe 'POST /api/v1/appearances' do
     context 'when data is valid' do

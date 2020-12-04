@@ -2,7 +2,7 @@ class Api::V1::RecordsController < ApplicationController
   before_action :set_user, only: %i[create show]
 
   def create
-    record = @user.records.create(date: params[:date])
+    record = @user.records.create(date: Date.parse(params[:date]), appearance: params[:appearance])
     render json: record
   end
 
