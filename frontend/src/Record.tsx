@@ -4,9 +4,9 @@ import axios from "axios";
 import { Store } from "./re-ducks/store/types";
 import { getUserId } from "./re-ducks/users/selectors";
 import { baseURL } from "./config";
-import { DailyRecordRegistration, DailyRecordDetails } from "./templates";
+import { RecordRegistration, RecordDetails } from "./templates";
 
-const DailyRecord: React.FC = () => {
+const Record: React.FC = () => {
   const selector = useSelector((state: Store) => state);
   const uid = getUserId(selector);
   const year = Number(window.location.pathname.split("/")[2]);
@@ -20,7 +20,7 @@ const DailyRecord: React.FC = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `${baseURL}/api/v1/records`,
+      url: `${baseURL}/api/v1/record`,
       params: {
         id: uid,
         date: new Date(year, month - 1, day + 1),
@@ -41,12 +41,12 @@ const DailyRecord: React.FC = () => {
   }, []);
 
   if (recordId && recordDate) {
-    return <DailyRecordDetails recordId={recordId} recordDate={recordDate} />;
+    return <RecordDetails recordId={recordId} recordDate={recordDate} />;
   } else if (recordRegistration) {
-    return <DailyRecordRegistration />;
+    return <RecordRegistration />;
   } else {
     return <></>;
   }
 };
 
-export default DailyRecord;
+export default Record;

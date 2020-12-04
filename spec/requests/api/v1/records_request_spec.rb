@@ -34,7 +34,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
     end
   end
 
-  describe 'GET /api/v1/records' do
+  describe 'GET /api/v1/record' do
     context 'when record exists' do
       let(:data) do
         {

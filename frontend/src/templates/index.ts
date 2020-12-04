@@ -1,5 +1,6 @@
-export { default as DailyRecordDetails } from "./DailyRecordDetails";
-export { default as DailyRecordRegistration } from "./DailyRecordRegistration";
+export { default as RecordDetails } from "./RecordDetails";
+export { default as RecordList } from "./RecordList";
+export { default as RecordRegistration } from "./RecordRegistration";
 export { default as SignIn } from "./SignIn";
 export { default as SignUp } from "./SignUp";
 export { default as UserDetails } from "./UserDetails";

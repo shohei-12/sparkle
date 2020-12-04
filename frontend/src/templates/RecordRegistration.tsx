@@ -8,7 +8,7 @@ import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton } from "../components/UIkit";
 import { baseURL } from "../config";
 
-const DailyRecordRegistration: React.FC = () => {
+const RecordRegistration: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const uid = getUserId(selector);
@@ -174,4 +174,4 @@ const DailyRecordRegistration: React.FC = () => {
   );
 };
 
-export default DailyRecordRegistration;
+export default RecordRegistration;
