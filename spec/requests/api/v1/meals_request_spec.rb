@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Meals', type: :request do
   let(:record) { create(:record) }
   let(:eating_time) { create(:eating_time) }
-  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
   let(:meal) { create(:meal) }
+  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
 
   describe 'POST /api/v1/meals' do
     context 'when data is valid' do

@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import { baseURL } from "../config";
+import NoImage from "../assets/img/no-image.png";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    media: {
+      height: 0,
+      paddingTop: "56.25%", // 16:9
+    },
+  })
+);
 
 type Record = {
   id: number;
@@ -12,9 +23,11 @@ type Record = {
   user_id: number;
   created_at: string;
   updated_at: string;
+  appearance: { url: string | null };
 };
 
 const RecordList: React.FC = () => {
+  const classes = useStyles();
   const [records, setRecords] = useState<Record[]>([]);
 
   useEffect(() => {
@@ -36,6 +49,14 @@ const RecordList: React.FC = () => {
         records.map((ele, i) => (
           <Card key={i}>
             <CardHeader title="record" />
+            {ele.appearance.url ? (
+              <CardMedia
+                className={classes.media}
+                image={baseURL + ele.appearance.url}
+              />
+            ) : (
+              <CardMedia className={classes.media} image={NoImage} />
+            )}
             <CardContent>{ele.date}</CardContent>
           </Card>
         ))}
