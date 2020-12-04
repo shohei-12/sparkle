@@ -80,7 +80,7 @@ export const signOut = () => {
     axios({
       method: "DELETE",
       url: `${baseURL}/api/v1/auth/sign_out`,
-      params: {
+      data: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
@@ -104,7 +104,7 @@ export const deleteUser = () => {
     axios({
       method: "DELETE",
       url: `${baseURL}/api/v1/auth`,
-      params: {
+      data: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
@@ -133,7 +133,7 @@ export const toggleTheme = (uid: string, theme: "light" | "dark") => {
     axios({
       method: "PUT",
       url: `${baseURL}/api/v1/toggle-theme`,
-      params: {
+      data: {
         id: uid,
         theme,
       },
