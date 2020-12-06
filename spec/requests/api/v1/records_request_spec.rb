@@ -68,4 +68,32 @@ RSpec.describe 'Api::V1::Records', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/records' do
+    let(:data) do
+      {
+        start: 0
+      }
+    end
+
+    context 'when there are more than 20 records' do
+      before { create_list(:record, 21) }
+
+      it 'get 20 records' do
+        get_20records(data)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body).length).to eq 20
+      end
+    end
+
+    context 'when there are less than 20 records' do
+      before { create_list(:record, 3) }
+
+      it 'get 3 records' do
+        get_20records(data)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body).length).to eq 3
+      end
+    end
+  end
 end

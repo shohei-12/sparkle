@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
@@ -34,7 +34,7 @@ type Record = {
 const RecordList: React.FC = () => {
   const classes = useStyles();
   const [records, setRecords] = useState<Record[]>([]);
-  const [page, setPage] = useState(1);
+  const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
   const getRecords = useCallback(() => {
@@ -42,7 +42,7 @@ const RecordList: React.FC = () => {
       method: "GET",
       url: `${baseURL}/api/v1/records`,
       params: {
-        page,
+        start,
       },
     })
       .then((res) => {
@@ -51,18 +51,36 @@ const RecordList: React.FC = () => {
           return;
         }
         setRecords([...records, ...res.data]);
-        setPage(page + 1);
+        setStart(start + 20);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [page, records]);
+  }, [start, records]);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `${baseURL}/api/v1/records`,
+      params: {
+        start,
+      },
+    })
+      .then((res) => {
+        setRecords([...res.data]);
+        setStart(20);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="wrap">
       <InfiniteScroll
         loadMore={getRecords}
-        initialLoad={true}
+        initialLoad={false}
         hasMore={hasMore}
         threshold={0}
         loader={
