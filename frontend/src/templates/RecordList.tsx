@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
+import InfiniteScroll from "react-infinite-scroller";
+import ReactLoading from "react-loading";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -13,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) =>
     media: {
       height: 0,
       paddingTop: "56.25%", // 16:9
+    },
+    loader: {
+      margin: "0 auto",
     },
   })
 );
@@ -29,37 +34,62 @@ type Record = {
 const RecordList: React.FC = () => {
   const classes = useStyles();
   const [records, setRecords] = useState<Record[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
+  const getRecords = useCallback(() => {
     axios({
       method: "GET",
       url: `${baseURL}/api/v1/records`,
+      params: {
+        page,
+      },
     })
       .then((res) => {
-        setRecords(res.data);
+        if (res.data.length === 0) {
+          setHasMore(false);
+          return;
+        }
+        setRecords([...records, ...res.data]);
+        setPage(page + 1);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, []);
+  }, [page, records]);
 
   return (
     <div className="wrap">
-      {records.length > 0 &&
-        records.map((ele, i) => (
-          <Card key={i}>
-            <CardHeader title="record" />
-            {ele.appearance.url ? (
-              <CardMedia
-                className={classes.media}
-                image={baseURL + ele.appearance.url}
-              />
-            ) : (
-              <CardMedia className={classes.media} image={NoImage} />
-            )}
-            <CardContent>{ele.date}</CardContent>
-          </Card>
-        ))}
+      <InfiniteScroll
+        loadMore={getRecords}
+        initialLoad={true}
+        hasMore={hasMore}
+        threshold={0}
+        loader={
+          <ReactLoading
+            key={0}
+            className={classes.loader}
+            type="spin"
+            color="#03a9f4"
+          />
+        }
+      >
+        {records.length > 0 &&
+          records.map((ele, i) => (
+            <Card key={i}>
+              <CardHeader title="record" />
+              {ele.appearance.url ? (
+                <CardMedia
+                  className={classes.media}
+                  image={baseURL + ele.appearance.url}
+                />
+              ) : (
+                <CardMedia className={classes.media} image={NoImage} />
+              )}
+              <CardContent>{ele.date}</CardContent>
+            </Card>
+          ))}
+      </InfiniteScroll>
     </div>
   );
 };

@@ -94,7 +94,7 @@ const ImageField: React.FC<Props> = (props) => {
       props.setDinners && props.setDinners((prev) => [...prev, imageFile[0]]);
       props.setSnacks && props.setSnacks((prev) => [...prev, imageFile[0]]);
       const imageUrl = URL.createObjectURL(imageFile[0]);
-      setImages((prev) => [...prev, [imageFile[0], imageUrl]]);
+      setImages([...images, [imageFile[0], imageUrl]]);
     }
   };
 
