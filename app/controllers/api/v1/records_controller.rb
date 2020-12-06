@@ -13,8 +13,7 @@ class Api::V1::RecordsController < ApplicationController
 
   def index
     # Get 20 cases of data
-    multiples_of_twenty = params[:page].to_i * 20
-    records = Record.where(id: multiples_of_twenty - 19..multiples_of_twenty)
+    records = Record.limit(20).offset(params[:start])
     render json: records
   end
 
