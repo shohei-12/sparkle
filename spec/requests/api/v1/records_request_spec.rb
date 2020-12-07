@@ -70,9 +70,15 @@ RSpec.describe 'Api::V1::Records', type: :request do
   end
 
   describe 'GET /api/v1/records' do
-    let(:data) do
+    let(:data1) do
       {
         start: 0
+      }
+    end
+
+    let(:data2) do
+      {
+        start: 20
       }
     end
 
@@ -80,7 +86,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
       before { create_list(:record, 21) }
 
       it 'get 20 records' do
-        get_20records(data)
+        get_20records(data1)
         expect(response.status).to eq 200
         expect(JSON.parse(response.body).length).to eq 20
       end
@@ -90,9 +96,15 @@ RSpec.describe 'Api::V1::Records', type: :request do
       before { create_list(:record, 3) }
 
       it 'get 3 records' do
-        get_20records(data)
+        get_20records(data1)
         expect(response.status).to eq 200
         expect(JSON.parse(response.body).length).to eq 3
+      end
+
+      it 'not get record' do
+        get_20records(data2)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body).length).to eq 0
       end
     end
   end
