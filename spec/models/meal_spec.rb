@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Meal, type: :model do
-  let(:meal) { create(:meal) }
+  let(:meal) { build(:meal) }
 
   it 'return true' do
     expect(meal.valid?).to eq true

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Record, type: :model do
-  let(:record) { create(:record) }
+  let(:record) { build(:record) }
 
   it 'return true' do
     expect(record.valid?).to eq true
