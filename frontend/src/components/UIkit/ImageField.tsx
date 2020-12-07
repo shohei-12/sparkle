@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme: Theme) =>
     profile: {
       borderRadius: "50%",
     },
+    removeIcon: {
+      color: "#000",
+    },
   })
 );
 
@@ -128,7 +131,7 @@ const ImageField: React.FC<Props> = (props) => {
                 className={classes.deletePreview + " " + classes.wrapIcon}
                 onClick={() => deletePreview(ele)}
               >
-                <RemoveIcon />
+                <RemoveIcon className={classes.removeIcon} />
               </span>
               {props.profile ? (
                 <img

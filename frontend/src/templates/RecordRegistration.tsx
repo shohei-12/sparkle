@@ -5,7 +5,7 @@ import { push } from "connected-react-router";
 import { flashAction } from "../re-ducks/flash/actions";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
-import { ImageField, SecondaryButton } from "../components/UIkit";
+import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { baseURL } from "../config";
 
 const RecordRegistration: React.FC = () => {
@@ -21,6 +21,47 @@ const RecordRegistration: React.FC = () => {
   const [lunchs, setLunchs] = useState<File[]>([]);
   const [dinners, setDinners] = useState<File[]>([]);
   const [snacks, setSnacks] = useState<File[]>([]);
+
+  const [appearanceMemo, setAppearanceMemo] = useState("");
+  const [breakfastMemo, setBreakfastMemo] = useState("");
+  const [lunchMemo, setLunchMemo] = useState("");
+  const [DinnerMemo, setDinnerMemo] = useState("");
+  const [SnackMemo, setSnackMemo] = useState("");
+
+  const inputAppearance = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setAppearanceMemo(event.target.value);
+    },
+    [setAppearanceMemo]
+  );
+
+  const inputBreakfast = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBreakfastMemo(event.target.value);
+    },
+    [setBreakfastMemo]
+  );
+
+  const inputLunch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setLunchMemo(event.target.value);
+    },
+    [setLunchMemo]
+  );
+
+  const inputDinner = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDinnerMemo(event.target.value);
+    },
+    [setDinnerMemo]
+  );
+
+  const inputSnack = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSnackMemo(event.target.value);
+    },
+    [setSnackMemo]
+  );
 
   const createRecord = useCallback(() => {
     const data = new FormData();
@@ -52,72 +93,30 @@ const RecordRegistration: React.FC = () => {
               throw new Error(error);
             });
         }
-        data.append("eating_time_id", "1");
-        for (const ele of breakfasts) {
-          data.append("image", ele);
-          await axios
-            .post(`${baseURL}/api/v1/meals`, data, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(() => {
-              data.delete("image");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        }
-        data.delete("eating_time_id");
-        data.append("eating_time_id", "2");
-        for (const ele of lunchs) {
-          data.append("image", ele);
-          await axios
-            .post(`${baseURL}/api/v1/meals`, data, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(() => {
-              data.delete("image");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        }
-        data.delete("eating_time_id");
-        data.append("eating_time_id", "3");
-        for (const ele of dinners) {
-          data.append("image", ele);
-          await axios
-            .post(`${baseURL}/api/v1/meals`, data, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(() => {
-              data.delete("image");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        }
-        data.delete("eating_time_id");
-        data.append("eating_time_id", "4");
-        for (const ele of snacks) {
-          data.append("image", ele);
-          await axios
-            .post(`${baseURL}/api/v1/meals`, data, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(() => {
-              data.delete("image");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
+        const meals = [
+          { eating_time_id: "1", meal: breakfasts },
+          { eating_time_id: "2", meal: lunchs },
+          { eating_time_id: "3", meal: dinners },
+          { eating_time_id: "4", meal: snacks },
+        ];
+        for (const ele of meals) {
+          data.append("eating_time_id", ele.eating_time_id);
+          for (const meal of ele.meal) {
+            data.append("image", meal);
+            await axios
+              .post(`${baseURL}/api/v1/meals`, data, {
+                headers: {
+                  "content-type": "multipart/form-data",
+                },
+              })
+              .then(() => {
+                data.delete("image");
+              })
+              .catch((error) => {
+                throw new Error(error);
+              });
+          }
+          data.delete("eating_time_id");
         }
         dispatch(flashAction({ type: "success", msg: "記録しました！" }));
         dispatch(push("/user/details"));
@@ -140,36 +139,86 @@ const RecordRegistration: React.FC = () => {
 
   return (
     <div className="wrap">
-      <h2>{`${year}年${month}月${day}日の記録`}</h2>
+      <h2>{`${year}-${month}-${day}`}</h2>
       <ImageField
-        text="見た目を記録する（最大5枚）"
+        text="💪 見た目を記録する（最大5枚）"
         sheets={4}
         profile={false}
         setAppearances={setAppearances}
       />
+      <TextInput
+        fullWidth={true}
+        label="メモ"
+        multiline={true}
+        required={false}
+        rows="5"
+        type="text"
+        name="appearance"
+        onChange={inputAppearance}
+      />
       <ImageField
-        text="朝食を記録する（最大3枚）"
+        text="🍙 朝食を記録する（最大3枚）"
         sheets={2}
         profile={false}
         setBreakfasts={setBreakfasts}
       />
+      <TextInput
+        fullWidth={true}
+        label="メモ"
+        multiline={true}
+        required={false}
+        rows="5"
+        type="text"
+        name="breakfast"
+        onChange={inputBreakfast}
+      />
       <ImageField
-        text="昼食を記録する（最大3枚）"
+        text="🍔 昼食を記録する（最大3枚）"
         sheets={2}
         profile={false}
         setLunchs={setLunchs}
       />
+      <TextInput
+        fullWidth={true}
+        label="メモ"
+        multiline={true}
+        required={false}
+        rows="5"
+        type="text"
+        name="lunch"
+        onChange={inputLunch}
+      />
       <ImageField
-        text="夕食を記録する（最大3枚）"
+        text="🍖 夕食を記録する（最大3枚）"
         sheets={2}
         profile={false}
         setDinners={setDinners}
       />
+      <TextInput
+        fullWidth={true}
+        label="メモ"
+        multiline={true}
+        required={false}
+        rows="5"
+        type="text"
+        name="dinner"
+        onChange={inputDinner}
+      />
       <ImageField
-        text="間食を記録する（最大3枚）"
+        text="🍰 間食を記録する（最大3枚）"
         sheets={2}
         profile={false}
         setSnacks={setSnacks}
+      />
+      <TextInput
+        fullWidth={true}
+        label="メモ"
+        multiline={true}
+        required={false}
+        rows="5"
+        type="text"
+        name="snack"
+        onChange={inputSnack}
       />
       <SecondaryButton text="記録する" onClick={createRecord} />
     </div>
