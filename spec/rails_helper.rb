@@ -37,6 +37,7 @@ RSpec.configure do |config|
   config.include AppearanceHelpers
   config.include DeviseHelpers
   config.include MealHelpers
+  config.include MemoHelpers
   config.include RecordHelpers
   config.include UserHelpers
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

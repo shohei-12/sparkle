@@ -80,11 +80,11 @@ const RecordRegistration: React.FC = () => {
           method: "POST",
           url: `${baseURL}/api/v1/memos`,
           data: {
-            appearanceMemo,
-            breakfastMemo,
-            lunchMemo,
-            dinnerMemo,
-            snackMemo,
+            appearance: appearanceMemo,
+            breakfast: breakfastMemo,
+            lunch: lunchMemo,
+            dinner: dinnerMemo,
+            snack: snackMemo,
             record_id: recordId,
           },
         }).catch((error) => {

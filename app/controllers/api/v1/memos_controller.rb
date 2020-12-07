@@ -1,11 +1,11 @@
 class Api::V1::MemosController < ApplicationController
   def create
     Memo.create(
-      appearance: params[:appearanceMemo],
-      breakfast: params[:breakfastMemo],
-      lunch: params[:lunchMemo],
-      dinner: params[:dinnerMemo],
-      snack: params[:snackMemo],
+      appearance: params[:appearance],
+      breakfast: params[:breakfast],
+      lunch: params[:lunch],
+      dinner: params[:dinner],
+      snack: params[:snack],
       record_id: params[:record_id]
     )
   end
