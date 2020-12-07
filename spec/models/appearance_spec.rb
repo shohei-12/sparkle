@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Appearance, type: :model do
-  let(:appearance) { create(:appearance) }
+  let(:appearance) { build(:appearance) }
 
   it 'return true' do
     expect(appearance.valid?).to eq true
