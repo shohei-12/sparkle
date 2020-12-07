@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_071222) do
+ActiveRecord::Schema.define(version: 2020_12_07_041123) do
 
   create_table "appearances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "image"
@@ -35,6 +35,18 @@ ActiveRecord::Schema.define(version: 2020_12_04_071222) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["eating_time_id"], name: "index_meals_on_eating_time_id"
     t.index ["record_id"], name: "index_meals_on_record_id"
+  end
+
+  create_table "memos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "appearance"
+    t.text "breakfast"
+    t.text "lunch"
+    t.text "dinner"
+    t.text "snack"
+    t.bigint "record_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["record_id"], name: "index_memos_on_record_id", unique: true
   end
 
   create_table "records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -74,5 +86,6 @@ ActiveRecord::Schema.define(version: 2020_12_04_071222) do
   add_foreign_key "appearances", "records"
   add_foreign_key "meals", "eating_times"
   add_foreign_key "meals", "records"
+  add_foreign_key "memos", "records"
   add_foreign_key "records", "users"
 end
