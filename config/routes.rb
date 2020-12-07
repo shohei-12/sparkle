@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get '/appearances', to: 'appearances#show'
       post '/meals', to: 'meals#create'
       get '/meals', to: 'meals#show'
+      post '/memos', to: 'memos#create'
       resources :users
     end
   end

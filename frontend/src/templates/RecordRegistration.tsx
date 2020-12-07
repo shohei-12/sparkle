@@ -25,8 +25,8 @@ const RecordRegistration: React.FC = () => {
   const [appearanceMemo, setAppearanceMemo] = useState("");
   const [breakfastMemo, setBreakfastMemo] = useState("");
   const [lunchMemo, setLunchMemo] = useState("");
-  const [DinnerMemo, setDinnerMemo] = useState("");
-  const [SnackMemo, setSnackMemo] = useState("");
+  const [dinnerMemo, setDinnerMemo] = useState("");
+  const [snackMemo, setSnackMemo] = useState("");
 
   const inputAppearance = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +76,20 @@ const RecordRegistration: React.FC = () => {
       })
       .then(async (res) => {
         const recordId = String(res.data.id);
+        axios({
+          method: "POST",
+          url: `${baseURL}/api/v1/memos`,
+          data: {
+            appearanceMemo,
+            breakfastMemo,
+            lunchMemo,
+            dinnerMemo,
+            snackMemo,
+            record_id: recordId,
+          },
+        }).catch((error) => {
+          throw new Error(error);
+        });
         const data = new FormData();
         data.append("record_id", recordId);
         for (const ele of appearances) {
@@ -134,6 +148,11 @@ const RecordRegistration: React.FC = () => {
     lunchs,
     dinners,
     snacks,
+    appearanceMemo,
+    breakfastMemo,
+    lunchMemo,
+    dinnerMemo,
+    snackMemo,
     dispatch,
   ]);
 
