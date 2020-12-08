@@ -22,13 +22,8 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [snacks, setSnacks] = useState<string[]>([]);
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: `${baseURL}/api/v1/appearances`,
-      params: {
-        id: props.recordId,
-      },
-    })
+    axios
+      .get(`${baseURL}/api/v1/appearances/${props.recordId}`)
       .then((res) => {
         for (const ele of res.data) {
           appearancesContainer.push(ele.image.url);
@@ -38,13 +33,8 @@ const RecordDetails: React.FC<Props> = (props) => {
       .catch((error) => {
         throw new Error(error);
       });
-    axios({
-      method: "GET",
-      url: `${baseURL}/api/v1/meals`,
-      params: {
-        id: props.recordId,
-      },
-    })
+    axios
+      .get(`${baseURL}/api/v1/meals/${props.recordId}`)
       .then((res) => {
         for (const ele of res.data) {
           switch (ele.eating_time_id) {
@@ -69,10 +59,8 @@ const RecordDetails: React.FC<Props> = (props) => {
       .catch((error) => {
         throw new Error(error);
       });
-    axios({
-      method: "GET",
-      url: `${baseURL}/api/v1/memos/${props.recordId}`,
-    })
+    axios
+      .get(`${baseURL}/api/v1/memos/${props.recordId}`)
       .then((res) => {
         console.log(res.data);
       })

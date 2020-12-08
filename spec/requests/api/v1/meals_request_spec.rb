@@ -43,28 +43,16 @@ RSpec.describe 'Api::V1::Meals', type: :request do
   describe 'GET /api/v1/meals' do
     context 'when record exists' do
       context 'when there is corresponding meals in record' do
-        let(:data) do
-          {
-            id: meal.record.id
-          }
-        end
-
         it 'get meals' do
-          get_meal(data)
+          get_meals(meal.record_id)
           expect(response.status).to eq 200
           expect(JSON.parse(response.body)[0]['id']).to eq meal.id
         end
       end
 
       context 'when there is not corresponding meals in record' do
-        let(:data) do
-          {
-            id: record.id
-          }
-        end
-
         it 'not get meals' do
-          get_meal(data)
+          get_meals(record.id)
           expect(response.status).to eq 200
           expect(JSON.parse(response.body)).to eq []
         end
@@ -73,7 +61,7 @@ RSpec.describe 'Api::V1::Meals', type: :request do
 
     context 'when record does not exist' do
       it 'raise ActiveRecord::RecordNotFound' do
-        expect { get_meal({ id: record.id + 1 }) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get_meals(record.id + 1) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

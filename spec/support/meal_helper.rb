@@ -3,7 +3,7 @@ module MealHelpers
     post '/api/v1/meals', params: data
   end
 
-  def get_meal(data)
-    get '/api/v1/meals', params: data
+  def get_meals(data)
+    get "/api/v1/meals/#{data}"
   end
 end
