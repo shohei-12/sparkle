@@ -9,4 +9,10 @@ class Api::V1::MemosController < ApplicationController
       record_id: params[:record_id]
     )
   end
+
+  def show
+    record = Record.find(params[:id])
+    memo = record.memo
+    render json: memo
+  end
 end
