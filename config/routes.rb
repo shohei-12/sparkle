@@ -6,6 +6,11 @@ Rails.application.routes.draw do
       post '/records', to: 'records#create'
       get '/record', to: 'records#show'
       get '/records', to: 'records#index'
+      put '/memos/:id/appearance', to: 'memos#update_appearance'
+      put '/memos/:id/breakfast', to: 'memos#update_breakfast'
+      put '/memos/:id/lunch', to: 'memos#update_lunch'
+      put '/memos/:id/dinner', to: 'memos#update_dinner'
+      put '/memos/:id/snack', to: 'memos#update_snack'
       resources :users
       resources :appearances
       resources :meals
