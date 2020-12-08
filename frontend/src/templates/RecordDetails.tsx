@@ -2,17 +2,20 @@ import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AppearancesGallery, MealsGallery } from "../components/Record";
-import { TextInput } from "../components/UIkit";
+import { SecondaryButton, TextInput } from "../components/UIkit";
 import { baseURL } from "../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    box: {
+    record: {
       marginBottom: 20,
       [theme.breakpoints.up("md")]: {
         display: "flex",
         marginBottom: 0,
       },
+    },
+    recordRight: {
+      width: 330,
     },
   })
 );
@@ -36,6 +39,7 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [dinners, setDinners] = useState<string[]>([]);
   const [snacks, setSnacks] = useState<string[]>([]);
 
+  const [memoId, setMemoId] = useState(0);
   const [appearanceMemo, setAppearanceMemo] = useState("");
   const [breakfastMemo, setBreakfastMemo] = useState("");
   const [lunchMemo, setLunchMemo] = useState("");
@@ -76,6 +80,56 @@ const RecordDetails: React.FC<Props> = (props) => {
     },
     [setSnackMemo]
   );
+
+  const updateAppearanceMemo = useCallback(() => {
+    axios
+      .put(`${baseURL}/api/v1/memos/${memoId}/appearance`, {
+        appearance: appearanceMemo,
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [memoId, appearanceMemo]);
+
+  const updateBreakfastMemo = useCallback(() => {
+    axios
+      .put(`${baseURL}/api/v1/memos/${memoId}/breakfast`, {
+        breakfast: breakfastMemo,
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [memoId, breakfastMemo]);
+
+  const updateLunchMemo = useCallback(() => {
+    axios
+      .put(`${baseURL}/api/v1/memos/${memoId}/lunch`, {
+        lunch: lunchMemo,
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [memoId, lunchMemo]);
+
+  const updateDinnerMemo = useCallback(() => {
+    axios
+      .put(`${baseURL}/api/v1/memos/${memoId}/dinner`, {
+        dinner: dinnerMemo,
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [memoId, dinnerMemo]);
+
+  const updateSnackMemo = useCallback(() => {
+    axios
+      .put(`${baseURL}/api/v1/memos/${memoId}/snack`, {
+        snack: snackMemo,
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [memoId, snackMemo]);
 
   useEffect(() => {
     axios
@@ -119,6 +173,7 @@ const RecordDetails: React.FC<Props> = (props) => {
       .get(`${baseURL}/api/v1/memos/${props.recordId}`)
       .then((res) => {
         if (res.data) {
+          setMemoId(res.data.id);
           setAppearanceMemo(res.data.appearance);
           setBreakfastMemo(res.data.breakfast);
           setLunchMemo(res.data.lunch);
@@ -136,96 +191,122 @@ const RecordDetails: React.FC<Props> = (props) => {
     <div className="wrap">
       <h2>{props.recordDate}</h2>
       <p>💪 見た目</p>
-      <div className={classes.box}>
+      <div className={classes.record}>
         {appearances.length > 0 && (
           <AppearancesGallery appearances={appearances} />
         )}
-        <TextInput
-          fullWidth={true}
-          label="メモ"
-          multiline={true}
-          required={false}
-          rows="5"
-          type="text"
-          name="appearance"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={appearanceMemo}
-          onChange={inputAppearance}
-        />
+        <div className={classes.recordRight}>
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="appearance"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={appearanceMemo}
+            onChange={inputAppearance}
+          />
+          <div className="space-m" />
+          <SecondaryButton
+            text="メモを更新する"
+            onClick={updateAppearanceMemo}
+          />
+        </div>
       </div>
       <p>🍙 朝食</p>
-      <div className={classes.box}>
+      <div className={classes.record}>
         {breakfasts.length > 0 && <MealsGallery meals={breakfasts} />}
-        <TextInput
-          fullWidth={true}
-          label="メモ"
-          multiline={true}
-          required={false}
-          rows="5"
-          type="text"
-          name="breakfast"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={breakfastMemo}
-          onChange={inputBreakfast}
-        />
+        <div className={classes.recordRight}>
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="breakfast"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={breakfastMemo}
+            onChange={inputBreakfast}
+          />
+          <div className="space-m" />
+          <SecondaryButton
+            text="メモを更新する"
+            onClick={updateBreakfastMemo}
+          />
+        </div>
       </div>
       <p>🍔 昼食</p>
-      <div className={classes.box}>
+      <div className={classes.record}>
         {lunchs.length > 0 && <MealsGallery meals={lunchs} />}
-        <TextInput
-          fullWidth={true}
-          label="メモ"
-          multiline={true}
-          required={false}
-          rows="5"
-          type="text"
-          name="lunch"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={lunchMemo}
-          onChange={inputLunch}
-        />
+        <div className={classes.recordRight}>
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="lunch"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={lunchMemo}
+            onChange={inputLunch}
+          />
+          <div className="space-m" />
+          <SecondaryButton text="メモを更新する" onClick={updateLunchMemo} />
+        </div>
       </div>
       <p>🍖 夕食</p>
-      <div className={classes.box}>
+      <div className={classes.record}>
         {dinners.length > 0 && <MealsGallery meals={dinners} />}
-        <TextInput
-          fullWidth={true}
-          label="メモ"
-          multiline={true}
-          required={false}
-          rows="5"
-          type="text"
-          name="dinner"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={dinnerMemo}
-          onChange={inputDinner}
-        />
+        <div className={classes.recordRight}>
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="dinner"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={dinnerMemo}
+            onChange={inputDinner}
+          />
+          <div className="space-m" />
+          <SecondaryButton text="メモを更新する" onClick={updateDinnerMemo} />
+        </div>
       </div>
       <p>🍰 間食</p>
-      <div className={classes.box}>
+      <div className={classes.record}>
         {snacks.length > 0 && <MealsGallery meals={snacks} />}
-        <TextInput
-          fullWidth={true}
-          label="メモ"
-          multiline={true}
-          required={false}
-          rows="5"
-          type="text"
-          name="snack"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={snackMemo}
-          onChange={inputSnack}
-        />
+        <div className={classes.recordRight}>
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="snack"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={snackMemo}
+            onChange={inputSnack}
+          />
+          <div className="space-m" />
+          <SecondaryButton text="メモを更新する" onClick={updateSnackMemo} />
+        </div>
       </div>
     </div>
   );
