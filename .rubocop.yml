@@ -41,8 +41,8 @@ RSpec/MultipleExpectations:
 RSpec/InstanceVariable:
   Enabled: false
 
-ClassAndModuleChildren:
+RSpec/NestedGroups:
   Enabled: false
 
-Lint/SuppressedException:
+ClassAndModuleChildren:
   Enabled: false

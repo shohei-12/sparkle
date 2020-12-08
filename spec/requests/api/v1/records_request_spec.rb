@@ -30,9 +30,8 @@ RSpec.describe 'Api::V1::Records', type: :request do
         }
       end
 
-      it 'not save record' do
-        save_record(invalid_data)
-      rescue StandardError
+      it 'raise ActiveRecord::RecordNotFound' do
+        expect { save_record(invalid_data) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

@@ -36,31 +36,39 @@ RSpec.describe 'Api::V1::Appearances', type: :request do
   end
 
   describe 'GET /api/v1/appearances' do
-    context 'when there is corresponding appearances in record' do
-      let(:data) do
-        {
-          id: appearance.record.id
-        }
+    context 'when record exists' do
+      context 'when there is corresponding appearances in record' do
+        let(:data) do
+          {
+            id: appearance.record.id
+          }
+        end
+
+        it 'get appearances' do
+          get_appearance(data)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body)[0]['id']).to eq appearance.id
+        end
       end
 
-      it 'get appearances' do
-        get_appearance(data)
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body)[0]['id']).to eq appearance.id
+      context 'when there is not corresponding appearances in record' do
+        let(:data) do
+          {
+            id: record.id
+          }
+        end
+
+        it 'not get appearances' do
+          get_appearance(data)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body)).to eq []
+        end
       end
     end
 
-    context 'when there is not corresponding appearances in record' do
-      let(:data) do
-        {
-          id: record.id
-        }
-      end
-
-      it 'not get appearances' do
-        get_appearance(data)
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq []
+    context 'when record does not exist' do
+      it 'raise ActiveRecord::RecordNotFound' do
+        expect { get_appearance({ id: record.id + 1 }) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
