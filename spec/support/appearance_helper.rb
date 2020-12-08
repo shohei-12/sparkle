@@ -3,7 +3,7 @@ module AppearanceHelpers
     post '/api/v1/appearances', params: data
   end
 
-  def get_appearance(data)
-    get '/api/v1/appearances', params: data
+  def get_appearances(data)
+    get "/api/v1/appearances/#{data}"
   end
 end
