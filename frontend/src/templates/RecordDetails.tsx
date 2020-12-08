@@ -69,13 +69,22 @@ const RecordDetails: React.FC<Props> = (props) => {
       .catch((error) => {
         throw new Error(error);
       });
+    axios({
+      method: "GET",
+      url: `${baseURL}/api/v1/memos/${props.recordId}`,
+    })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="wrap">
-      <h1>詳細</h1>
-      <p>{props.recordDate}</p>
+      <h2>{props.recordDate}</h2>
       {appearances.length > 0 && (
         <AppearancesGallery appearances={appearances} />
       )}
