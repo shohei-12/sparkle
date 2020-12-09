@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
     profile: {
       width: 30,
       height: 30,
-      objectFit: "contain",
+      objectFit: "cover",
       borderRadius: "50%",
     },
     close: {

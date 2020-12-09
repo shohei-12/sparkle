@@ -37,7 +37,7 @@ const App: React.FC = () => {
         main: colors.lightBlue[500],
       },
       secondary: {
-        main: colors.pink[400],
+        main: colors.yellow[500],
       },
       type: "light",
     },
@@ -49,7 +49,7 @@ const App: React.FC = () => {
         main: colors.lightBlue[500],
       },
       secondary: {
-        main: colors.pink[400],
+        main: colors.yellow[500],
       },
       type: "dark",
     },

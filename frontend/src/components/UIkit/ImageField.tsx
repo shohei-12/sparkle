@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "50%",
     },
     image: {
-      objectFit: "contain",
+      objectFit: "cover",
     },
     addImage: {
       display: "inline-block",
