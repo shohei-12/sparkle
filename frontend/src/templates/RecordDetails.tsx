@@ -3,19 +3,32 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AppearancesGallery, MealsGallery } from "../components/Record";
 import { SecondaryButton, TextInput } from "../components/UIkit";
+import NoImage from "../assets/img/no-image.png";
 import { baseURL } from "../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     record: {
       marginBottom: 20,
+      textAlign: "center",
       [theme.breakpoints.up("md")]: {
         display: "flex",
         marginBottom: 0,
+        textAlign: "start",
       },
     },
     recordRight: {
-      width: 330,
+      maxWidth: 330,
+      width: "100%",
+      margin: "0 auto",
+    },
+    noImage: {
+      maxWidth: 350,
+      width: "100%",
+      [theme.breakpoints.up("md")]: {
+        marginRight: 20,
+        marginBottom: 20,
+      },
     },
   })
 );
@@ -192,8 +205,10 @@ const RecordDetails: React.FC<Props> = (props) => {
       <h2>{props.recordDate}</h2>
       <p>💪 見た目</p>
       <div className={classes.record}>
-        {appearances.length > 0 && (
+        {appearances.length > 0 ? (
           <AppearancesGallery appearances={appearances} />
+        ) : (
+          <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
           <TextInput
@@ -219,7 +234,11 @@ const RecordDetails: React.FC<Props> = (props) => {
       </div>
       <p>🍙 朝食</p>
       <div className={classes.record}>
-        {breakfasts.length > 0 && <MealsGallery meals={breakfasts} />}
+        {breakfasts.length > 0 ? (
+          <MealsGallery meals={breakfasts} />
+        ) : (
+          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+        )}
         <div className={classes.recordRight}>
           <TextInput
             fullWidth={true}
@@ -244,7 +263,11 @@ const RecordDetails: React.FC<Props> = (props) => {
       </div>
       <p>🍔 昼食</p>
       <div className={classes.record}>
-        {lunchs.length > 0 && <MealsGallery meals={lunchs} />}
+        {lunchs.length > 0 ? (
+          <MealsGallery meals={lunchs} />
+        ) : (
+          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+        )}
         <div className={classes.recordRight}>
           <TextInput
             fullWidth={true}
@@ -266,7 +289,11 @@ const RecordDetails: React.FC<Props> = (props) => {
       </div>
       <p>🍖 夕食</p>
       <div className={classes.record}>
-        {dinners.length > 0 && <MealsGallery meals={dinners} />}
+        {dinners.length > 0 ? (
+          <MealsGallery meals={dinners} />
+        ) : (
+          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+        )}
         <div className={classes.recordRight}>
           <TextInput
             fullWidth={true}
@@ -288,7 +315,11 @@ const RecordDetails: React.FC<Props> = (props) => {
       </div>
       <p>🍰 間食</p>
       <div className={classes.record}>
-        {snacks.length > 0 && <MealsGallery meals={snacks} />}
+        {snacks.length > 0 ? (
+          <MealsGallery meals={snacks} />
+        ) : (
+          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+        )}
         <div className={classes.recordRight}>
           <TextInput
             fullWidth={true}
