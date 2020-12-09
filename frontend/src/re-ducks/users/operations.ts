@@ -4,6 +4,27 @@ import { signInAction, signOutAction, toggleThemeAction } from "./actions";
 import { flashAction } from "../flash/actions";
 import { baseURL } from "../../config";
 
+const signInAfterSavingToken = (
+  dispatch: any,
+  responseData: any,
+  responseHeaders: any
+) => {
+  localStorage.setItem("uid", responseHeaders.uid);
+  localStorage.setItem("client", responseHeaders.client);
+  localStorage.setItem("access_token", responseHeaders.access_token);
+  dispatch(
+    signInAction({
+      isSignedIn: true,
+      id: String(responseData.id),
+      name: responseData.name,
+      email: responseData.email,
+      profile: responseData.profile.url,
+      theme: responseData.theme,
+    })
+  );
+  dispatch(push("/"));
+};
+
 export const listenAuthState = () => {
   return async (dispatch: any) => {
     axios({
@@ -49,20 +70,7 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
           dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
         const responseData = res.data.data;
         const responseHeaders = res.headers;
-        localStorage.setItem("uid", responseHeaders.uid);
-        localStorage.setItem("client", responseHeaders.client);
-        localStorage.setItem("access_token", responseHeaders.access_token);
-        dispatch(
-          signInAction({
-            isSignedIn: true,
-            id: String(responseData.id),
-            name: responseData.name,
-            email: responseData.email,
-            profile: responseData.profile.url,
-            theme: responseData.theme,
-          })
-        );
-        dispatch(push("/"));
+        signInAfterSavingToken(dispatch, responseData, responseHeaders);
       })
       .catch(() => {
         dispatch(
@@ -71,6 +79,28 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
             msg: "入力されたメールアドレスまたはパスワードに誤りがあります。",
           })
         );
+      });
+  };
+};
+
+export const signInAsGuestUser = () => {
+  return async (dispatch: any) => {
+    axios({
+      method: "POST",
+      url: `${baseURL}/api/v1/auth/sign_in`,
+      data: {
+        email: "guest@example.com",
+        password: "password",
+      },
+    })
+      .then((res) => {
+        dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
+        const responseData = res.data.data;
+        const responseHeaders = res.headers;
+        signInAfterSavingToken(dispatch, responseData, responseHeaders);
+      })
+      .catch((error) => {
+        throw new Error(error);
       });
   };
 };
@@ -92,6 +122,7 @@ export const signOut = () => {
         localStorage.removeItem("client");
         localStorage.removeItem("access_token");
         dispatch(signOutAction());
+        dispatch(push("/signin"));
       })
       .catch((error) => {
         throw new Error(error);

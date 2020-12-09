@@ -16,6 +16,16 @@ User.create!(
   theme: 'light'
 )
 
+# guest user
+User.create!(
+  profile: open("#{Rails.root}/db/fixtures/guest-profile.jpg"),
+  name: 'ゲスト',
+  email: 'guest@example.com',
+  password: 'password',
+  password_confirmation: 'password',
+  theme: 'light'
+)
+
 # sub user
 4.times do |n|
   User.create!(
