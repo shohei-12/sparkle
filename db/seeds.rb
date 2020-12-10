@@ -28,19 +28,33 @@ User.create!(
 end
 
 # records
-[1, 2, 3, 4, 5].each do |i|
-  20.times do |n|
+head = Date.new(2021, 1, 1)
+tail = Date.new(2021, 2, 28)
+(head..tail).each do |d|
+  [1, 2, 3, 4, 5].each do |n|
     Record.create!(
-      date: Date.new(2021, 1, n + 1),
+      date: d,
       appearance: open("#{Rails.root}/db/fixtures/appearances/appearance#{rand(1..5)}.jpg"),
-      user_id: i
+      user_id: n
     )
   end
 end
 
+# memos
+295.times do |n|
+  Memo.create!(
+    appearance: '見た目についてメモを残せます。',
+    breakfast: '朝食についてメモを残せます。',
+    lunch: '昼食についてメモを残せます。',
+    dinner: '夕食についてメモを残せます。',
+    snack: '間食についてメモを残せます。',
+    record_id: n + 1
+  )
+end
+
 # appearances
-100.times do |i|
-  5.times do |n|
+295.times do |i|
+  rand(0..5).times do |n|
     Appearance.create!(
       image: open("#{Rails.root}/db/fixtures/appearances/appearance#{n + 1}.jpg"),
       record_id: i + 1
@@ -48,30 +62,33 @@ end
   end
 end
 
-# meals
-100.times do |i|
-  3.times do |n|
+# mealss
+295.times do |i|
+  rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/breakfasts/meal#{n + 1}.jpg"),
       record_id: i + 1,
       eating_time_id: 1
     )
   end
-  3.times do |n|
+
+  rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/lunchs/meal#{n + 1}.jpg"),
       record_id: i + 1,
       eating_time_id: 2
     )
   end
-  3.times do |n|
+
+  rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/dinners/meal#{n + 1}.jpg"),
       record_id: i + 1,
       eating_time_id: 3
     )
   end
-  3.times do |n|
+
+  rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/snacks/meal#{n + 1}.jpg"),
       record_id: i + 1,
