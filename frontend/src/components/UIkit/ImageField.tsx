@@ -1,10 +1,19 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Store } from "../../re-ducks/store/types";
+import { getUserId, getTheme } from "../../re-ducks/users/selectors";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import RemoveIcon from "@material-ui/icons/Remove";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    textLight: {
+      color: "rgba(0, 0, 0, 0.38)",
+    },
+    textDark: {
+      color: "rgba(255, 255, 255, 0.5)",
+    },
     previews: {
       display: "flex",
       flexWrap: "wrap",
@@ -83,6 +92,9 @@ type Props = {
 
 const ImageField: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const selector = useSelector((state: Store) => state);
+  const uid = getUserId(selector);
+  const theme = getTheme(selector);
   const [images, setImages] = useState<[File, string][]>([]);
 
   const preview = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +131,17 @@ const ImageField: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <p>{props.text}</p>
+      {uid === "1" ? (
+        <>
+          {theme === "light" ? (
+            <p className={classes.textLight}>{props.text}</p>
+          ) : (
+            <p className={classes.textDark}>{props.text}</p>
+          )}
+        </>
+      ) : (
+        <p>{props.text}</p>
+      )}
       <div className={classes.previews}>
         {images.length > 0 &&
           images.map((ele, index) => (
@@ -158,17 +180,42 @@ const ImageField: React.FC<Props> = (props) => {
           <>
             {props.uprofile ? (
               <label>
-                <img
-                  className={`${classes.image} ${classes.imageSize} ${classes.profile} pointer-h`}
-                  src={props.uprofile}
-                  alt="プレビュー"
-                />
-                <input
-                  className={classes.none}
-                  type="file"
-                  accept="image/*"
-                  onChange={preview}
-                />
+                {uid === "1" ? (
+                  <>
+                    <img
+                      className={
+                        classes.image +
+                        " " +
+                        classes.imageSize +
+                        " " +
+                        classes.profile
+                      }
+                      src={props.uprofile}
+                      alt="プレビュー"
+                    />
+                    <input
+                      className={classes.none}
+                      type="file"
+                      accept="image/*"
+                      onChange={preview}
+                      disabled
+                    />
+                  </>
+                ) : (
+                  <>
+                    <img
+                      className={`${classes.image} ${classes.imageSize} ${classes.profile} pointer-h`}
+                      src={props.uprofile}
+                      alt="プレビュー"
+                    />
+                    <input
+                      className={classes.none}
+                      type="file"
+                      accept="image/*"
+                      onChange={preview}
+                    />
+                  </>
+                )}
               </label>
             ) : (
               <>

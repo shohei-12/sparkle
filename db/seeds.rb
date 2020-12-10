@@ -6,16 +6,6 @@ EatingTime.create!([
                      { name: 'snack' }
                    ])
 
-# main user
-User.create!(
-  profile: open("#{Rails.root}/db/fixtures/profile.jpg"),
-  name: 'shohei',
-  email: 'shohei@example.com',
-  password: 'password',
-  password_confirmation: 'password',
-  theme: 'light'
-)
-
 # guest user
 User.create!(
   profile: open("#{Rails.root}/db/fixtures/guest-profile.jpg"),
