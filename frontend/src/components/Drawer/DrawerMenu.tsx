@@ -138,13 +138,16 @@ const DrawerMenu = () => {
 
   const dispatchDeleteUser = useCallback(() => {
     if (window.confirm("アカウントを削除しますか？")) {
-      type && dispatch(flashAction({ type: "", msg: "" }));
+      if (uid === "1") {
+        alert("ゲストユーザーはアカウントを削除できません！");
+        return;
+      }
       dispatch(deleteUser());
       if (window.innerWidth < 960) {
         handleDrawerToggle();
       }
     }
-  }, [dispatch, handleDrawerToggle, type]);
+  }, [dispatch, handleDrawerToggle, uid]);
 
   const signInList = [
     {

@@ -2,8 +2,10 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import {
+  getUserId,
   getUserName,
   getUserEmail,
   getUserProfile,
@@ -24,6 +26,7 @@ type Inputs = {
 const UserEdit: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
+  const uid = getUserId(selector);
   const uname = getUserName(selector);
   const uemail = getUserEmail(selector);
   const uprofile = getUserProfile(selector);
@@ -180,6 +183,11 @@ const UserEdit: React.FC = () => {
 
   return (
     <div className="wrap">
+      {uid === "1" && (
+        <Alert variant="filled" severity="warning">
+          ゲストユーザーはユーザー情報を変更できません！
+        </Alert>
+      )}
       <h2>ユーザー編集</h2>
       <ImageField
         text="プロフィール画像（任意）"
@@ -205,6 +213,7 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.name)}
         helperText={errors.name && errors.name.message}
+        disabled={uid === "1" ? true : false}
         onChange={inputName}
       />
       <TextInput
@@ -239,6 +248,7 @@ const UserEdit: React.FC = () => {
             email === duplicateEmail &&
             "このメールアドレスはすでに存在します。")
         }
+        disabled={uid === "1" ? true : false}
         onChange={inputEmail}
       />
       <TextInput
@@ -262,6 +272,7 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.password)}
         helperText={errors.password && errors.password.message}
+        disabled={uid === "1" ? true : false}
         placeholder="パスワードを変更しない場合は空白にしてください"
         InputLabelProps={{
           shrink: true,
@@ -286,6 +297,7 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.confirmPassword)}
         helperText={errors.confirmPassword && errors.confirmPassword.message}
+        disabled={uid === "1" ? true : false}
         placeholder="パスワードを変更しない場合は空白にしてください"
         InputLabelProps={{
           shrink: true,
@@ -302,6 +314,7 @@ const UserEdit: React.FC = () => {
         name="currentPassword"
         error={differentPassword ? true : false}
         helperText={differentPassword ? "パスワードが違います。" : undefined}
+        disabled={uid === "1" ? true : false}
         value={currentPassword}
         onChange={inputCurrentPassword}
       />
