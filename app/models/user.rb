@@ -22,4 +22,17 @@ class User < ApplicationRecord
             format: { with: /\A[\w-]+\z/ },
             confirmation: true
   validates :theme, presence: true, inclusion: { in: %w[light dark] }
+
+  def follow(other_user)
+    relationships.create(follow_id: other_user.id) unless self == other_user
+  end
+
+  def unfollow(other_user)
+    relationship = relationships.find_by(follow_id: other_user.id)
+    relationship&.destroy
+  end
+
+  def following?(other_user)
+    followings.include?(other_user)
+  end
 end

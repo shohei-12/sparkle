@@ -159,7 +159,7 @@ const DrawerMenu = () => {
           alt="プロフィール画像"
         />
       ),
-      path: "/user/details",
+      path: `/users/${uid}`,
     },
   ];
 
