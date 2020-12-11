@@ -16,7 +16,7 @@ const Router: React.FC = () => {
           path="/daily-record/:year/:month/:day"
           component={Record}
         />
-        <Route exact path="/user/details" component={UserDetails} />
+        <Route exact path="/users/:id" component={UserDetails} />
         <Route exact path="/user/edit" component={UserEdit} />
       </Auth>
     </Switch>
