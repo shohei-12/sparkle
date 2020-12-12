@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let(:user1) { build(:user) }
   let(:user2) { create(:user) }
+  let(:user3) { create(:user) }
+  let(:user4) { create(:user) }
 
   it 'return true' do
     expect(user1.valid?).to eq true
@@ -130,6 +132,75 @@ RSpec.describe User, type: :model do
 
       it 'return false' do
         expect(user1.valid?).to eq false
+      end
+    end
+  end
+
+  describe '#follow(other_user)' do
+    context 'when other_user exists' do
+      context 'when other_user is not self' do
+        context 'when not following other_user' do
+          it 'follow other_user' do
+            expect { user2.follow(user3) }.to change(Relationship, :count).by(1)
+            relationship = Relationship.first
+            expect(relationship.user_id).to eq user2.id
+            expect(relationship.follow_id).to eq user3.id
+          end
+        end
+
+        context 'when already following other_user' do
+          before do
+            expect { user2.follow(user3) }.to change(Relationship, :count).by(1)
+          end
+
+          it 'not follow other_user' do
+            expect { user2.follow(user3) }.to change(Relationship, :count).by(0)
+          end
+        end
+      end
+
+      context 'when other_user is self' do
+        it 'not follow other_user' do
+          expect { user2.follow(user2) }.to change(Relationship, :count).by(0)
+        end
+      end
+    end
+
+    context 'when other_user does not exist' do
+      it 'raise NoMethodError' do
+        expect { user2.follow(nil) }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
+  describe '#unfollow(other_user)' do
+    context 'when following other_user' do
+      before { user2.follow(user3) }
+
+      it 'unfollow other_user' do
+        expect { user2.unfollow(user3) }.to change(Relationship, :count).by(-1)
+      end
+    end
+
+    context 'when not following other_user' do
+      it 'return nil' do
+        expect(user2.unfollow(user4)).to eq nil
+      end
+    end
+  end
+
+  describe '#following?(other_user)' do
+    context 'when following other_user' do
+      before { user2.follow(user3) }
+
+      it 'return true' do
+        expect(user2.following?(user3)).to eq true
+      end
+    end
+
+    context 'when not following other_user' do
+      it 'return false' do
+        expect(user2.following?(user3)).to eq false
       end
     end
   end

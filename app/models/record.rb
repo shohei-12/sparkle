@@ -7,5 +7,5 @@ class Record < ApplicationRecord
   has_many :meals, dependent: :destroy
 
   validates :date, presence: true
-  validates :user, presence: true
+  validates :user, presence: true, uniqueness: { scope: :date }
 end
