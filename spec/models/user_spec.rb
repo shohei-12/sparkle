@@ -150,7 +150,7 @@ RSpec.describe User, type: :model do
 
         context 'when already following other_user' do
           before do
-            expect { user2.follow(user3) }.to change(Relationship, :count).by(1)
+            user2.follow(user3)
           end
 
           it 'not follow other_user' do
