@@ -119,8 +119,7 @@ const UserDetails: React.FC = () => {
       .catch((error) => {
         throw new Error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uid]);
 
   return (
     <div className="wrap">
