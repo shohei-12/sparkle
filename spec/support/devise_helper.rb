@@ -1,4 +1,4 @@
-module DeviseHelpers
+module DeviseHelper
   def sign_up(user)
     post '/api/v1/auth', params: user
   end

@@ -1,4 +1,4 @@
-module MealHelpers
+module MealsHelper
   def save_meal(data)
     post '/api/v1/meals', params: data
   end

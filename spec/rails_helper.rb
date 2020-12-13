@@ -34,12 +34,13 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
-  config.include AppearanceHelpers
-  config.include DeviseHelpers
-  config.include MealHelpers
-  config.include MemoHelpers
-  config.include RecordHelpers
-  config.include UserHelpers
+  config.include AppearancesHelper
+  config.include DeviseHelper
+  config.include MealsHelper
+  config.include MemosHelper
+  config.include RecordsHelper
+  config.include RelationshipsHelper
+  config.include UsersHelper
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
