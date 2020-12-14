@@ -8,6 +8,10 @@ module DeviseHelper
     response.headers.slice('uid', 'client', 'access_token')
   end
 
+  def get_current_user(token)
+    get '/api/v1/auth/validate_token', headers: token
+  end
+
   def sign_out(token)
     delete '/api/v1/auth/sign_out', headers: token
   end
