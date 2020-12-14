@@ -9,9 +9,15 @@ import RemoveIcon from "@material-ui/icons/Remove";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textLight: {
-      color: "rgba(0, 0, 0, 0.38)",
+      color: "rgba(0, 0, 0, 0.54)",
     },
     textDark: {
+      color: "rgba(255, 255, 255, 0.7)",
+    },
+    guestTextLight: {
+      color: "rgba(0, 0, 0, 0.38)",
+    },
+    guestTextDark: {
       color: "rgba(255, 255, 255, 0.5)",
     },
     previews: {
@@ -82,6 +88,7 @@ type Props = {
   sheets: number;
   profile: boolean;
   uprofile?: string;
+  userEdit?: boolean;
   setProfile?: React.Dispatch<React.SetStateAction<File | null>>;
   setAppearances?: React.Dispatch<React.SetStateAction<File[]>>;
   setBreakfasts?: React.Dispatch<React.SetStateAction<File[]>>;
@@ -131,16 +138,28 @@ const ImageField: React.FC<Props> = (props) => {
 
   return (
     <div>
-      {uid === "1" ? (
+      {uid === "1" && props.userEdit ? (
         <>
           {theme === "light" ? (
-            <p className={classes.textLight}>{props.text}</p>
+            <p className={classes.guestTextLight}>{props.text}</p>
           ) : (
-            <p className={classes.textDark}>{props.text}</p>
+            <p className={classes.guestTextDark}>{props.text}</p>
           )}
         </>
       ) : (
-        <p>{props.text}</p>
+        <>
+          {props.userEdit ? (
+            <>
+              {theme === "light" ? (
+                <p className={classes.textLight}>{props.text}</p>
+              ) : (
+                <p className={classes.textDark}>{props.text}</p>
+              )}
+            </>
+          ) : (
+            <p>{props.text}</p>
+          )}
+        </>
       )}
       <div className={classes.previews}>
         {images.length > 0 &&
