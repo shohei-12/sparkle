@@ -194,6 +194,7 @@ const UserEdit: React.FC = () => {
         sheets={0}
         profile={true}
         uprofile={uprofile ? baseURL + uprofile : NoProfile}
+        userEdit={true}
         setProfile={setProfile}
       />
       <TextInput
