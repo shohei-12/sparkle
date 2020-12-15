@@ -198,7 +198,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         throw new Error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.recordId]);
 
   return (
     <div className="wrap">

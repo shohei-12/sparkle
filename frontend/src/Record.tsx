@@ -5,6 +5,7 @@ import { Store } from "./re-ducks/store/types";
 import { getUserId } from "./re-ducks/users/selectors";
 import { baseURL } from "./config";
 import { RecordRegistration, RecordDetails } from "./templates";
+import { DateSwitch } from "./components/Record";
 
 const Record: React.FC = () => {
   const selector = useSelector((state: Store) => state);
@@ -12,6 +13,7 @@ const Record: React.FC = () => {
   const year = Number(window.location.pathname.split("/")[2]);
   const month = Number(window.location.pathname.split("/")[3]);
   const day = Number(window.location.pathname.split("/")[4]);
+  const date = new Date(year, month - 1, day);
 
   const [recordId, setRecordId] = useState<number | null>(null);
   const [recordDate, setRecordDate] = useState<string | null>(null);
@@ -31,19 +33,30 @@ const Record: React.FC = () => {
           setRecordId(res.data.id);
           setRecordDate(res.data.date);
         } else {
+          setRecordId(null);
+          setRecordDate(null);
           setRecordRegistration(true);
         }
       })
       .catch((error) => {
         throw new Error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uid, year, month, day]);
 
   if (recordId && recordDate) {
-    return <RecordDetails recordId={recordId} recordDate={recordDate} />;
+    return (
+      <>
+        <DateSwitch date={date} />
+        <RecordDetails recordId={recordId} recordDate={recordDate} />
+      </>
+    );
   } else if (recordRegistration) {
-    return <RecordRegistration />;
+    return (
+      <>
+        <DateSwitch date={date} />
+        <RecordRegistration />
+      </>
+    );
   } else {
     return <></>;
   }
