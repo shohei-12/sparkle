@@ -105,6 +105,7 @@ const SignUp: React.FC = () => {
         text="プロフィール画像（任意）"
         sheets={0}
         profile={true}
+        signUp={true}
         setProfile={setProfile}
       />
       <TextInput

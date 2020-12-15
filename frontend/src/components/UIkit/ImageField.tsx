@@ -88,6 +88,7 @@ type Props = {
   sheets: number;
   profile: boolean;
   uprofile?: string;
+  signUp?: boolean;
   userEdit?: boolean;
   setProfile?: React.Dispatch<React.SetStateAction<File | null>>;
   setAppearances?: React.Dispatch<React.SetStateAction<File[]>>;
@@ -148,7 +149,7 @@ const ImageField: React.FC<Props> = (props) => {
         </>
       ) : (
         <>
-          {props.userEdit ? (
+          {props.userEdit || props.signUp ? (
             <>
               {theme === "light" ? (
                 <p className={classes.textLight}>{props.text}</p>
