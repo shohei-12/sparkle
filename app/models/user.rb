@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :followings, through: :relationships, source: :follow
   has_many :reverse_of_relationships, class_name: 'Relationship', foreign_key: 'follow_id', dependent: :destroy
   has_many :followers, through: :reverse_of_relationships, source: :user
+  has_many :likes, dependent: :destroy
+  has_many :like_records, through: :likes, source: :record
 
   validates :name, presence: true, length: { maximum: 20 }
   validates :email,
@@ -34,5 +36,14 @@ class User < ApplicationRecord
 
   def following?(other_user)
     followings.include?(other_user)
+  end
+
+  def like(record)
+    likes.create(record_id: record.id)
+  end
+
+  def unlike(record)
+    like = likes.find_by(record_id: record.id)
+    like&.destroy
   end
 end
