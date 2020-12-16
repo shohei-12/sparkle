@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   recordId: number;
-  recordDate: string;
 };
 
 const RecordDetails: React.FC<Props> = (props) => {
@@ -201,8 +200,7 @@ const RecordDetails: React.FC<Props> = (props) => {
   }, [props.recordId]);
 
   return (
-    <div className="wrap">
-      <h2>{props.recordDate}</h2>
+    <>
       <p>💪 見た目</p>
       <div className={classes.record}>
         {appearances.length > 0 ? (
@@ -339,7 +337,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <SecondaryButton text="メモを更新する" onClick={updateSnackMemo} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -182,7 +182,7 @@ const UserEdit: React.FC = () => {
   };
 
   return (
-    <div className="wrap">
+    <>
       {uid === "1" && (
         <Alert variant="filled" severity="warning">
           ゲストユーザーはユーザー情報を変更できません！
@@ -325,7 +325,7 @@ const UserEdit: React.FC = () => {
         disabled={name && email && currentPassword ? false : true}
         onClick={handleSubmit(updateUser)}
       />
-    </div>
+    </>
   );
 };
 

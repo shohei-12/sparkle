@@ -16,7 +16,6 @@ const Record: React.FC = () => {
   const date = new Date(year, month - 1, day);
 
   const [recordId, setRecordId] = useState<number | null>(null);
-  const [recordDate, setRecordDate] = useState<string | null>(null);
   const [recordRegistration, setRecordRegistration] = useState(false);
 
   useEffect(() => {
@@ -31,10 +30,8 @@ const Record: React.FC = () => {
       .then((res) => {
         if (res.data) {
           setRecordId(res.data.id);
-          setRecordDate(res.data.date);
         } else {
           setRecordId(null);
-          setRecordDate(null);
           setRecordRegistration(true);
         }
       })
@@ -43,11 +40,11 @@ const Record: React.FC = () => {
       });
   }, [uid, year, month, day]);
 
-  if (recordId && recordDate) {
+  if (recordId) {
     return (
       <>
         <DateSwitch date={date} />
-        <RecordDetails recordId={recordId} recordDate={recordDate} />
+        <RecordDetails recordId={recordId} />
       </>
     );
   } else if (recordRegistration) {

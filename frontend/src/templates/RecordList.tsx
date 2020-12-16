@@ -77,7 +77,7 @@ const RecordList: React.FC = () => {
   }, []);
 
   return (
-    <div className="wrap">
+    <>
       <InfiniteScroll
         loadMore={getRecords}
         initialLoad={false}
@@ -108,7 +108,7 @@ const RecordList: React.FC = () => {
             </Card>
           ))}
       </InfiniteScroll>
-    </div>
+    </>
   );
 };
 

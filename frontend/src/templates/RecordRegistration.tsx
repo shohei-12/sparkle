@@ -157,8 +157,7 @@ const RecordRegistration: React.FC = () => {
   ]);
 
   return (
-    <div className="wrap">
-      <h2>{`${year}-${month}-${day}`}</h2>
+    <>
       <ImageField
         text="💪 見た目を記録する（最大5枚）"
         sheets={4}
@@ -240,7 +239,7 @@ const RecordRegistration: React.FC = () => {
         onChange={inputSnack}
       />
       <SecondaryButton text="記録する" onClick={createRecord} />
-    </div>
+    </>
   );
 };
 
