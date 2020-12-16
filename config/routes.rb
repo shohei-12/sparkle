@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :meals
       resources :memos
       resources :relationships, only: %i[create destroy]
+      resources :likes, only: %i[create destroy]
     end
   end
 end
