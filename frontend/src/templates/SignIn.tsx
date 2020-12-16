@@ -42,7 +42,7 @@ const SignIn: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="wrap">
+    <>
       <h2>ログイン</h2>
       <TextInput
         fullWidth={true}
@@ -78,7 +78,7 @@ const SignIn: React.FC = () => {
       >
         ゲストユーザーでログインする
       </Button>
-    </div>
+    </>
   );
 };
 

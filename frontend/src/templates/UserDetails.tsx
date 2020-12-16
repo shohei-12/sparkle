@@ -122,7 +122,7 @@ const UserDetails: React.FC = () => {
   }, [uid]);
 
   return (
-    <div className="wrap">
+    <>
       <h2>My Page</h2>
       <img
         className={classes.profile}
@@ -156,7 +156,7 @@ const UserDetails: React.FC = () => {
         value={new Date()}
         onClickDay={goDailyRecordPage}
       />
-    </div>
+    </>
   );
 };
 
