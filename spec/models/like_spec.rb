@@ -23,6 +23,18 @@ RSpec.describe Like, type: :model do
         expect(like.valid?).to eq false
       end
     end
+
+    context 'when duplicate combination of user_id and record_id' do
+      before do
+        @like = create(:like)
+        like.user_id = @like.user_id
+        like.record_id = @like.record_id
+      end
+
+      it 'return false' do
+        expect(like.valid?).to eq false
+      end
+    end
   end
 
   describe 'record_id' do
