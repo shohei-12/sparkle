@@ -32,6 +32,14 @@ RSpec.describe 'Api::V1::Likes', type: :request do
         end
       end
 
+      context 'when already liking' do
+        it 'not like' do
+          like(valid_data)
+          expect { like(valid_data) }.to change(Like, :count).by(0)
+          expect(response.status).to eq 204
+        end
+      end
+
       context 'when record does not exist' do
         let(:invalid_data) do
           {

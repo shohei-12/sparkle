@@ -220,6 +220,14 @@ RSpec.describe User, type: :model do
       end
     end
 
+    context 'when already liking' do
+      before { user2.like(record) }
+
+      it 'not like record' do
+        expect { user2.like(record) }.to change(Like, :count).by(0)
+      end
+    end
+
     context 'when record does not exist' do
       it 'raise NoMethodError' do
         expect { user2.like(nil) }.to raise_error(NoMethodError)
