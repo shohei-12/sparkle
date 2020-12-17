@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
   let(:user2) { create(:user) }
   let(:user3) { create(:user) }
   let(:user4) { create(:user) }
+  let(:record) { create(:record) }
 
   it 'return true' do
     expect(user1.valid?).to eq true
@@ -185,6 +186,12 @@ RSpec.describe User, type: :model do
         expect(user2.unfollow(user4)).to eq nil
       end
     end
+
+    context 'when other_user does not exist' do
+      it 'raise NoMethodError' do
+        expect { user2.unfollow(nil) }.to raise_error(NoMethodError)
+      end
+    end
   end
 
   describe '#following?(other_user)' do
@@ -199,6 +206,45 @@ RSpec.describe User, type: :model do
     context 'when not following other_user' do
       it 'return false' do
         expect(user2.following?(user3)).to eq false
+      end
+    end
+  end
+
+  describe '#like(record)' do
+    context 'when record exists' do
+      it 'like record' do
+        expect { user2.like(record) }.to change(Like, :count).by(1)
+        like = Like.first
+        expect(like.user_id).to eq user2.id
+        expect(like.record_id).to eq record.id
+      end
+    end
+
+    context 'when record does not exist' do
+      it 'raise NoMethodError' do
+        expect { user2.like(nil) }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
+  describe '#unlike(record)' do
+    context 'when liking' do
+      before { user2.like(record) }
+
+      it 'unlike record' do
+        expect { user2.unlike(record) }.to change(Like, :count).by(-1)
+      end
+    end
+
+    context 'when not liking' do
+      it 'return nil' do
+        expect(user2.unlike(record)).to eq nil
+      end
+    end
+
+    context 'when record does not exist' do
+      it 'raise NoMethodError' do
+        expect { user2.unlike(nil) }.to raise_error(NoMethodError)
       end
     end
   end

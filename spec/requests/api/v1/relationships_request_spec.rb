@@ -20,6 +20,18 @@ RSpec.describe 'Api::V1::Relationships', type: :request do
     end
 
     context 'when data is invalid' do
+      context 'when token is invalid' do
+        let(:invalid_data) do
+          {
+            id: user2.id
+          }
+        end
+
+        it 'raise NoMethodError' do
+          expect { follow(invalid_data) }.to raise_error(NoMethodError)
+        end
+      end
+
       context 'when already following' do
         it 'not follow' do
           follow(valid_data)
