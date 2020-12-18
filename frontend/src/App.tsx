@@ -59,10 +59,8 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
       <DrawerMenu />
       <main className={classes.main}>
-        <div className="wrap">
-          <FlashMessage />
-          <Router />
-        </div>
+        <FlashMessage />
+        <Router />
       </main>
     </ThemeProvider>
   );

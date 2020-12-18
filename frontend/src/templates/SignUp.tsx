@@ -99,7 +99,7 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="wrap">
       <h2>新規ユーザー登録</h2>
       <ImageField
         text="プロフィール画像（任意）"
@@ -212,7 +212,7 @@ const SignUp: React.FC = () => {
         disabled={name && email && password && confirmPassword ? false : true}
         onClick={handleSubmit(signUp)}
       />
-    </>
+    </div>
   );
 };
 

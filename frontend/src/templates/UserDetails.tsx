@@ -96,33 +96,35 @@ const UserDetails: React.FC = () => {
   }, [setUnfollowBtnText]);
 
   useEffect(() => {
-    axios
-      .get(`${baseURL}/api/v1/users/${uid}`)
-      .then((res) => {
-        axios
-          .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
-            params: {
-              uid: localStorage.getItem("uid"),
-              client: localStorage.getItem("client"),
-              access_token: localStorage.getItem("access_token"),
-            },
-          })
-          .then((res) => {
-            setFollowing(res.data);
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-        setName(res.data.name);
-        setProfile(res.data.profile.url);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    if (window.location.pathname === `/users/${uid}`) {
+      axios
+        .get(`${baseURL}/api/v1/users/${uid}`)
+        .then((res) => {
+          axios
+            .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
+              params: {
+                uid: localStorage.getItem("uid"),
+                client: localStorage.getItem("client"),
+                access_token: localStorage.getItem("access_token"),
+              },
+            })
+            .then((res) => {
+              setFollowing(res.data);
+            })
+            .catch((error) => {
+              throw new Error(error);
+            });
+          setName(res.data.name);
+          setProfile(res.data.profile.url);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
   }, [uid]);
 
   return (
-    <>
+    <div className="wrap">
       <h2>My Page</h2>
       <img
         className={classes.profile}
@@ -156,7 +158,7 @@ const UserDetails: React.FC = () => {
         value={new Date()}
         onClickDay={goDailyRecordPage}
       />
-    </>
+    </div>
   );
 };
 

@@ -32,6 +32,12 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+ClassAndModuleChildren:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
 RSpec/EmptyExampleGroup:
   Enabled: false
 
@@ -45,7 +51,4 @@ RSpec/InstanceVariable:
   Enabled: false
 
 RSpec/NestedGroups:
-  Enabled: false
-
-ClassAndModuleChildren:
   Enabled: false
