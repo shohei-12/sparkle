@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
+import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -7,11 +9,32 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import { baseURL } from "../config";
 import NoImage from "../assets/img/no-image.png";
+import NoProfile from "../assets/img/no-profile.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    record: {
+      display: "inline-block",
+      margin: 8,
+      [theme.breakpoints.up("xs")]: {
+        width: "100%",
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "calc(50% - 16px)",
+      },
+      [theme.breakpoints.up("lg")]: {
+        width: "calc(33.3333% - 16px)",
+      },
+      [theme.breakpoints.up("xl")]: {
+        width: "calc(25% - 16px)",
+      },
+    },
     media: {
       height: 0,
       paddingTop: "56.25%", // 16:9
@@ -23,16 +46,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Record = {
-  id: number;
   date: string;
-  user_id: number;
-  created_at: string;
-  updated_at: string;
   appearance: { url: string | null };
+  profile: { url: string | null };
+  author: string;
+  author_id: number;
 };
 
 const RecordList: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [records, setRecords] = useState<Record[]>([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -67,7 +90,7 @@ const RecordList: React.FC = () => {
       },
     })
       .then((res) => {
-        setRecords([...res.data]);
+        setRecords(res.data);
         setStart(20);
       })
       .catch((error) => {
@@ -94,8 +117,44 @@ const RecordList: React.FC = () => {
       >
         {records.length > 0 &&
           records.map((ele, i) => (
-            <Card key={i}>
-              <CardHeader title="record" />
+            <Card key={i} className={classes.record}>
+              {ele.profile.url ? (
+                <CardHeader
+                  avatar={
+                    <Avatar>
+                      <img
+                        className="pointer-h"
+                        src={baseURL + ele.profile.url}
+                        alt="プロフィール画像"
+                        width="40"
+                        height="40"
+                        onClick={() =>
+                          dispatch(push(`/users/${ele.author_id}`))
+                        }
+                      />
+                    </Avatar>
+                  }
+                  title={ele.author}
+                />
+              ) : (
+                <CardHeader
+                  avatar={
+                    <Avatar>
+                      <img
+                        className="pointer-h"
+                        src={NoProfile}
+                        alt="プロフィール画像"
+                        width="40"
+                        height="40"
+                        onClick={() =>
+                          dispatch(push(`/users/${ele.author_id}`))
+                        }
+                      />
+                    </Avatar>
+                  }
+                  title={ele.author}
+                />
+              )}
               {ele.appearance.url ? (
                 <CardMedia
                   className={classes.media}
@@ -105,6 +164,11 @@ const RecordList: React.FC = () => {
                 <CardMedia className={classes.media} image={NoImage} />
               )}
               <CardContent>{ele.date}</CardContent>
+              <CardActions>
+                <IconButton aria-label="いいね">
+                  <FavoriteIcon />
+                </IconButton>
+              </CardActions>
             </Card>
           ))}
       </InfiniteScroll>
