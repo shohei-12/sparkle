@@ -16,7 +16,13 @@ class Api::V1::RecordsController < ApplicationController
     records = Record.limit(20).offset(params[:start])
     array = []
     records.each do |record|
-      array.push({ date: record.date, appearance: record.appearance, profile: record.user.profile, author: record.user.name, author_id: record.user_id })
+      array.push({
+                   date: record.date,
+                   appearance: record.appearance,
+                   profile: record.user.profile,
+                   author: record.user.name,
+                   author_id: record.user_id
+                 })
     end
     render json: array
   end
