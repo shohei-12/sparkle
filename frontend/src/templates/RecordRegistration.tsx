@@ -64,16 +64,14 @@ const RecordRegistration: React.FC = () => {
   );
 
   const createRecord = useCallback(() => {
-    const data = new FormData();
-    data.append("id", uid);
-    data.append("date", `${year}-${month}-${day}`);
-    data.append("appearance", appearances[0]);
-    axios
-      .post(`${baseURL}/api/v1/records`, data, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
+    axios({
+      method: "POST",
+      url: `${baseURL}/api/v1/records`,
+      data: {
+        id: uid,
+        date: new Date(year, month - 1, day + 1),
+      },
+    })
       .then(async (res) => {
         const recordId = String(res.data.id);
         axios({
@@ -133,7 +131,7 @@ const RecordRegistration: React.FC = () => {
           data.delete("eating_time_id");
         }
         dispatch(flashAction({ type: "success", msg: "記録しました！" }));
-        dispatch(push("/user/details"));
+        dispatch(push(`/users/${uid}`));
       })
       .catch((error) => {
         throw new Error(error);

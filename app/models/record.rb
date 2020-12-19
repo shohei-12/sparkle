@@ -1,6 +1,4 @@
 class Record < ApplicationRecord
-  mount_uploader :appearance, ImageUploader
-
   belongs_to :user
   has_one :memo, dependent: :destroy
   has_many :appearances, dependent: :destroy

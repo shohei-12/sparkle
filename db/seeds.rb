@@ -34,7 +34,6 @@ tail = Date.new(2021, 2, 28)
   [1, 2, 3, 4, 5].each do |n|
     Record.create!(
       date: d,
-      appearance: open("#{Rails.root}/db/fixtures/appearances/appearance#{rand(1..5)}.jpg"),
       user_id: n
     )
   end
@@ -53,11 +52,11 @@ end
 end
 
 # appearances
-295.times do |i|
-  rand(0..5).times do |n|
+295.times do |n|
+  rand(0..5).times do
     Appearance.create!(
-      image: open("#{Rails.root}/db/fixtures/appearances/appearance#{n + 1}.jpg"),
-      record_id: i + 1
+      image: open("#{Rails.root}/db/fixtures/appearances/appearance#{rand(1..5)}.jpg"),
+      record_id: n + 1
     )
   end
 end
