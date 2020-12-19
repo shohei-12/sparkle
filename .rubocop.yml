@@ -38,6 +38,9 @@ ClassAndModuleChildren:
 Metrics/MethodLength:
   Enabled: false
 
+Metrics/AbcSize:
+  Max: 25
+
 RSpec/EmptyExampleGroup:
   Enabled: false
 
