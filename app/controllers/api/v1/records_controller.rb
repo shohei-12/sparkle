@@ -17,11 +17,14 @@ class Api::V1::RecordsController < ApplicationController
     array = []
     records.each do |record|
       array.push({
+                   record_id: record.id,
                    date: record.date,
                    appearance: record.appearances.first,
                    profile: record.user.profile,
                    author: record.user.name,
-                   author_id: record.user_id
+                   author_id: record.user_id,
+                   likes: record.likes.length,
+                   liking: record.liked_by?(current_api_v1_user)
                  })
     end
     render json: array

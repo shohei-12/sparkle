@@ -9,7 +9,6 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -39,6 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 0,
       paddingTop: "56.25%", // 16:9
     },
+    iconArea: {
+      padding: "0 8px 8px",
+    },
+    unlikeIcon: {
+      color: "#f44336",
+    },
     loader: {
       margin: "0 auto",
     },
@@ -46,11 +51,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Record = {
+  record_id: number;
   date: string;
   appearance: any;
   profile: { url: string | null };
   author: string;
   author_id: number;
+  likes: number;
+  liking: boolean;
 };
 
 const RecordList: React.FC = () => {
@@ -60,12 +68,44 @@ const RecordList: React.FC = () => {
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
+  const like = useCallback((recordId: number) => {
+    axios
+      .post(`${baseURL}/api/v1/likes`, {
+        id: recordId,
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
+      })
+      .then(() => {})
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, []);
+
+  const unlike = useCallback((recordId: number) => {
+    axios
+      .delete(`${baseURL}/api/v1/likes/${recordId}`, {
+        data: {
+          uid: localStorage.getItem("uid"),
+          client: localStorage.getItem("client"),
+          access_token: localStorage.getItem("access_token"),
+        },
+      })
+      .then(() => {})
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, []);
+
   const getRecords = useCallback(() => {
     axios({
       method: "GET",
       url: `${baseURL}/api/v1/records`,
       params: {
         start,
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
       },
     })
       .then((res) => {
@@ -87,9 +127,13 @@ const RecordList: React.FC = () => {
       url: `${baseURL}/api/v1/records`,
       params: {
         start,
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
       },
     })
       .then((res) => {
+        console.log(res.data);
         setRecords(res.data);
         setStart(20);
       })
@@ -164,11 +208,24 @@ const RecordList: React.FC = () => {
                 <CardMedia className={classes.media} image={NoImage} />
               )}
               <CardContent>{ele.date}</CardContent>
-              <CardActions>
-                <IconButton aria-label="いいね">
-                  <FavoriteIcon />
-                </IconButton>
-              </CardActions>
+              <div className={classes.iconArea}>
+                {ele.liking ? (
+                  <IconButton
+                    aria-label="いいね解除"
+                    onClick={() => unlike(ele.record_id)}
+                  >
+                    <FavoriteIcon className={classes.unlikeIcon} />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    aria-label="いいね"
+                    onClick={() => like(ele.record_id)}
+                  >
+                    <FavoriteIcon />
+                  </IconButton>
+                )}
+                <span>{ele.likes}</span>
+              </div>
             </Card>
           ))}
       </InfiniteScroll>
