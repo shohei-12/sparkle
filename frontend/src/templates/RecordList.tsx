@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Record = {
   date: string;
-  appearance: { url: string | null };
+  appearance: any;
   profile: { url: string | null };
   author: string;
   author_id: number;
@@ -155,10 +155,10 @@ const RecordList: React.FC = () => {
                   title={ele.author}
                 />
               )}
-              {ele.appearance.url ? (
+              {ele.appearance ? (
                 <CardMedia
                   className={classes.media}
-                  image={baseURL + ele.appearance.url}
+                  image={baseURL + ele.appearance.image.url}
                 />
               ) : (
                 <CardMedia className={classes.media} image={NoImage} />

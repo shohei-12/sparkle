@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
     dateSwitch: {
       display: "flex",
       alignItems: "center",
-      justifyContent: "center",
     },
     date: {
       margin: "0 20px",

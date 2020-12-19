@@ -19,25 +19,27 @@ const Record: React.FC = () => {
   const [recordRegistration, setRecordRegistration] = useState(false);
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: `${baseURL}/api/v1/record`,
-      params: {
-        id: uid,
-        date: new Date(year, month - 1, day + 1),
-      },
-    })
-      .then((res) => {
-        if (res.data) {
-          setRecordId(res.data.id);
-        } else {
-          setRecordId(null);
-          setRecordRegistration(true);
-        }
+    if (window.location.pathname === `/daily-record/${year}/${month}/${day}`) {
+      axios({
+        method: "GET",
+        url: `${baseURL}/api/v1/record`,
+        params: {
+          id: uid,
+          date: new Date(year, month - 1, day + 1),
+        },
       })
-      .catch((error) => {
-        throw new Error(error);
-      });
+        .then((res) => {
+          if (res.data) {
+            setRecordId(res.data.id);
+          } else {
+            setRecordId(null);
+            setRecordRegistration(true);
+          }
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
   }, [uid, year, month, day]);
 
   if (recordId) {

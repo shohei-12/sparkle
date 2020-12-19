@@ -3,15 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Records', type: :request do
   let(:user) { create(:user) }
   let(:record) { create(:record) }
-  let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
 
   describe 'POST /api/v1/records' do
     context 'when data is valid' do
       let(:valid_data) do
         {
           id: user.id,
-          date: '2020-11-22',
-          appearance: image
+          date: '2020-11-22'
         }
       end
 
@@ -25,8 +23,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
       let(:invalid_data) do
         {
           id: user.id += 1,
-          date: '2020-11-22',
-          appearance: image
+          date: '2020-11-22'
         }
       end
 

@@ -2,7 +2,7 @@ class Api::V1::RecordsController < ApplicationController
   before_action :set_user, only: %i[create show]
 
   def create
-    record = @user.records.create(date: Date.parse(params[:date]), appearance: params[:appearance])
+    record = @user.records.create(date: params[:date])
     render json: record
   end
 
@@ -18,7 +18,7 @@ class Api::V1::RecordsController < ApplicationController
     records.each do |record|
       array.push({
                    date: record.date,
-                   appearance: record.appearance,
+                   appearance: record.appearances.first,
                    profile: record.user.profile,
                    author: record.user.name,
                    author_id: record.user_id
