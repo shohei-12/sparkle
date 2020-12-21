@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
+  uid: number;
   date: Date;
 };
 
@@ -36,23 +37,23 @@ const DateSwitch: React.FC<Props> = (props) => {
     date.setDate(day + 1);
     dispatch(
       push(
-        `/daily-record/${date.getFullYear()}/${
+        `/record/${props.uid}/${date.getFullYear()}/${
           date.getMonth() + 1
         }/${date.getDate()}`
       )
     );
-  }, [date, day, dispatch]);
+  }, [props.uid, date, day, dispatch]);
 
   const oneDayAgo = useCallback(() => {
     date.setDate(day - 1);
     dispatch(
       push(
-        `/daily-record/${date.getFullYear()}/${
+        `/record/${props.uid}/${date.getFullYear()}/${
           date.getMonth() + 1
         }/${date.getDate()}`
       )
     );
-  }, [date, day, dispatch]);
+  }, [props.uid, date, day, dispatch]);
 
   return (
     <div className={classes.dateSwitch}>

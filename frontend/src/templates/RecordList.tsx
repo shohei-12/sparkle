@@ -42,6 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 0,
       paddingTop: "56.25%", // 16:9
     },
+    cardContent: {
+      display: "inline-block",
+      padding: 0,
+      margin: 16,
+    },
     iconArea: {
       padding: "0 8px 8px",
     },
@@ -69,10 +74,19 @@ const RecordList: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [records, setRecords] = useState<Record[]>([]);
-  // const [likes, setLikes] = useState<number[]>([]);
-  // const [liking, setLiking] = useState<boolean[]>([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+
+  const goRecordDetailsPage = useCallback(
+    (author_id: number, dateString: string) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      dispatch(push(`/record/${author_id}/${year}/${month}/${day}`));
+    },
+    [dispatch]
+  );
 
   const like = useCallback(
     (recordId: number, i: number) => {
@@ -200,6 +214,7 @@ const RecordList: React.FC = () => {
                     </Avatar>
                   }
                   title={ele.author}
+                  subheader={ele.date}
                 />
               ) : (
                 <CardHeader
@@ -218,6 +233,7 @@ const RecordList: React.FC = () => {
                     </Avatar>
                   }
                   title={ele.author}
+                  subheader={ele.date}
                 />
               )}
               {ele.appearance ? (
@@ -228,7 +244,12 @@ const RecordList: React.FC = () => {
               ) : (
                 <CardMedia className={classes.media} image={NoImage} />
               )}
-              <CardContent>{ele.date}</CardContent>
+              <CardContent
+                className={`${classes.cardContent} pointer-h`}
+                onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
+              >
+                詳細を見る
+              </CardContent>
               <div className={classes.iconArea}>
                 {ele.liking ? (
                   <Tooltip title="いいね解除">
