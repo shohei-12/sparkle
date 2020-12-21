@@ -44,14 +44,14 @@ const UserDetails: React.FC = () => {
     dispatch(push("/user/edit"));
   }, [dispatch]);
 
-  const goDailyRecordPage = useCallback(
+  const goRecordPage = useCallback(
     (date: Date) => {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
-      dispatch(push(`/daily-record/${year}/${month}/${day}`));
+      dispatch(push(`/record/${uid}/${year}/${month}/${day}`));
     },
-    [dispatch]
+    [dispatch, uid]
   );
 
   const follow = useCallback(() => {
@@ -156,7 +156,7 @@ const UserDetails: React.FC = () => {
       <Calendar
         calendarType="US"
         value={new Date()}
-        onClickDay={goDailyRecordPage}
+        onClickDay={goRecordPage}
       />
     </div>
   );
