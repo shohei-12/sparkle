@@ -12,6 +12,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import Tooltip from "@material-ui/core/Tooltip";
 import { baseURL } from "../config";
 import NoImage from "../assets/img/no-image.png";
 import NoProfile from "../assets/img/no-profile.png";
@@ -20,18 +21,21 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     record: {
       display: "inline-block",
-      margin: 8,
       [theme.breakpoints.up("xs")]: {
         width: "100%",
+        margin: "8px 0",
       },
       [theme.breakpoints.up("sm")]: {
         width: "calc(50% - 16px)",
+        margin: 8,
       },
       [theme.breakpoints.up("lg")]: {
         width: "calc(33.3333% - 16px)",
+        margin: 8,
       },
       [theme.breakpoints.up("xl")]: {
         width: "calc(25% - 16px)",
+        margin: 8,
       },
     },
     media: {
@@ -65,37 +69,55 @@ const RecordList: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [records, setRecords] = useState<Record[]>([]);
+  // const [likes, setLikes] = useState<number[]>([]);
+  // const [liking, setLiking] = useState<boolean[]>([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const like = useCallback((recordId: number) => {
-    axios
-      .post(`${baseURL}/api/v1/likes`, {
-        id: recordId,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
-      })
-      .then(() => {})
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, []);
-
-  const unlike = useCallback((recordId: number) => {
-    axios
-      .delete(`${baseURL}/api/v1/likes/${recordId}`, {
-        data: {
+  const like = useCallback(
+    (recordId: number, i: number) => {
+      axios
+        .post(`${baseURL}/api/v1/likes`, {
+          id: recordId,
           uid: localStorage.getItem("uid"),
           client: localStorage.getItem("client"),
           access_token: localStorage.getItem("access_token"),
-        },
-      })
-      .then(() => {})
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, []);
+        })
+        .then(() => {
+          const recordsCopy = [...records];
+          recordsCopy[i].likes++;
+          recordsCopy[i].liking = true;
+          setRecords(recordsCopy);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    },
+    [records]
+  );
+
+  const unlike = useCallback(
+    (recordId: number, i: number) => {
+      axios
+        .delete(`${baseURL}/api/v1/likes/${recordId}`, {
+          data: {
+            uid: localStorage.getItem("uid"),
+            client: localStorage.getItem("client"),
+            access_token: localStorage.getItem("access_token"),
+          },
+        })
+        .then(() => {
+          const recordsCopy = [...records];
+          recordsCopy[i].likes--;
+          recordsCopy[i].liking = false;
+          setRecords(recordsCopy);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    },
+    [records]
+  );
 
   const getRecords = useCallback(() => {
     axios({
@@ -133,7 +155,6 @@ const RecordList: React.FC = () => {
       },
     })
       .then((res) => {
-        console.log(res.data);
         setRecords(res.data);
         setStart(20);
       })
@@ -210,19 +231,23 @@ const RecordList: React.FC = () => {
               <CardContent>{ele.date}</CardContent>
               <div className={classes.iconArea}>
                 {ele.liking ? (
-                  <IconButton
-                    aria-label="いいね解除"
-                    onClick={() => unlike(ele.record_id)}
-                  >
-                    <FavoriteIcon className={classes.unlikeIcon} />
-                  </IconButton>
+                  <Tooltip title="いいね解除">
+                    <IconButton
+                      aria-label="いいね解除"
+                      onClick={() => unlike(ele.record_id, i)}
+                    >
+                      <FavoriteIcon className={classes.unlikeIcon} />
+                    </IconButton>
+                  </Tooltip>
                 ) : (
-                  <IconButton
-                    aria-label="いいね"
-                    onClick={() => like(ele.record_id)}
-                  >
-                    <FavoriteIcon />
-                  </IconButton>
+                  <Tooltip title="いいね">
+                    <IconButton
+                      aria-label="いいね"
+                      onClick={() => like(ele.record_id, i)}
+                    >
+                      <FavoriteIcon />
+                    </IconButton>
+                  </Tooltip>
                 )}
                 <span>{ele.likes}</span>
               </div>
