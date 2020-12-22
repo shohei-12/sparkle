@@ -42,7 +42,7 @@ const Record: React.FC = () => {
     return (
       <>
         <DateSwitch uid={uid} date={date} />
-        <RecordDetails recordId={recordId} />
+        <RecordDetails recordId={recordId} urlUid={uid} />
       </>
     );
   } else if (recordRegistration) {
