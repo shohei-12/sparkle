@@ -14,12 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
     textDark: {
       color: "rgba(255, 255, 255, 0.7)",
     },
-    guestTextLight: {
-      color: "rgba(0, 0, 0, 0.38)",
-    },
-    guestTextDark: {
-      color: "rgba(255, 255, 255, 0.5)",
-    },
     previews: {
       display: "flex",
       flexWrap: "wrap",
@@ -121,7 +115,7 @@ const ImageField: React.FC<Props> = (props) => {
     }
   };
 
-  const deletePreview = async (image: [File, string]) => {
+  const deletePreview = (image: [File, string]) => {
     props.setProfile && props.setProfile(null);
     props.setAppearances &&
       props.setAppearances((prev) => prev.filter((ele) => ele !== image[0]));
@@ -139,28 +133,16 @@ const ImageField: React.FC<Props> = (props) => {
 
   return (
     <div>
-      {uid === "1" && props.userEdit ? (
+      {props.userEdit || props.signUp ? (
         <>
           {theme === "light" ? (
-            <p className={classes.guestTextLight}>{props.text}</p>
+            <p className={classes.textLight}>{props.text}</p>
           ) : (
-            <p className={classes.guestTextDark}>{props.text}</p>
+            <p className={classes.textDark}>{props.text}</p>
           )}
         </>
       ) : (
-        <>
-          {props.userEdit || props.signUp ? (
-            <>
-              {theme === "light" ? (
-                <p className={classes.textLight}>{props.text}</p>
-              ) : (
-                <p className={classes.textDark}>{props.text}</p>
-              )}
-            </>
-          ) : (
-            <p>{props.text}</p>
-          )}
-        </>
+        <p>{props.text}</p>
       )}
       <div className={classes.previews}>
         {images.length > 0 &&
@@ -170,6 +152,7 @@ const ImageField: React.FC<Props> = (props) => {
               className={classes.preview + " " + classes.imageSize}
             >
               <span
+                id="delete-preview"
                 className={classes.deletePreview + " " + classes.wrapIcon}
                 onClick={() => deletePreview(ele)}
               >

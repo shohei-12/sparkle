@@ -109,17 +109,19 @@ const UserEdit: React.FC = () => {
         },
       })
         .then((res) => {
-          const imageURL = res.data.data.profile.url as string;
-          password && reset({ password: "", confirmPassword: "" });
-          setCurrentPassword("");
           dispatch(
             flashAction({
               type: "success",
               msg: "ユーザー情報を更新しました！",
             })
           );
-          localStorage.setItem("uid", email);
+          const imageURL = res.data.data.profile.url as string;
           dispatch(updateUserAction({ name, email, profile: imageURL }));
+          localStorage.setItem("uid", email);
+          document.getElementById("delete-preview")!.click();
+          password && reset({ password: "", confirmPassword: "" });
+          setCurrentPassword("");
+          differentPassword && setDifferentPassword(false);
         })
         .catch((error) => {
           const errorData = error.response.data;
@@ -156,13 +158,14 @@ const UserEdit: React.FC = () => {
       },
     })
       .then(() => {
-        password && reset({ password: "", confirmPassword: "" });
-        setCurrentPassword("");
         dispatch(
           flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
         );
-        localStorage.setItem("uid", email);
         dispatch(updateUserAction({ name, email }));
+        localStorage.setItem("uid", email);
+        password && reset({ password: "", confirmPassword: "" });
+        setCurrentPassword("");
+        differentPassword && setDifferentPassword(false);
       })
       .catch((error) => {
         const errorData = error.response.data;
@@ -214,7 +217,13 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.name)}
         helperText={errors.name && errors.name.message}
-        disabled={uid === "1" ? true : false}
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
         onChange={inputName}
       />
       <TextInput
@@ -249,7 +258,13 @@ const UserEdit: React.FC = () => {
             email === duplicateEmail &&
             "このメールアドレスはすでに存在します。")
         }
-        disabled={uid === "1" ? true : false}
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
         onChange={inputEmail}
       />
       <TextInput
@@ -273,8 +288,14 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.password)}
         helperText={errors.password && errors.password.message}
-        disabled={uid === "1" ? true : false}
         placeholder="パスワードを変更しない場合は空白にしてください"
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
         InputLabelProps={{
           shrink: true,
         }}
@@ -298,8 +319,14 @@ const UserEdit: React.FC = () => {
         })}
         error={Boolean(errors.confirmPassword)}
         helperText={errors.confirmPassword && errors.confirmPassword.message}
-        disabled={uid === "1" ? true : false}
         placeholder="パスワードを変更しない場合は空白にしてください"
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
         InputLabelProps={{
           shrink: true,
         }}
@@ -315,7 +342,13 @@ const UserEdit: React.FC = () => {
         name="currentPassword"
         error={differentPassword ? true : false}
         helperText={differentPassword ? "パスワードが違います。" : undefined}
-        disabled={uid === "1" ? true : false}
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
         value={currentPassword}
         onChange={inputCurrentPassword}
       />

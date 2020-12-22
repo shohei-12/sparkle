@@ -12,7 +12,6 @@ type Props = {
   inputRef?: any;
   error?: boolean;
   helperText?: string | false;
-  disabled?: boolean;
   placeholder?: string;
   inputProps?: object;
   InputLabelProps?: object;
@@ -34,7 +33,6 @@ const TextInput: React.FC<Props> = React.memo((props) => {
       inputRef={props.inputRef}
       error={props.error}
       helperText={props.helperText}
-      disabled={props.disabled}
       placeholder={props.placeholder}
       inputProps={props.inputProps}
       InputLabelProps={props.InputLabelProps}
