@@ -1,6 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Store } from "../re-ducks/store/types";
+import { getUserId } from "../re-ducks/users/selectors";
 import { AppearancesGallery, MealsGallery } from "../components/Record";
 import { SecondaryButton, TextInput } from "../components/UIkit";
 import NoImage from "../assets/img/no-image.png";
@@ -35,10 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   recordId: number;
+  urlUid: number;
 };
 
 const RecordDetails: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const selector = useSelector((state: Store) => state);
+  const uid = Number(getUserId(selector));
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
   const lunchsContainer: string[] = [];
@@ -209,25 +215,44 @@ const RecordDetails: React.FC<Props> = (props) => {
           <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
-          <TextInput
-            fullWidth={true}
-            label="メモ"
-            multiline={true}
-            required={false}
-            rows="5"
-            type="text"
-            name="appearance"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={appearanceMemo}
-            onChange={inputAppearance}
-          />
-          <div className="space-m" />
-          <SecondaryButton
-            text="メモを更新する"
-            onClick={updateAppearanceMemo}
-          />
+          {uid === props.urlUid ? (
+            <>
+              <TextInput
+                fullWidth={true}
+                label="メモ"
+                multiline={true}
+                required={false}
+                rows="5"
+                type="text"
+                name="appearance"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={appearanceMemo}
+                onChange={inputAppearance}
+              />
+              <div className="space-m" />
+              <SecondaryButton
+                text="メモを更新する"
+                onClick={updateAppearanceMemo}
+              />
+            </>
+          ) : (
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="appearance"
+              inputProps={{
+                readOnly: true,
+              }}
+              value={appearanceMemo}
+              onChange={inputAppearance}
+            />
+          )}
         </div>
       </div>
       <p>🍙 朝食</p>
@@ -238,25 +263,41 @@ const RecordDetails: React.FC<Props> = (props) => {
           <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
-          <TextInput
-            fullWidth={true}
-            label="メモ"
-            multiline={true}
-            required={false}
-            rows="5"
-            type="text"
-            name="breakfast"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={breakfastMemo}
-            onChange={inputBreakfast}
-          />
-          <div className="space-m" />
-          <SecondaryButton
-            text="メモを更新する"
-            onClick={updateBreakfastMemo}
-          />
+          {uid === props.urlUid ? (
+            <>
+              <TextInput
+                fullWidth={true}
+                label="メモ"
+                multiline={true}
+                required={false}
+                rows="5"
+                type="text"
+                name="breakfast"
+                value={breakfastMemo}
+                onChange={inputBreakfast}
+              />
+              <div className="space-m" />
+              <SecondaryButton
+                text="メモを更新する"
+                onClick={updateBreakfastMemo}
+              />
+            </>
+          ) : (
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="breakfast"
+              inputProps={{
+                readOnly: true,
+              }}
+              value={breakfastMemo}
+              onChange={inputBreakfast}
+            />
+          )}
         </div>
       </div>
       <p>🍔 昼食</p>
@@ -267,22 +308,41 @@ const RecordDetails: React.FC<Props> = (props) => {
           <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
-          <TextInput
-            fullWidth={true}
-            label="メモ"
-            multiline={true}
-            required={false}
-            rows="5"
-            type="text"
-            name="lunch"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={lunchMemo}
-            onChange={inputLunch}
-          />
-          <div className="space-m" />
-          <SecondaryButton text="メモを更新する" onClick={updateLunchMemo} />
+          {uid === props.urlUid ? (
+            <>
+              <TextInput
+                fullWidth={true}
+                label="メモ"
+                multiline={true}
+                required={false}
+                rows="5"
+                type="text"
+                name="lunch"
+                value={lunchMemo}
+                onChange={inputLunch}
+              />
+              <div className="space-m" />
+              <SecondaryButton
+                text="メモを更新する"
+                onClick={updateLunchMemo}
+              />
+            </>
+          ) : (
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="lunch"
+              inputProps={{
+                readOnly: true,
+              }}
+              value={lunchMemo}
+              onChange={inputLunch}
+            />
+          )}
         </div>
       </div>
       <p>🍖 夕食</p>
@@ -293,22 +353,41 @@ const RecordDetails: React.FC<Props> = (props) => {
           <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
-          <TextInput
-            fullWidth={true}
-            label="メモ"
-            multiline={true}
-            required={false}
-            rows="5"
-            type="text"
-            name="dinner"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={dinnerMemo}
-            onChange={inputDinner}
-          />
-          <div className="space-m" />
-          <SecondaryButton text="メモを更新する" onClick={updateDinnerMemo} />
+          {uid === props.urlUid ? (
+            <>
+              <TextInput
+                fullWidth={true}
+                label="メモ"
+                multiline={true}
+                required={false}
+                rows="5"
+                type="text"
+                name="dinner"
+                value={dinnerMemo}
+                onChange={inputDinner}
+              />
+              <div className="space-m" />
+              <SecondaryButton
+                text="メモを更新する"
+                onClick={updateDinnerMemo}
+              />
+            </>
+          ) : (
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="dinner"
+              inputProps={{
+                readOnly: true,
+              }}
+              value={dinnerMemo}
+              onChange={inputDinner}
+            />
+          )}
         </div>
       </div>
       <p>🍰 間食</p>
@@ -319,22 +398,41 @@ const RecordDetails: React.FC<Props> = (props) => {
           <img className={classes.noImage} src={NoImage} alt="画像なし" />
         )}
         <div className={classes.recordRight}>
-          <TextInput
-            fullWidth={true}
-            label="メモ"
-            multiline={true}
-            required={false}
-            rows="5"
-            type="text"
-            name="snack"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={snackMemo}
-            onChange={inputSnack}
-          />
-          <div className="space-m" />
-          <SecondaryButton text="メモを更新する" onClick={updateSnackMemo} />
+          {uid === props.urlUid ? (
+            <>
+              <TextInput
+                fullWidth={true}
+                label="メモ"
+                multiline={true}
+                required={false}
+                rows="5"
+                type="text"
+                name="snack"
+                value={snackMemo}
+                onChange={inputSnack}
+              />
+              <div className="space-m" />
+              <SecondaryButton
+                text="メモを更新する"
+                onClick={updateSnackMemo}
+              />
+            </>
+          ) : (
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="snack"
+              inputProps={{
+                readOnly: true,
+              }}
+              value={snackMemo}
+              onChange={inputSnack}
+            />
+          )}
         </div>
       </div>
     </div>
