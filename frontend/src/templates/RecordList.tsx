@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: 8,
       },
     },
+    profile: {
+      width: 40,
+      height: 40,
+      objectFit: "cover",
+    },
     media: {
       height: 0,
       paddingTop: "56.25%", // 16:9
@@ -202,11 +207,9 @@ const RecordList: React.FC = () => {
                   avatar={
                     <Avatar>
                       <img
-                        className="pointer-h"
+                        className={`${classes.profile} pointer-h`}
                         src={baseURL + ele.profile.url}
                         alt="プロフィール画像"
-                        width="40"
-                        height="40"
                         onClick={() =>
                           dispatch(push(`/users/${ele.author_id}`))
                         }
@@ -221,11 +224,9 @@ const RecordList: React.FC = () => {
                   avatar={
                     <Avatar>
                       <img
-                        className="pointer-h"
+                        className={`${classes.profile} pointer-h`}
                         src={NoProfile}
                         alt="プロフィール画像"
-                        width="40"
-                        height="40"
                         onClick={() =>
                           dispatch(push(`/users/${ele.author_id}`))
                         }
