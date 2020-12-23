@@ -151,7 +151,7 @@ const DrawerMenu = () => {
 
   const signInList = [
     {
-      text: "My Page",
+      text: "マイページ",
       icon: (
         <img
           className={classes.profile}

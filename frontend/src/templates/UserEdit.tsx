@@ -109,6 +109,10 @@ const UserEdit: React.FC = () => {
         },
       })
         .then((res) => {
+          document.getElementById("delete-preview")!.click();
+          password && reset({ password: "", confirmPassword: "" });
+          setCurrentPassword("");
+          differentPassword && setDifferentPassword(false);
           dispatch(
             flashAction({
               type: "success",
@@ -118,10 +122,6 @@ const UserEdit: React.FC = () => {
           const imageURL = res.data.data.profile.url as string;
           dispatch(updateUserAction({ name, email, profile: imageURL }));
           localStorage.setItem("uid", email);
-          document.getElementById("delete-preview")!.click();
-          password && reset({ password: "", confirmPassword: "" });
-          setCurrentPassword("");
-          differentPassword && setDifferentPassword(false);
         })
         .catch((error) => {
           const errorData = error.response.data;
@@ -158,14 +158,14 @@ const UserEdit: React.FC = () => {
       },
     })
       .then(() => {
+        password && reset({ password: "", confirmPassword: "" });
+        setCurrentPassword("");
+        differentPassword && setDifferentPassword(false);
         dispatch(
           flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
         );
         dispatch(updateUserAction({ name, email }));
         localStorage.setItem("uid", email);
-        password && reset({ password: "", confirmPassword: "" });
-        setCurrentPassword("");
-        differentPassword && setDifferentPassword(false);
       })
       .catch((error) => {
         const errorData = error.response.data;
