@@ -3,17 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import Calendar from "react-calendar";
 import axios from "axios";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { SecondaryButton } from "../components/UIkit";
 import "react-calendar/dist/Calendar.css";
+import "react-tabs/style/react-tabs.css";
 import NoProfile from "../assets/img/no-profile.png";
 import { baseURL } from "../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    name: {
+      fontWeight: 400,
+    },
     profile: {
       width: 200,
       height: 200,
@@ -41,8 +46,8 @@ const UserDetails: React.FC = () => {
   const [unfollowBtnText, setUnfollowBtnText] = useState("フォロー中");
 
   const goUserEditPage = useCallback(() => {
-    dispatch(push("/user/edit"));
-  }, [dispatch]);
+    dispatch(push(`/users/${currentUserId}/edit`));
+  }, [dispatch, currentUserId]);
 
   const goRecordPage = useCallback(
     (date: Date) => {
@@ -125,14 +130,18 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="wrap">
-      <h2>My Page</h2>
+      <h2 className={classes.name}>{name}</h2>
       <img
         className={classes.profile}
         src={profile ? baseURL + profile : NoProfile}
         alt="プロフィール画像"
       />
-      <span>{name}</span>
-      <SecondaryButton text="ユーザー情報を編集する" onClick={goUserEditPage} />
+      {currentUserId === uid && (
+        <SecondaryButton
+          text="ユーザー情報を編集する"
+          onClick={goUserEditPage}
+        />
+      )}
       {currentUserId !== uid && (
         <>
           {following ? (
@@ -153,11 +162,23 @@ const UserDetails: React.FC = () => {
           )}
         </>
       )}
-      <Calendar
-        calendarType="US"
-        value={new Date()}
-        onClickDay={goRecordPage}
-      />
+      <Tabs>
+        <TabList>
+          <Tab>Title 1</Tab>
+          <Tab>Title 2</Tab>
+        </TabList>
+
+        <TabPanel>
+          <Calendar
+            calendarType="US"
+            value={new Date()}
+            onClickDay={goRecordPage}
+          />
+        </TabPanel>
+        <TabPanel>
+          <h2>Any content 2</h2>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 };
