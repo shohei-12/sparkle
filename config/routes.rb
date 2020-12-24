@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       put '/memos/:id/lunch', to: 'memos#update_lunch'
       put '/memos/:id/dinner', to: 'memos#update_dinner'
       put '/memos/:id/snack', to: 'memos#update_snack'
-      get '/relationships/following/:id', to: 'relationships#following'
+      get '/relationships/following/:id', to: 'relationships#following?'
       resources :appearances
       resources :meals
       resources :memos

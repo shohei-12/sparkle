@@ -6,7 +6,26 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    render json: @user
+    followings = []
+    followers = []
+    @user.followings.each do |user|
+      followings.push({
+                        id: user.id,
+                        name: user.name,
+                        profile: user.profile,
+                        following: true
+                      })
+    end
+    @user.followers.each do |user|
+      bool = @user.following?(user)
+      followers.push({
+                       id: user.id,
+                       name: user.name,
+                       profile: user.profile,
+                       following: bool
+                     })
+    end
+    render json: { user: @user, follow_list: followings, follower_list: followers }
   end
 
   private

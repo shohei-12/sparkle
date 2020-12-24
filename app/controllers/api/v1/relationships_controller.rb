@@ -9,7 +9,7 @@ class Api::V1::RelationshipsController < ApplicationController
     current_api_v1_user.unfollow(@user)
   end
 
-  def following
+  def following?
     render json: current_api_v1_user.following?(@user)
   end
 
