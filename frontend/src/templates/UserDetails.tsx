@@ -1,14 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
-import Calendar from "react-calendar";
 import axios from "axios";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { SecondaryButton } from "../components/UIkit";
+import { DetailsTab } from "../components/User";
 import "react-calendar/dist/Calendar.css";
 import "react-tabs/style/react-tabs.css";
 import NoProfile from "../assets/img/no-profile.png";
@@ -33,31 +32,29 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+type User = {
+  id: number;
+  name: string;
+  profile: { url: string | null };
+  following: boolean;
+};
+
 const UserDetails: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
-  const currentUserId = getUserId(selector);
-  const uid = window.location.pathname.split("/")[2];
+  const currentUserId = Number(getUserId(selector));
+  const uid = Number(window.location.pathname.split("/")[2]);
 
   const [name, setName] = useState("");
   const [profile, setProfile] = useState<string | null>("");
   const [following, setFollowing] = useState(false);
-  const [unfollowBtnText, setUnfollowBtnText] = useState("フォロー中");
+  const [followings, setFollowings] = useState<User[]>([]);
+  const [followers, setFollowers] = useState<User[]>([]);
 
   const goUserEditPage = useCallback(() => {
     dispatch(push(`/users/${currentUserId}/edit`));
   }, [dispatch, currentUserId]);
-
-  const goRecordPage = useCallback(
-    (date: Date) => {
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      dispatch(push(`/record/${uid}/${year}/${month}/${day}`));
-    },
-    [dispatch, uid]
-  );
 
   const follow = useCallback(() => {
     axios
@@ -92,13 +89,15 @@ const UserDetails: React.FC = () => {
       });
   }, [uid]);
 
-  const over = useCallback(() => {
-    setUnfollowBtnText("フォロー解除");
-  }, [setUnfollowBtnText]);
+  const over = useCallback((n: number) => {
+    document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
+      "フォロー解除";
+  }, []);
 
-  const leave = useCallback(() => {
-    setUnfollowBtnText("フォロー中");
-  }, [setUnfollowBtnText]);
+  const leave = useCallback((n: number) => {
+    document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
+      "フォロー中";
+  }, []);
 
   useEffect(() => {
     if (window.location.pathname === `/users/${uid}`) {
@@ -119,8 +118,10 @@ const UserDetails: React.FC = () => {
             .catch((error) => {
               throw new Error(error);
             });
-          setName(res.data.name);
-          setProfile(res.data.profile.url);
+          setName(res.data.user.name);
+          setProfile(res.data.user.profile.url);
+          setFollowings(res.data.follow_list);
+          setFollowers(res.data.follower_list);
         })
         .catch((error) => {
           throw new Error(error);
@@ -146,14 +147,15 @@ const UserDetails: React.FC = () => {
         <>
           {following ? (
             <Button
+              id="unfollow-btn-1"
               className={classes.unfollowBtn}
               variant="contained"
               color="primary"
               onClick={unfollow}
-              onMouseOver={over}
-              onMouseLeave={leave}
+              onMouseOver={() => over(-1)}
+              onMouseLeave={() => leave(-1)}
             >
-              {unfollowBtnText}
+              フォロー中
             </Button>
           ) : (
             <Button variant="outlined" color="primary" onClick={follow}>
@@ -162,23 +164,15 @@ const UserDetails: React.FC = () => {
           )}
         </>
       )}
-      <Tabs>
-        <TabList>
-          <Tab>Title 1</Tab>
-          <Tab>Title 2</Tab>
-        </TabList>
-
-        <TabPanel>
-          <Calendar
-            calendarType="US"
-            value={new Date()}
-            onClickDay={goRecordPage}
-          />
-        </TabPanel>
-        <TabPanel>
-          <h2>Any content 2</h2>
-        </TabPanel>
-      </Tabs>
+      <DetailsTab
+        uid={uid}
+        followings={followings}
+        followers={followers}
+        setFollowings={setFollowings}
+        setFollowers={setFollowers}
+        over={over}
+        leave={leave}
+      />
     </div>
   );
 };
