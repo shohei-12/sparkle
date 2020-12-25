@@ -9,15 +9,16 @@ class Api::V1::UsersController < ApplicationController
     followings = []
     followers = []
     @user.followings.each do |user|
+      bool = current_api_v1_user.following?(user)
       followings.push({
                         id: user.id,
                         name: user.name,
                         profile: user.profile,
-                        following: true
+                        following: bool
                       })
     end
     @user.followers.each do |user|
-      bool = @user.following?(user)
+      bool = current_api_v1_user.following?(user)
       followers.push({
                        id: user.id,
                        name: user.name,
