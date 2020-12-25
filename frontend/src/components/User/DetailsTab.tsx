@@ -40,6 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#f44336",
       },
     },
+    hidden: {
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+        visibility: "hidden",
+        display: "inline-block",
+      },
+    },
   })
 );
 
@@ -52,6 +59,7 @@ type User = {
 
 type Props = {
   uid: number;
+  currentUserId: number;
   followings: User[];
   followers: User[];
   setFollowings: React.Dispatch<React.SetStateAction<User[]>>;
@@ -63,6 +71,8 @@ type Props = {
 const DetailsTab: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const uid = props.uid;
+  const currentUserId = props.currentUserId;
   const followings = props.followings;
   const followers = props.followers;
   const setFollowings = props.setFollowings;
@@ -79,7 +89,7 @@ const DetailsTab: React.FC<Props> = (props) => {
   );
 
   const follow = useCallback(
-    (id: number, i: number) => {
+    (id: number, i: number, follow_list: boolean) => {
       axios
         .post(`${baseURL}/api/v1/relationships`, {
           id,
@@ -88,25 +98,52 @@ const DetailsTab: React.FC<Props> = (props) => {
           access_token: localStorage.getItem("access_token"),
         })
         .then(() => {
-          const followersCopy = [...followers];
-          followersCopy[i].following = true;
-          setFollowers(followersCopy);
-          document.getElementById(
-            `unfollow-btn${i}`
-          )!.firstElementChild!.innerHTML = "フォロー解除";
-          followings.push(followersCopy[i]);
-          const followingsCopy = [...followings];
-          setFollowings(followingsCopy);
+          if (uid === currentUserId) {
+            const followersCopy = [...followers];
+            followersCopy[i].following = true;
+            setFollowers(followersCopy);
+            document.getElementById(
+              `unfollow-btn${i}`
+            )!.firstElementChild!.innerHTML = "フォロー解除";
+            followings.push(followersCopy[i]);
+            const followingsCopy = [...followings];
+            setFollowings(followingsCopy);
+          } else {
+            const followingsCopy = [...followings];
+            const found1 = followingsCopy.find((ele) => ele.id === id);
+            if (found1) {
+              const index = followingsCopy.indexOf(found1);
+              followingsCopy[index].following = true;
+              setFollowings(followingsCopy);
+              if (follow_list) {
+                document.getElementById(
+                  `unfollow-btn${index}`
+                )!.firstElementChild!.innerHTML = "フォロー解除";
+              }
+            }
+            const followersCopy = [...followers];
+            const found2 = followersCopy.find((ele) => ele.id === id);
+            if (found2) {
+              const index = followersCopy.indexOf(found2);
+              followersCopy[index].following = true;
+              setFollowers(followersCopy);
+              if (!follow_list) {
+                document.getElementById(
+                  `unfollow-btn${index}`
+                )!.firstElementChild!.innerHTML = "フォロー解除";
+              }
+            }
+          }
         })
         .catch((error) => {
           throw new Error(error);
         });
     },
-    [followers, setFollowers, followings, setFollowings]
+    [uid, currentUserId, followers, setFollowers, followings, setFollowings]
   );
 
   const unfollow = useCallback(
-    (id: number, i: number) => {
+    (id: number, i: number, follow_list: boolean) => {
       axios
         .delete(`${baseURL}/api/v1/relationships/${id}`, {
           data: {
@@ -116,17 +153,44 @@ const DetailsTab: React.FC<Props> = (props) => {
           },
         })
         .then(() => {
-          const result = followings.filter((ele) => ele.id !== id);
-          setFollowings(result);
-          const followersCopy = [...followers];
-          const found = followersCopy.find((ele) => ele.id === id);
-          if (found) {
-            const index = followersCopy.indexOf(found);
-            followersCopy[index].following = false;
-            setFollowers(followersCopy);
-            const followBtn = document.getElementById(`follow-btn${i}`);
-            if (followBtn) {
-              followBtn.firstElementChild!.innerHTML = "フォロー";
+          if (uid === currentUserId) {
+            const result = followings.filter((ele) => ele.id !== id);
+            setFollowings(result);
+            const followersCopy = [...followers];
+            const found = followersCopy.find((ele) => ele.id === id);
+            if (found) {
+              const index = followersCopy.indexOf(found);
+              followersCopy[index].following = false;
+              setFollowers(followersCopy);
+              const followBtn = document.getElementById(`follow-btn${index}`);
+              if (followBtn) {
+                followBtn.firstElementChild!.innerHTML = "フォロー";
+              }
+            }
+          } else {
+            const followingsCopy = [...followings];
+            const found1 = followingsCopy.find((ele) => ele.id === id);
+            if (found1) {
+              const index = followingsCopy.indexOf(found1);
+              followingsCopy[index].following = false;
+              setFollowings(followingsCopy);
+              if (follow_list) {
+                document.getElementById(
+                  `follow-btn${index}`
+                )!.firstElementChild!.innerHTML = "フォロー";
+              }
+            }
+            const followersCopy = [...followers];
+            const found2 = followersCopy.find((ele) => ele.id === id);
+            if (found2) {
+              const index = followersCopy.indexOf(found2);
+              followersCopy[index].following = false;
+              setFollowers(followersCopy);
+              if (!follow_list) {
+                document.getElementById(
+                  `follow-btn${index}`
+                )!.firstElementChild!.innerHTML = "フォロー";
+              }
             }
           }
         })
@@ -134,7 +198,7 @@ const DetailsTab: React.FC<Props> = (props) => {
           throw new Error(error);
         });
     },
-    [followings, setFollowings, followers, setFollowers]
+    [uid, currentUserId, followings, setFollowings, followers, setFollowers]
   );
 
   return (
@@ -162,17 +226,34 @@ const DetailsTab: React.FC<Props> = (props) => {
               onClick={() => dispatch(push(`/users/${ele.id}`))}
             />
             <p>{ele.name}</p>
-            <Button
-              id={`unfollow-btn${i}`}
-              className={classes.unfollowBtn}
-              variant="contained"
-              color="primary"
-              onClick={() => unfollow(ele.id, i)}
-              onMouseOver={() => props.over(i)}
-              onMouseLeave={() => props.leave(i)}
-            >
-              フォロー中
-            </Button>
+            {ele.id !== currentUserId ? (
+              <>
+                {ele.following ? (
+                  <Button
+                    id={`unfollow-btn${i}`}
+                    className={classes.unfollowBtn}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => unfollow(ele.id, i, true)}
+                    onMouseOver={() => props.over(i)}
+                    onMouseLeave={() => props.leave(i)}
+                  >
+                    フォロー中
+                  </Button>
+                ) : (
+                  <Button
+                    id={`follow-btn${i}`}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => follow(ele.id, i, true)}
+                  >
+                    フォロー
+                  </Button>
+                )}
+              </>
+            ) : (
+              <Button className={classes.hidden}>Hidden</Button>
+            )}
           </div>
         ))}
       </TabPanel>
@@ -186,27 +267,33 @@ const DetailsTab: React.FC<Props> = (props) => {
               onClick={() => dispatch(push(`/users/${ele.id}`))}
             />
             <p>{ele.name}</p>
-            {ele.following ? (
-              <Button
-                id={`unfollow-btn${i}`}
-                className={classes.unfollowBtn}
-                variant="contained"
-                color="primary"
-                onClick={() => unfollow(ele.id, i)}
-                onMouseOver={() => props.over(i)}
-                onMouseLeave={() => props.leave(i)}
-              >
-                フォロー中
-              </Button>
+            {ele.id !== currentUserId ? (
+              <>
+                {ele.following ? (
+                  <Button
+                    id={`unfollow-btn${i}`}
+                    className={classes.unfollowBtn}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => unfollow(ele.id, i, false)}
+                    onMouseOver={() => props.over(i)}
+                    onMouseLeave={() => props.leave(i)}
+                  >
+                    フォロー中
+                  </Button>
+                ) : (
+                  <Button
+                    id={`follow-btn${i}`}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => follow(ele.id, i, false)}
+                  >
+                    フォロー
+                  </Button>
+                )}
+              </>
             ) : (
-              <Button
-                id={`follow-btn${i}`}
-                variant="outlined"
-                color="primary"
-                onClick={() => follow(ele.id, i)}
-              >
-                フォロー
-              </Button>
+              <Button className={classes.hidden}>Hidden</Button>
             )}
           </div>
         ))}

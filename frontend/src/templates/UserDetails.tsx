@@ -5,7 +5,11 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Store } from "../re-ducks/store/types";
-import { getUserId } from "../re-ducks/users/selectors";
+import {
+  getUserId,
+  getUserName,
+  getUserProfile,
+} from "../re-ducks/users/selectors";
 import { SecondaryButton } from "../components/UIkit";
 import { DetailsTab } from "../components/User";
 import "react-calendar/dist/Calendar.css";
@@ -44,6 +48,8 @@ const UserDetails: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = Number(getUserId(selector));
+  const currentUserName = getUserName(selector);
+  const currentUserProfile = getUserProfile(selector);
   const uid = Number(window.location.pathname.split("/")[2]);
 
   const [name, setName] = useState("");
@@ -66,11 +72,22 @@ const UserDetails: React.FC = () => {
       })
       .then(() => {
         setFollowing(true);
+        document.getElementById(
+          "unfollow-btn-1"
+        )!.firstElementChild!.innerHTML = "フォロー解除";
+        followers.push({
+          id: currentUserId,
+          name: currentUserName,
+          profile: { url: currentUserProfile },
+          following: false,
+        });
+        const followersCopy = [...followers];
+        setFollowers(followersCopy);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [uid]);
+  }, [uid, followers, currentUserId, currentUserName, currentUserProfile]);
 
   const unfollow = useCallback(() => {
     axios
@@ -83,11 +100,15 @@ const UserDetails: React.FC = () => {
       })
       .then(() => {
         setFollowing(false);
+        document.getElementById("follow-btn-1")!.firstElementChild!.innerHTML =
+          "フォロー";
+        const result = followers.filter((ele) => ele.id !== currentUserId);
+        setFollowers(result);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [uid]);
+  }, [uid, followers, currentUserId]);
 
   const over = useCallback((n: number) => {
     document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
@@ -102,7 +123,13 @@ const UserDetails: React.FC = () => {
   useEffect(() => {
     if (window.location.pathname === `/users/${uid}`) {
       axios
-        .get(`${baseURL}/api/v1/users/${uid}`)
+        .get(`${baseURL}/api/v1/users/${uid}`, {
+          params: {
+            uid: localStorage.getItem("uid"),
+            client: localStorage.getItem("client"),
+            access_token: localStorage.getItem("access_token"),
+          },
+        })
         .then((res) => {
           axios
             .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
@@ -158,7 +185,12 @@ const UserDetails: React.FC = () => {
               フォロー中
             </Button>
           ) : (
-            <Button variant="outlined" color="primary" onClick={follow}>
+            <Button
+              id="follow-btn-1"
+              variant="outlined"
+              color="primary"
+              onClick={follow}
+            >
               フォロー
             </Button>
           )}
@@ -166,6 +198,7 @@ const UserDetails: React.FC = () => {
       )}
       <DetailsTab
         uid={uid}
+        currentUserId={currentUserId}
         followings={followings}
         followers={followers}
         setFollowings={setFollowings}
