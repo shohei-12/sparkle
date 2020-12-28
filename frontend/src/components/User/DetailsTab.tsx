@@ -4,6 +4,7 @@ import { push } from "connected-react-router";
 import Calendar from "react-calendar";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { LikeRecordList } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import "react-calendar/dist/Calendar.css";
@@ -207,6 +208,7 @@ const DetailsTab: React.FC<Props> = (props) => {
         <Tab>カレンダー</Tab>
         <Tab>{`フォロー ${followings.length}`}</Tab>
         <Tab>{`フォロワー ${followers.length}`}</Tab>
+        <Tab>いいね</Tab>
       </TabList>
 
       <TabPanel>
@@ -297,6 +299,9 @@ const DetailsTab: React.FC<Props> = (props) => {
             )}
           </div>
         ))}
+      </TabPanel>
+      <TabPanel>
+        <LikeRecordList uid={uid} />
       </TabPanel>
     </Tabs>
   );

@@ -12,9 +12,13 @@ export type Record = {
 export type RecordState = {
   records: Record[];
   start: number;
+  like_records: {
+    records: Record[];
+    start: number;
+  };
 };
 
 export type RecordAction = {
   type: string;
-  payload?: RecordState;
+  payload?: any;
 };

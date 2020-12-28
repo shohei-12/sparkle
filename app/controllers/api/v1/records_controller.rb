@@ -1,5 +1,5 @@
 class Api::V1::RecordsController < ApplicationController
-  before_action :set_user, only: %i[create show]
+  before_action :set_user, only: %i[create show twenty_like_records]
 
   def create
     record = @user.records.create(date: params[:date])
@@ -13,21 +13,15 @@ class Api::V1::RecordsController < ApplicationController
 
   def index
     # Get 20 cases of data
-    records = Record.limit(20).offset(params[:start])
-    array = []
-    records.each do |record|
-      array.push({
-                   record_id: record.id,
-                   date: record.date,
-                   appearance: record.appearances.first,
-                   profile: record.user.profile,
-                   author: record.user.name,
-                   author_id: record.user_id,
-                   likes: record.likes.length,
-                   liking: record.liked_by?(current_api_v1_user)
-                 })
-    end
-    render json: array
+    twenty_records = Record.limit(20).offset(params[:start])
+    record_infos = Record.get_record_infos(twenty_records, current_api_v1_user)
+    render json: record_infos
+  end
+
+  def twenty_like_records
+    twenty_like_records = @user.like_records.limit(20).offset(params[:start])
+    record_infos = Record.get_record_infos(twenty_like_records, current_api_v1_user)
+    render json: record_infos
   end
 
   private
