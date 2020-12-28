@@ -1,5 +1,5 @@
 class Api::V1::RecordsController < ApplicationController
-  before_action :set_user, only: %i[create show get_20_like_records]
+  before_action :set_user, only: %i[create show twenty_like_records]
 
   def create
     record = @user.records.create(date: params[:date])
@@ -18,7 +18,7 @@ class Api::V1::RecordsController < ApplicationController
     render json: record_infos
   end
 
-  def get_20_like_records
+  def twenty_like_records
     twenty_like_records = @user.like_records.limit(20).offset(params[:start])
     record_infos = Record.get_record_infos(twenty_like_records, current_api_v1_user)
     render json: record_infos
