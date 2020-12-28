@@ -1,9 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
+import { likeRecord, unlikeRecord } from "../re-ducks/records/operations";
+import { getRecordsAction } from "../re-ducks/records/actions";
+import { getRecords, getStart } from "../re-ducks/records/selectors";
+import { Record } from "../re-ducks/records/types";
+import { Store } from "../re-ducks/store/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -64,22 +69,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Record = {
-  record_id: number;
-  date: string;
-  appearance: any;
-  profile: { url: string | null };
-  author: string;
-  author_id: number;
-  likes: number;
-  liking: boolean;
-};
-
 const RecordList: React.FC = () => {
   const classes = useStyles();
+  const selector = useSelector((state: Store) => state);
+  const records = getRecords(selector);
+  const start = getStart(selector);
   const dispatch = useDispatch();
-  const [records, setRecords] = useState<Record[]>([]);
-  const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
   const goRecordDetailsPage = useCallback(
@@ -93,52 +88,7 @@ const RecordList: React.FC = () => {
     [dispatch]
   );
 
-  const like = useCallback(
-    (recordId: number, i: number) => {
-      axios
-        .post(`${baseURL}/api/v1/likes`, {
-          id: recordId,
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
-        })
-        .then(() => {
-          const recordsCopy = [...records];
-          recordsCopy[i].likes++;
-          recordsCopy[i].liking = true;
-          setRecords(recordsCopy);
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    },
-    [records]
-  );
-
-  const unlike = useCallback(
-    (recordId: number, i: number) => {
-      axios
-        .delete(`${baseURL}/api/v1/likes/${recordId}`, {
-          data: {
-            uid: localStorage.getItem("uid"),
-            client: localStorage.getItem("client"),
-            access_token: localStorage.getItem("access_token"),
-          },
-        })
-        .then(() => {
-          const recordsCopy = [...records];
-          recordsCopy[i].likes--;
-          recordsCopy[i].liking = false;
-          setRecords(recordsCopy);
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    },
-    [records]
-  );
-
-  const getRecords = useCallback(() => {
+  const get20Records = useCallback(() => {
     axios({
       method: "GET",
       url: `${baseURL}/api/v1/records`,
@@ -150,44 +100,23 @@ const RecordList: React.FC = () => {
       },
     })
       .then((res) => {
-        if (res.data.length === 0) {
+        const twentyRecordsData: Record[] = res.data;
+        if (twentyRecordsData.length === 0) {
           setHasMore(false);
           return;
         }
-        setRecords([...records, ...res.data]);
-        setStart(start + 20);
+        const nextStart = start + 20;
+        dispatch(getRecordsAction(twentyRecordsData, nextStart));
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [start, records]);
-
-  useEffect(() => {
-    axios({
-      method: "GET",
-      url: `${baseURL}/api/v1/records`,
-      params: {
-        start,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
-      .then((res) => {
-        setRecords(res.data);
-        setStart(20);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [start, dispatch]);
 
   return (
     <>
       <InfiniteScroll
-        loadMore={getRecords}
-        initialLoad={false}
+        loadMore={get20Records}
         hasMore={hasMore}
         threshold={0}
         loader={
@@ -256,7 +185,7 @@ const RecordList: React.FC = () => {
                   <Tooltip title="いいね解除">
                     <IconButton
                       aria-label="いいね解除"
-                      onClick={() => unlike(ele.record_id, i)}
+                      onClick={() => dispatch(unlikeRecord(ele.record_id, i))}
                     >
                       <FavoriteIcon className={classes.unlikeIcon} />
                     </IconButton>
@@ -265,7 +194,7 @@ const RecordList: React.FC = () => {
                   <Tooltip title="いいね">
                     <IconButton
                       aria-label="いいね"
-                      onClick={() => like(ele.record_id, i)}
+                      onClick={() => dispatch(likeRecord(ele.record_id, i))}
                     >
                       <FavoriteIcon />
                     </IconButton>

@@ -1,4 +1,5 @@
 import { UserState } from "../users/types";
+import { RecordState } from "../records/types";
 import { FlashState } from "../flash/types";
 
 const initialUserState: UserState = {
@@ -10,6 +11,11 @@ const initialUserState: UserState = {
   theme: "light",
 };
 
+const initialRecordState: RecordState = {
+  records: [],
+  start: 0,
+};
+
 const initialFlashState: FlashState = {
   type: "",
   msg: "",
@@ -17,5 +23,6 @@ const initialFlashState: FlashState = {
 
 export const initialState = {
   users: initialUserState,
+  records: initialRecordState,
   flash: initialFlashState,
 };
