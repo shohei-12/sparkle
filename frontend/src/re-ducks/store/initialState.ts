@@ -14,6 +14,10 @@ const initialUserState: UserState = {
 const initialRecordState: RecordState = {
   records: [],
   start: 0,
+  like_records: {
+    records: [],
+    start: 0,
+  },
 };
 
 const initialFlashState: FlashState = {

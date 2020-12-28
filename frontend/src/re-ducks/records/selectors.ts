@@ -12,3 +12,8 @@ export const getStart = createSelector(
   [recordsSelector],
   (state) => state.start
 );
+
+export const getLikeRecords = createSelector(
+  [recordsSelector],
+  (state) => state.like_records
+);

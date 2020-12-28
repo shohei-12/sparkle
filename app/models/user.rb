@@ -38,6 +38,34 @@ class User < ApplicationRecord
     followings.include?(other_user)
   end
 
+  def self.get_followings(user_followings, current_user)
+    followings = []
+    user_followings.each do |following|
+      bool = current_user.following?(following)
+      followings.push({
+                        id: following.id,
+                        name: following.name,
+                        profile: following.profile,
+                        following: bool
+                      })
+    end
+    followings
+  end
+
+  def self.get_followers(user_followers, current_user)
+    followers = []
+    user_followers.each do |follower|
+      bool = current_user.following?(follower)
+      followers.push({
+                       id: follower.id,
+                       name: follower.name,
+                       profile: follower.profile,
+                       following: bool
+                     })
+    end
+    followers
+  end
+
   def like(record)
     likes.create(record_id: record.id)
   end

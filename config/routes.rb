@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       post '/records', to: 'records#create'
       get '/record', to: 'records#show'
       get '/records', to: 'records#index'
+      get '/users/:id/like-records', to: 'records#get_20_like_records'
       put '/memos/:id/appearance', to: 'memos#update_appearance'
       put '/memos/:id/breakfast', to: 'memos#update_breakfast'
       put '/memos/:id/lunch', to: 'memos#update_lunch'

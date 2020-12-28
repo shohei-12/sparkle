@@ -9,12 +9,24 @@ export const RecordsReducer = (
   switch (action.type) {
     case Actions.GET_RECORDS:
       return {
-        records: [...state.records, ...action.payload!.records],
-        start: action.payload!.start,
+        ...state,
+        records: [...state.records, ...action.payload.records],
+        start: action.payload.start,
       };
     case Actions.LIKE_OR_UNLIKE_RECORD:
       return {
         ...state,
+      };
+    case Actions.GET_LIKE_RECORDS:
+      return {
+        ...state,
+        like_records: {
+          records: [
+            ...state.like_records.records,
+            ...action.payload.like_records,
+          ],
+          start: action.payload.start,
+        },
       };
     default:
       return state;
