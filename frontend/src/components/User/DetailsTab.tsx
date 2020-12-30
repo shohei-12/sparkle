@@ -17,17 +17,15 @@ const useStyles = makeStyles((theme: Theme) =>
     user: {
       display: "inline-block",
       textAlign: "center",
+      margin: 8,
       [theme.breakpoints.up("xs")]: {
-        width: "100%",
-        margin: "8px 0",
+        width: "calc(50% - 16px)",
       },
       [theme.breakpoints.up("sm")]: {
         width: "calc(33.3333% - 16px)",
-        margin: 8,
       },
       [theme.breakpoints.up("md")]: {
         width: "calc(20% - 16px)",
-        margin: 8,
       },
     },
     profile: {
