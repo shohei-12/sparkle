@@ -11,7 +11,8 @@ class Api::V1::UsersController < ApplicationController
     render json: {
       user: @user,
       follow_list: followings,
-      follower_list: followers
+      follower_list: followers,
+      likes: @user.like_records.length
     }
   end
 

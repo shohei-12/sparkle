@@ -57,6 +57,7 @@ const UserDetails: React.FC = () => {
   const [following, setFollowing] = useState(false);
   const [followings, setFollowings] = useState<User[]>([]);
   const [followers, setFollowers] = useState<User[]>([]);
+  const [likes, setLikes] = useState(0);
 
   const goUserEditPage = useCallback(() => {
     dispatch(push(`/users/${currentUserId}/edit`));
@@ -149,6 +150,7 @@ const UserDetails: React.FC = () => {
           setProfile(res.data.user.profile.url);
           setFollowings(res.data.follow_list);
           setFollowers(res.data.follower_list);
+          setLikes(res.data.likes);
         })
         .catch((error) => {
           throw new Error(error);
@@ -158,54 +160,59 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="wrap">
-      <h2 className={classes.name}>{name}</h2>
-      <img
-        className={classes.profile}
-        src={profile ? baseURL + profile : NoProfile}
-        alt="プロフィール画像"
-      />
-      {currentUserId === uid && (
-        <SecondaryButton
-          text="ユーザー情報を編集する"
-          onClick={goUserEditPage}
-        />
-      )}
-      {currentUserId !== uid && (
+      {name && (
         <>
-          {following ? (
-            <Button
-              id="unfollow-btn-1"
-              className={classes.unfollowBtn}
-              variant="contained"
-              color="primary"
-              onClick={unfollow}
-              onMouseOver={() => over(-1)}
-              onMouseLeave={() => leave(-1)}
-            >
-              フォロー中
-            </Button>
-          ) : (
-            <Button
-              id="follow-btn-1"
-              variant="outlined"
-              color="primary"
-              onClick={follow}
-            >
-              フォロー
-            </Button>
+          <h2 className={classes.name}>{name}</h2>
+          <img
+            className={classes.profile}
+            src={profile ? baseURL + profile : NoProfile}
+            alt="プロフィール画像"
+          />
+          {currentUserId === uid && (
+            <SecondaryButton
+              text="ユーザー情報を編集する"
+              onClick={goUserEditPage}
+            />
           )}
+          {currentUserId !== uid && (
+            <>
+              {following ? (
+                <Button
+                  id="unfollow-btn-1"
+                  className={classes.unfollowBtn}
+                  variant="contained"
+                  color="primary"
+                  onClick={unfollow}
+                  onMouseOver={() => over(-1)}
+                  onMouseLeave={() => leave(-1)}
+                >
+                  フォロー中
+                </Button>
+              ) : (
+                <Button
+                  id="follow-btn-1"
+                  variant="outlined"
+                  color="primary"
+                  onClick={follow}
+                >
+                  フォロー
+                </Button>
+              )}
+            </>
+          )}
+          <DetailsTab
+            uid={uid}
+            currentUserId={currentUserId}
+            followings={followings}
+            followers={followers}
+            likes={likes}
+            setFollowings={setFollowings}
+            setFollowers={setFollowers}
+            over={over}
+            leave={leave}
+          />
         </>
       )}
-      <DetailsTab
-        uid={uid}
-        currentUserId={currentUserId}
-        followings={followings}
-        followers={followers}
-        setFollowings={setFollowings}
-        setFollowers={setFollowers}
-        over={over}
-        leave={leave}
-      />
     </div>
   );
 };
