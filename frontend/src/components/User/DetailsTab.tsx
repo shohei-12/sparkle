@@ -61,6 +61,7 @@ type Props = {
   currentUserId: number;
   followings: User[];
   followers: User[];
+  likes: number;
   setFollowings: React.Dispatch<React.SetStateAction<User[]>>;
   setFollowers: React.Dispatch<React.SetStateAction<User[]>>;
   over: (n: number) => void;
@@ -206,7 +207,7 @@ const DetailsTab: React.FC<Props> = (props) => {
         <Tab>カレンダー</Tab>
         <Tab>{`フォロー ${followings.length}`}</Tab>
         <Tab>{`フォロワー ${followers.length}`}</Tab>
-        <Tab>いいね</Tab>
+        <Tab>{`いいね ${props.likes}`}</Tab>
       </TabList>
 
       <TabPanel>
