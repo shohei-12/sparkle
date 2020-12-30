@@ -23,6 +23,21 @@ import NoProfile from "../../assets/img/no-profile.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    likeRecord: {
+      display: "inline-block",
+      [theme.breakpoints.up("xs")]: {
+        width: "100%",
+        margin: "8px 0",
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "calc(50% - 16px)",
+        margin: 8,
+      },
+      [theme.breakpoints.up("md")]: {
+        width: "calc(33.3333% - 16px)",
+        margin: 8,
+      },
+    },
     profile: {
       width: 40,
       height: 40,
@@ -60,6 +75,17 @@ const LikeRecordList: React.FC<Props> = (props) => {
   const like_records = getLikeRecords(selector).records;
   const start = getLikeRecords(selector).start;
   const [hasMore, setHasMore] = useState(true);
+
+  const goRecordDetailsPage = useCallback(
+    (author_id: number, dateString: string) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      dispatch(push(`/record/${author_id}/${year}/${month}/${day}`));
+    },
+    [dispatch]
+  );
 
   const get20LikeRecords = useCallback(() => {
     axios
@@ -101,7 +127,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
     >
       {like_records.length > 0 &&
         like_records.map((ele, i) => (
-          <Card key={i}>
+          <Card key={i} className={classes.likeRecord}>
             {ele.profile.url ? (
               <CardHeader
                 avatar={
@@ -139,7 +165,10 @@ const LikeRecordList: React.FC<Props> = (props) => {
             ) : (
               <CardMedia className={classes.media} image={NoImage} />
             )}
-            <CardContent className={`${classes.cardContent} pointer-h`}>
+            <CardContent
+              className={`${classes.cardContent} pointer-h`}
+              onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
+            >
               詳細を見る
             </CardContent>
             <div className={classes.iconArea}>
