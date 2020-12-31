@@ -1,10 +1,12 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import Calendar from "react-calendar";
 import axios from "axios";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { LikeRecordList } from "../Record";
+import { switchTabAction } from "../../re-ducks/users/actions";
+import { getTabIndex } from "../../re-ducks/users/selectors";
+import { Store } from "../../re-ducks/store/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import "react-calendar/dist/Calendar.css";
@@ -71,6 +73,8 @@ type Props = {
 const DetailsTab: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: Store) => state);
+  const tabIndex = getTabIndex(selector);
   const uid = props.uid;
   const currentUserId = props.currentUserId;
   const followings = props.followings;
@@ -202,107 +206,149 @@ const DetailsTab: React.FC<Props> = (props) => {
   );
 
   return (
-    <Tabs>
-      <TabList>
-        <Tab>カレンダー</Tab>
-        <Tab>{`フォロー ${followings.length}`}</Tab>
-        <Tab>{`フォロワー ${followers.length}`}</Tab>
-        <Tab>{`いいね ${props.likes}`}</Tab>
-      </TabList>
-
-      <TabPanel>
+    <>
+      <ul className="tabs">
+        {tabIndex === 0 ? (
+          <li
+            className="tab tab-selected"
+            onClick={() => dispatch(switchTabAction(0))}
+          >
+            カレンダー
+          </li>
+        ) : (
+          <li className="tab" onClick={() => dispatch(switchTabAction(0))}>
+            カレンダー
+          </li>
+        )}
+        {tabIndex === 1 ? (
+          <li
+            className="tab tab-selected"
+            onClick={() => dispatch(switchTabAction(1))}
+          >{`フォロー ${followings.length}`}</li>
+        ) : (
+          <li
+            className="tab"
+            onClick={() => dispatch(switchTabAction(1))}
+          >{`フォロー ${followings.length}`}</li>
+        )}
+        {tabIndex === 2 ? (
+          <li
+            className="tab tab-selected"
+            onClick={() => dispatch(switchTabAction(2))}
+          >{`フォロワー ${followers.length}`}</li>
+        ) : (
+          <li
+            className="tab"
+            onClick={() => dispatch(switchTabAction(2))}
+          >{`フォロワー ${followers.length}`}</li>
+        )}
+        {tabIndex === 3 ? (
+          <li
+            className="tab tab-selected"
+            onClick={() => dispatch(switchTabAction(3))}
+          >{`いいね ${props.likes}`}</li>
+        ) : (
+          <li
+            className="tab"
+            onClick={() => dispatch(switchTabAction(3))}
+          >{`いいね ${props.likes}`}</li>
+        )}
+      </ul>
+      {tabIndex === 0 && (
         <Calendar
           calendarType="US"
           value={new Date()}
           onClickDay={goRecordPage}
         />
-      </TabPanel>
-      <TabPanel>
-        {followings.map((ele, i) => (
-          <div key={i} className={classes.user}>
-            <img
-              className={`${classes.profile} pointer-h`}
-              src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
-              alt="プロフィール画像"
-              onClick={() => dispatch(push(`/users/${ele.id}`))}
-            />
-            <p>{ele.name}</p>
-            {ele.id !== currentUserId ? (
-              <>
-                {ele.following ? (
-                  <Button
-                    id={`unfollow-btn${i}`}
-                    className={classes.unfollowBtn}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => unfollow(ele.id, i, true)}
-                    onMouseOver={() => props.over(i)}
-                    onMouseLeave={() => props.leave(i)}
-                  >
-                    フォロー中
-                  </Button>
-                ) : (
-                  <Button
-                    id={`follow-btn${i}`}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => follow(ele.id, i, true)}
-                  >
-                    フォロー
-                  </Button>
-                )}
-              </>
-            ) : (
-              <Button className={classes.hidden}>Hidden</Button>
-            )}
-          </div>
-        ))}
-      </TabPanel>
-      <TabPanel>
-        {followers.map((ele, i) => (
-          <div key={i} className={classes.user}>
-            <img
-              className={`${classes.profile} pointer-h`}
-              src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
-              alt="プロフィール画像"
-              onClick={() => dispatch(push(`/users/${ele.id}`))}
-            />
-            <p>{ele.name}</p>
-            {ele.id !== currentUserId ? (
-              <>
-                {ele.following ? (
-                  <Button
-                    id={`unfollow-btn${i}`}
-                    className={classes.unfollowBtn}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => unfollow(ele.id, i, false)}
-                    onMouseOver={() => props.over(i)}
-                    onMouseLeave={() => props.leave(i)}
-                  >
-                    フォロー中
-                  </Button>
-                ) : (
-                  <Button
-                    id={`follow-btn${i}`}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => follow(ele.id, i, false)}
-                  >
-                    フォロー
-                  </Button>
-                )}
-              </>
-            ) : (
-              <Button className={classes.hidden}>Hidden</Button>
-            )}
-          </div>
-        ))}
-      </TabPanel>
-      <TabPanel>
-        <LikeRecordList uid={uid} />
-      </TabPanel>
-    </Tabs>
+      )}
+      {tabIndex === 1 && (
+        <>
+          {followings.map((ele, i) => (
+            <div key={i} className={classes.user}>
+              <img
+                className={`${classes.profile} pointer-h`}
+                src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
+                alt="プロフィール画像"
+                onClick={() => dispatch(push(`/users/${ele.id}`))}
+              />
+              <p>{ele.name}</p>
+              {ele.id !== currentUserId ? (
+                <>
+                  {ele.following ? (
+                    <Button
+                      id={`unfollow-btn${i}`}
+                      className={classes.unfollowBtn}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => unfollow(ele.id, i, true)}
+                      onMouseOver={() => props.over(i)}
+                      onMouseLeave={() => props.leave(i)}
+                    >
+                      フォロー中
+                    </Button>
+                  ) : (
+                    <Button
+                      id={`follow-btn${i}`}
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => follow(ele.id, i, true)}
+                    >
+                      フォロー
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button className={classes.hidden}>Hidden</Button>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+      {tabIndex === 2 && (
+        <>
+          {followers.map((ele, i) => (
+            <div key={i} className={classes.user}>
+              <img
+                className={`${classes.profile} pointer-h`}
+                src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
+                alt="プロフィール画像"
+                onClick={() => dispatch(push(`/users/${ele.id}`))}
+              />
+              <p>{ele.name}</p>
+              {ele.id !== currentUserId ? (
+                <>
+                  {ele.following ? (
+                    <Button
+                      id={`unfollow-btn${i}`}
+                      className={classes.unfollowBtn}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => unfollow(ele.id, i, false)}
+                      onMouseOver={() => props.over(i)}
+                      onMouseLeave={() => props.leave(i)}
+                    >
+                      フォロー中
+                    </Button>
+                  ) : (
+                    <Button
+                      id={`follow-btn${i}`}
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => follow(ele.id, i, false)}
+                    >
+                      フォロー
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button className={classes.hidden}>Hidden</Button>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+      {tabIndex === 3 && <LikeRecordList uid={uid} />}
+    </>
   );
 };
 

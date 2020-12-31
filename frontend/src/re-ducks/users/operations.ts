@@ -20,12 +20,13 @@ const signInAfterSavingToken = (
       email: responseData.email,
       profile: responseData.profile.url,
       theme: responseData.theme,
+      tabIndex: 0,
     })
   );
   dispatch(push("/"));
 };
 
-export const listenAuthState = () => {
+export const listenAuthState = (tabIndex: number) => {
   return async (dispatch: any) => {
     axios({
       method: "GET",
@@ -46,6 +47,7 @@ export const listenAuthState = () => {
             email: responseData.email,
             profile: responseData.profile.url,
             theme: responseData.theme,
+            tabIndex,
           })
         );
       })

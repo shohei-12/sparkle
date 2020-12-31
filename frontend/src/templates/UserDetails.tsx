@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import axios from "axios";
@@ -51,6 +51,7 @@ const UserDetails: React.FC = () => {
   const currentUserName = getUserName(selector);
   const currentUserProfile = getUserProfile(selector);
   const uid = Number(window.location.pathname.split("/")[2]);
+  const isBrowserBack = useRef(false);
 
   const [name, setName] = useState("");
   const [profile, setProfile] = useState<string | null>("");
@@ -58,6 +59,10 @@ const UserDetails: React.FC = () => {
   const [followings, setFollowings] = useState<User[]>([]);
   const [followers, setFollowers] = useState<User[]>([]);
   const [likes, setLikes] = useState(0);
+
+  window.onpopstate = () => {
+    isBrowserBack.current = true;
+  };
 
   const goUserEditPage = useCallback(() => {
     dispatch(push(`/users/${currentUserId}/edit`));
@@ -151,6 +156,19 @@ const UserDetails: React.FC = () => {
           setFollowings(res.data.follow_list);
           setFollowers(res.data.follower_list);
           setLikes(res.data.likes);
+          const scrollYLikeRecords = Number(
+            localStorage.getItem("scrollY-like_records")
+          );
+          if (isBrowserBack.current) {
+            if (scrollYLikeRecords) {
+              window.scrollTo(0, scrollYLikeRecords);
+              localStorage.removeItem("scrollY-like_records");
+            }
+            isBrowserBack.current = false;
+          }
+          if (scrollYLikeRecords) {
+            localStorage.removeItem("scrollY-like_records");
+          }
         })
         .catch((error) => {
           throw new Error(error);
