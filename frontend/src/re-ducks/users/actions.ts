@@ -20,6 +20,7 @@ export const signOutAction = () => {
       name: "",
       email: "",
       profile: "",
+      tabIndex: 0,
     },
   };
 };
@@ -40,6 +41,16 @@ export const toggleThemeAction = (theme: ThemeToggle) => {
     type: "THEME_TOGGLE",
     payload: {
       ...theme,
+    },
+  };
+};
+
+export const SWITCH_TAB = "SWITCH_TAB";
+export const switchTabAction = (tabIndex: number) => {
+  return {
+    type: "SWITCH_TAB",
+    payload: {
+      tabIndex,
     },
   };
 };

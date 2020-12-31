@@ -9,6 +9,7 @@ const initialUserState: UserState = {
   email: "",
   profile: "",
   theme: "light",
+  tabIndex: 0,
 };
 
 const initialRecordState: RecordState = {

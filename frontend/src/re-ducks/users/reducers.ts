@@ -26,6 +26,11 @@ export const UsersReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.SWITCH_TAB:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

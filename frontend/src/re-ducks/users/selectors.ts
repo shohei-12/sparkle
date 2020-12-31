@@ -26,3 +26,8 @@ export const getUserProfile = createSelector(
 );
 
 export const getTheme = createSelector([usersSelector], (state) => state.theme);
+
+export const getTabIndex = createSelector(
+  [usersSelector],
+  (state) => state.tabIndex
+);

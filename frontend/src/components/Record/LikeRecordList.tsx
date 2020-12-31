@@ -76,8 +76,17 @@ const LikeRecordList: React.FC<Props> = (props) => {
   const start = getLikeRecords(selector).start;
   const [hasMore, setHasMore] = useState(true);
 
+  const goUserDetailsPage = useCallback(
+    (author_id: number) => {
+      localStorage.setItem("scrollY-like_records", String(window.scrollY));
+      dispatch(push(`/users/${author_id}`));
+    },
+    [dispatch]
+  );
+
   const goRecordDetailsPage = useCallback(
     (author_id: number, dateString: string) => {
+      localStorage.setItem("scrollY-like_records", String(window.scrollY));
       const date = new Date(dateString);
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -136,6 +145,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
                       className={`${classes.profile} pointer-h`}
                       src={baseURL + ele.profile.url}
                       alt="プロフィール画像"
+                      onClick={() => goUserDetailsPage(ele.author_id)}
                     />
                   </Avatar>
                 }
@@ -150,6 +160,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
                       className={`${classes.profile} pointer-h`}
                       src={NoProfile}
                       alt="プロフィール画像"
+                      onClick={() => goUserDetailsPage(ele.author_id)}
                     />
                   </Avatar>
                 }

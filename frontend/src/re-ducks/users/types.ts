@@ -5,6 +5,7 @@ export type UserState = {
   email: string;
   profile: string;
   theme: "light" | "dark";
+  tabIndex: number;
 };
 
 export type UserUpdate = {
