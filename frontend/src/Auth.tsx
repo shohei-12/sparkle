@@ -12,7 +12,8 @@ const Auth: React.FC = ({ children }: any) => {
 
   useEffect(() => {
     dispatch(listenAuthState(tabIndex));
-  }, [dispatch, tabIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   if (!isSignedIn) {
     return <></>;

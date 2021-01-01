@@ -7,7 +7,7 @@ import { push } from "connected-react-router";
 import { Store } from "../../re-ducks/store/types";
 import { Record } from "../../re-ducks/records/types";
 import { getLikeRecords } from "../../re-ducks/records/selectors";
-import { getLikeRecordsAction } from "../../re-ducks/records/actions";
+import { addLikeRecords } from "../../re-ducks/records/operations";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -70,10 +70,12 @@ type Props = {
 
 const LikeRecordList: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const uid = props.uid;
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
-  const like_records = getLikeRecords(selector).records;
-  const start = getLikeRecords(selector).start;
+  const found = getLikeRecords(selector).find((ele) => ele.uid === uid)!;
+  const likeRecords = found.records;
+  const start = found.start;
   const [hasMore, setHasMore] = useState(true);
 
   const goUserDetailsPage = useCallback(
@@ -98,7 +100,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
 
   const get20LikeRecords = useCallback(() => {
     axios
-      .get(`${baseURL}/api/v1/users/${props.uid}/like-records`, {
+      .get(`${baseURL}/api/v1/users/${uid}/like-records`, {
         params: {
           start,
           uid: localStorage.getItem("uid"),
@@ -107,18 +109,18 @@ const LikeRecordList: React.FC<Props> = (props) => {
         },
       })
       .then((res) => {
-        const twentyLikeRecordsData: Record[] = res.data;
-        if (twentyLikeRecordsData.length === 0) {
+        const twentyLikeRecords: Record[] = res.data;
+        if (twentyLikeRecords.length === 0) {
           setHasMore(false);
           return;
         }
         const nextStart = start + 20;
-        dispatch(getLikeRecordsAction(twentyLikeRecordsData, nextStart));
+        dispatch(addLikeRecords(uid, twentyLikeRecords, nextStart));
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [dispatch, props.uid, start]);
+  }, [dispatch, uid, start]);
 
   return (
     <InfiniteScroll
@@ -134,8 +136,8 @@ const LikeRecordList: React.FC<Props> = (props) => {
         />
       }
     >
-      {like_records.length > 0 &&
-        like_records.map((ele, i) => (
+      {likeRecords.length > 0 &&
+        likeRecords.map((ele, i) => (
           <Card key={i} className={classes.likeRecord}>
             {ele.profile.url ? (
               <CardHeader

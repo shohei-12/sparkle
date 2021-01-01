@@ -5,7 +5,7 @@ import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
 import { likeRecord, unlikeRecord } from "../re-ducks/records/operations";
-import { getRecordsAction } from "../re-ducks/records/actions";
+import { addRecordsAction } from "../re-ducks/records/actions";
 import { getRecords, getStart } from "../re-ducks/records/selectors";
 import { Record } from "../re-ducks/records/types";
 import { Store } from "../re-ducks/store/types";
@@ -100,13 +100,13 @@ const RecordList: React.FC = () => {
       },
     })
       .then((res) => {
-        const twentyRecordsData: Record[] = res.data;
-        if (twentyRecordsData.length === 0) {
+        const twentyRecords: Record[] = res.data;
+        if (twentyRecords.length === 0) {
           setHasMore(false);
           return;
         }
         const nextStart = start + 20;
-        dispatch(getRecordsAction(twentyRecordsData, nextStart));
+        dispatch(addRecordsAction(twentyRecords, nextStart));
       })
       .catch((error) => {
         throw new Error(error);

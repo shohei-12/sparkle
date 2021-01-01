@@ -10,10 +10,10 @@ import {
   getUserName,
   getUserProfile,
 } from "../re-ducks/users/selectors";
+import { getLikeRecords } from "../re-ducks/records/selectors";
+import { createLikeRecordsContainerAction } from "../re-ducks/records/actions";
 import { SecondaryButton } from "../components/UIkit";
 import { DetailsTab } from "../components/User";
-import "react-calendar/dist/Calendar.css";
-import "react-tabs/style/react-tabs.css";
 import NoProfile from "../assets/img/no-profile.png";
 import { baseURL } from "../config";
 
@@ -51,6 +51,7 @@ const UserDetails: React.FC = () => {
   const currentUserName = getUserName(selector);
   const currentUserProfile = getUserProfile(selector);
   const uid = Number(window.location.pathname.split("/")[2]);
+  const likeRecords = getLikeRecords(selector).find((ele) => ele.uid === uid);
   const isBrowserBack = useRef(false);
 
   const [name, setName] = useState("");
@@ -137,6 +138,7 @@ const UserDetails: React.FC = () => {
           },
         })
         .then((res) => {
+          likeRecords || dispatch(createLikeRecordsContainerAction(uid));
           axios
             .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
               params: {
@@ -174,11 +176,11 @@ const UserDetails: React.FC = () => {
           throw new Error(error);
         });
     }
-  }, [uid]);
+  }, [uid, dispatch, likeRecords]);
 
   return (
     <div className="wrap">
-      {name && (
+      {likeRecords && (
         <>
           <h2 className={classes.name}>{name}</h2>
           <img
