@@ -1,9 +1,9 @@
 import { Record } from "./types";
 
-export const GET_RECORDS = "GET_RECORDS";
-export const getRecordsAction = (records: Record[], start: number) => {
+export const ADD_RECORDS = "ADD_RECORDS";
+export const addRecordsAction = (records: Record[], start: number) => {
   return {
-    type: "GET_RECORDS",
+    type: "ADD_RECORDS",
     payload: {
       records,
       start,
@@ -18,13 +18,21 @@ export const likeOrUnlikeRecordAction = () => {
   };
 };
 
-export const GET_LIKE_RECORDS = "GET_LIKE_RECORDS";
-export const getLikeRecordsAction = (like_records: Record[], start: number) => {
+export const ADD_LIKE_RECORDS = "ADD_LIKE_RECORDS";
+export const addLikeRecordsAction = () => {
   return {
-    type: "GET_LIKE_RECORDS",
+    type: "ADD_LIKE_RECORDS",
+  };
+};
+
+export const CREATE_LIKE_RECORDS_CONTAINER = "CREATE_LIKE_RECORDS_CONTAINER";
+export const createLikeRecordsContainerAction = (uid: number) => {
+  return {
+    type: "CREATE_LIKE_RECORDS_CONTAINER",
     payload: {
-      like_records,
-      start,
+      uid,
+      records: [],
+      start: 0,
     },
   };
 };

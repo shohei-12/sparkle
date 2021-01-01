@@ -1,6 +1,6 @@
 import axios from "axios";
-import { likeOrUnlikeRecordAction } from "./actions";
-import { Record } from "./types";
+import { likeOrUnlikeRecordAction, addLikeRecordsAction } from "./actions";
+import { Record, LikeRecords } from "./types";
 import { baseURL } from "../../config";
 
 export const likeRecord = (recordId: number, i: number) => {
@@ -43,5 +43,19 @@ export const unlikeRecord = (recordId: number, i: number) => {
       .catch((error) => {
         throw new Error(error);
       });
+  };
+};
+
+export const addLikeRecords = (
+  uid: number,
+  twentyLikeRecords: Record[],
+  nextStart: number
+) => {
+  return async (dispatch: any, getState: any) => {
+    const likeRecords = getState().records.like_records as LikeRecords[];
+    const found = likeRecords.find((ele) => ele.uid === uid)!;
+    found.records = [...found.records, ...twentyLikeRecords];
+    found.start = nextStart;
+    dispatch(addLikeRecordsAction());
   };
 };

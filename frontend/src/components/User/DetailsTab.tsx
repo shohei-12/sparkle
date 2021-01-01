@@ -10,7 +10,6 @@ import { Store } from "../../re-ducks/store/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import "react-calendar/dist/Calendar.css";
-import "react-tabs/style/react-tabs.css";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
 
@@ -72,10 +71,10 @@ type Props = {
 
 const DetailsTab: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const uid = props.uid;
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const tabIndex = getTabIndex(selector);
-  const uid = props.uid;
   const currentUserId = props.currentUserId;
   const followings = props.followings;
   const followers = props.followers;
@@ -209,22 +208,14 @@ const DetailsTab: React.FC<Props> = (props) => {
     <>
       <ul className="tabs">
         {tabIndex === 0 ? (
-          <li
-            className="tab tab-selected"
-            onClick={() => dispatch(switchTabAction(0))}
-          >
-            カレンダー
-          </li>
+          <li className="tab tab-selected">カレンダー</li>
         ) : (
           <li className="tab" onClick={() => dispatch(switchTabAction(0))}>
             カレンダー
           </li>
         )}
         {tabIndex === 1 ? (
-          <li
-            className="tab tab-selected"
-            onClick={() => dispatch(switchTabAction(1))}
-          >{`フォロー ${followings.length}`}</li>
+          <li className="tab tab-selected">{`フォロー ${followings.length}`}</li>
         ) : (
           <li
             className="tab"
@@ -232,10 +223,7 @@ const DetailsTab: React.FC<Props> = (props) => {
           >{`フォロー ${followings.length}`}</li>
         )}
         {tabIndex === 2 ? (
-          <li
-            className="tab tab-selected"
-            onClick={() => dispatch(switchTabAction(2))}
-          >{`フォロワー ${followers.length}`}</li>
+          <li className="tab tab-selected">{`フォロワー ${followers.length}`}</li>
         ) : (
           <li
             className="tab"
@@ -243,10 +231,7 @@ const DetailsTab: React.FC<Props> = (props) => {
           >{`フォロワー ${followers.length}`}</li>
         )}
         {tabIndex === 3 ? (
-          <li
-            className="tab tab-selected"
-            onClick={() => dispatch(switchTabAction(3))}
-          >{`いいね ${props.likes}`}</li>
+          <li className="tab tab-selected">{`いいね ${props.likes}`}</li>
         ) : (
           <li
             className="tab"

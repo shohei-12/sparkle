@@ -9,13 +9,16 @@ export type Record = {
   liking: boolean;
 };
 
+export type LikeRecords = {
+  uid: number;
+  records: Record[];
+  start: number;
+};
+
 export type RecordState = {
   records: Record[];
   start: number;
-  like_records: {
-    records: Record[];
-    start: number;
-  };
+  like_records: LikeRecords[];
 };
 
 export type RecordAction = {
