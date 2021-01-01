@@ -4,6 +4,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import { push } from "connected-react-router";
+import { switchTabAction } from "../../re-ducks/users/actions";
 import { Store } from "../../re-ducks/store/types";
 import { Record } from "../../re-ducks/records/types";
 import { getLikeRecords } from "../../re-ducks/records/selectors";
@@ -80,6 +81,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
 
   const goUserDetailsPage = useCallback(
     (author_id: number) => {
+      dispatch(switchTabAction(0));
       localStorage.setItem("scrollY-like_records", String(window.scrollY));
       dispatch(push(`/users/${author_id}`));
     },
