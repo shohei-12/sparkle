@@ -254,7 +254,10 @@ const DetailsTab: React.FC<Props> = (props) => {
                 className={`${classes.profile} pointer-h`}
                 src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
                 alt="プロフィール画像"
-                onClick={() => dispatch(push(`/users/${ele.id}`))}
+                onClick={() => {
+                  dispatch(switchTabAction(0));
+                  dispatch(push(`/users/${ele.id}`));
+                }}
               />
               <p>{ele.name}</p>
               {ele.id !== currentUserId ? (
@@ -297,7 +300,10 @@ const DetailsTab: React.FC<Props> = (props) => {
                 className={`${classes.profile} pointer-h`}
                 src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
                 alt="プロフィール画像"
-                onClick={() => dispatch(push(`/users/${ele.id}`))}
+                onClick={() => {
+                  dispatch(switchTabAction(0));
+                  dispatch(push(`/users/${ele.id}`));
+                }}
               />
               <p>{ele.name}</p>
               {ele.id !== currentUserId ? (

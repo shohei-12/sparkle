@@ -4,6 +4,7 @@ import axios from "axios";
 import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
+import { switchTabAction } from "../re-ducks/users/actions";
 import { likeRecord, unlikeRecord } from "../re-ducks/records/operations";
 import { addRecordsAction } from "../re-ducks/records/actions";
 import { getRecords, getStart } from "../re-ducks/records/selectors";
@@ -138,7 +139,10 @@ const RecordList: React.FC = () => {
                       className={`${classes.profile} pointer-h`}
                       src={baseURL + ele.profile.url}
                       alt="プロフィール画像"
-                      onClick={() => dispatch(push(`/users/${ele.author_id}`))}
+                      onClick={() => {
+                        dispatch(switchTabAction(0));
+                        dispatch(push(`/users/${ele.author_id}`));
+                      }}
                     />
                   </Avatar>
                 }
@@ -153,7 +157,10 @@ const RecordList: React.FC = () => {
                       className={`${classes.profile} pointer-h`}
                       src={NoProfile}
                       alt="プロフィール画像"
-                      onClick={() => dispatch(push(`/users/${ele.author_id}`))}
+                      onClick={() => {
+                        dispatch(switchTabAction(0));
+                        dispatch(push(`/users/${ele.author_id}`));
+                      }}
                     />
                   </Avatar>
                 }
