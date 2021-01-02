@@ -8,7 +8,11 @@ import { switchTabAction } from "../../re-ducks/users/actions";
 import { Store } from "../../re-ducks/store/types";
 import { Record } from "../../re-ducks/records/types";
 import { getLikeRecords } from "../../re-ducks/records/selectors";
-import { addLikeRecords } from "../../re-ducks/records/operations";
+import {
+  addLikeRecords,
+  likeRecord,
+  unlikeRecord,
+} from "../../re-ducks/records/operations";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -189,13 +193,21 @@ const LikeRecordList: React.FC<Props> = (props) => {
             <div className={classes.iconArea}>
               {ele.liking ? (
                 <Tooltip title="いいね解除">
-                  <IconButton aria-label="いいね解除">
+                  <IconButton
+                    aria-label="いいね解除"
+                    onClick={() =>
+                      dispatch(unlikeRecord(ele.record_id, i, uid))
+                    }
+                  >
                     <FavoriteIcon className={classes.unlikeIcon} />
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="いいね">
-                  <IconButton aria-label="いいね">
+                  <IconButton
+                    aria-label="いいね"
+                    onClick={() => dispatch(likeRecord(ele.record_id, i, uid))}
+                  >
                     <FavoriteIcon />
                   </IconButton>
                 </Tooltip>
