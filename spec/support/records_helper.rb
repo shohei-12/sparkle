@@ -7,7 +7,11 @@ module RecordsHelper
     get '/api/v1/record', params: data
   end
 
-  def get_20records(data)
+  def get_20_records(data)
     get '/api/v1/records', params: data
+  end
+
+  def get_20_like_records(data, user_id)
+    get "/api/v1/users/#{user_id}/like-records", params: data
   end
 end

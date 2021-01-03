@@ -38,9 +38,6 @@ ClassAndModuleChildren:
 Metrics/MethodLength:
   Enabled: false
 
-Metrics/AbcSize:
-  Max: 25
-
 RSpec/EmptyExampleGroup:
   Enabled: false
 
@@ -48,6 +45,9 @@ RSpec/ExampleLength:
   Enabled: false
 
 RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 RSpec/InstanceVariable:

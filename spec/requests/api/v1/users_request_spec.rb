@@ -5,12 +5,14 @@ RSpec.describe 'Api::V1::Users', type: :request do
   let(:user2) { create(:user) }
   let(:token1) { sign_in({ email: user1.email, password: 'password' }) }
   let(:token2) { sign_in({ email: user2.email, password: 'password' }) }
+  let(:record) { create(:record) }
 
   describe 'GET /api/v1/users/:id' do
     context 'when user exists' do
       before do
         follow({ **token1, id: user2.id })
         follow({ **token2, id: user1.id })
+        user1.like(record)
       end
 
       context 'when token is valid' do
@@ -20,6 +22,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
           expect(JSON.parse(response.body)['user']['id']).to eq user1.id
           expect(JSON.parse(response.body)['follow_list'][0]['id']).to eq user2.id
           expect(JSON.parse(response.body)['follower_list'][0]['id']).to eq user2.id
+          expect(JSON.parse(response.body)['likes']).to eq 1
         end
       end
 
