@@ -210,6 +210,84 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#self.get_followings(user_followings, current_user)' do
+    context 'when followings exists' do
+      it 'get followings info' do
+        user2.follow(user3)
+        followings_info = described_class.get_followings([user3, user4], user2)
+        user3_info = { user: user3, index: 0, following: true }
+        user4_info = { user: user4, index: 1, following: false }
+        [user3_info, user4_info].each do |user_info|
+          expect(followings_info[user_info[:index]][:id]).to eq user_info[:user].id
+          expect(followings_info[user_info[:index]][:name]).to eq user_info[:user].name
+          expect(followings_info[user_info[:index]][:profile]).to eq user_info[:user].profile
+          expect(followings_info[user_info[:index]][:following]).to eq user_info[:following]
+        end
+      end
+    end
+
+    context 'when followings does not exist' do
+      it 'not get followings info' do
+        followings_info = described_class.get_followings([], user2)
+        expect(followings_info.length).to eq 0
+      end
+    end
+
+    context 'when current user does not exist' do
+      context 'when followings exists' do
+        it 'raise NoMethodError' do
+          expect { described_class.get_followings([user2, user3], nil) }.to raise_error(NoMethodError)
+        end
+      end
+
+      context 'when followings does not exist' do
+        it 'not get followings info' do
+          followings_info = described_class.get_followings([], nil)
+          expect(followings_info.length).to eq 0
+        end
+      end
+    end
+  end
+
+  describe '#self.get_followers(user_followers, current_user)' do
+    context 'when followers exists' do
+      it 'get followers info' do
+        user2.follow(user4)
+        followers_info = described_class.get_followers([user3, user4], user2)
+        user3_info = { user: user3, index: 0, following: false }
+        user4_info = { user: user4, index: 1, following: true }
+        [user3_info, user4_info].each do |user_info|
+          expect(followers_info[user_info[:index]][:id]).to eq user_info[:user].id
+          expect(followers_info[user_info[:index]][:name]).to eq user_info[:user].name
+          expect(followers_info[user_info[:index]][:profile]).to eq user_info[:user].profile
+          expect(followers_info[user_info[:index]][:following]).to eq user_info[:following]
+        end
+      end
+    end
+
+    context 'when followers does not exist' do
+      it 'not get followers info' do
+        followers_info = described_class.get_followers([], user2)
+        expect(followers_info.length).to eq 0
+      end
+    end
+
+    context 'when current user does not exist' do
+      context 'when followers exists' do
+        it 'raise NoMethodError' do
+          expect { described_class.get_followers([user2, user3], nil) }.to raise_error(NoMethodError)
+        end
+      end
+
+      context 'when followers does not exist' do
+        it 'not get followers info' do
+          followers_info = described_class.get_followers([], nil)
+          expect(followers_info.length).to eq 0
+        end
+      end
+    end
+  end
+
   describe '#like(record)' do
     context 'when record exists' do
       it 'like record' do
