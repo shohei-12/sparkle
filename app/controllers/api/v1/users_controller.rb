@@ -6,12 +6,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    followings = User.get_followings(@user.followings, current_api_v1_user)
-    followers = User.get_followers(@user.followers, current_api_v1_user)
+    following_infos = User.get_following_infos(@user.followings, current_api_v1_user)
+    follower_infos = User.get_follower_infos(@user.followers, current_api_v1_user)
     render json: {
       user: @user,
-      follow_list: followings,
-      follower_list: followers,
+      follow_list: following_infos,
+      follower_list: follower_infos,
       likes: @user.like_records.length
     }
   end
