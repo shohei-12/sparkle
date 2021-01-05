@@ -1,6 +1,6 @@
 module RecordsHelper
-  def save_record(data)
-    post '/api/v1/records', params: data
+  def save_record(data, token)
+    post '/api/v1/records', params: data, headers: token
   end
 
   def get_record(data)

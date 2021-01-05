@@ -1,8 +1,8 @@
 class Api::V1::RecordsController < ApplicationController
-  before_action :set_user, only: %i[create show twenty_like_records]
+  before_action :set_user, only: %i[show twenty_like_records]
 
   def create
-    record = @user.records.create(date: params[:date])
+    record = current_api_v1_user.records.create(date: params[:date])
     render json: record
   end
 

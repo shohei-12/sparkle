@@ -3,6 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Records', type: :request do
   let(:user) { create(:user) }
   let(:record) { create(:record) }
+  let(:date) do
+    { date: '2020-11-22' }
+  end
+  let(:invalid_data) do
+    { date: 'a' }
+  end
+  let(:token) { sign_in({ email: user.email, password: 'password' }) }
   let(:start0) do
     { start: 0 }
   end
@@ -11,30 +18,32 @@ RSpec.describe 'Api::V1::Records', type: :request do
   end
 
   describe 'POST /api/v1/records' do
-    context 'when data is valid' do
-      let(:valid_data) do
-        {
-          id: user.id,
-          date: '2020-11-22'
-        }
+    context 'when token is valid' do
+      context 'when data is valid' do
+        it 'save record' do
+          expect { save_record(date, token) }.to change(Record, :count).by(1)
+          expect(response.status).to eq 200
+        end
       end
 
-      it 'save record' do
-        expect { save_record(valid_data) }.to change(Record, :count).by(1)
-        expect(response.status).to eq 200
+      context 'when data is invalid' do
+        it 'not save record' do
+          expect { save_record(invalid_data, token) }.to change(Record, :count).by(0)
+        end
       end
     end
 
-    context 'when data is invalid' do
-      let(:invalid_data) do
-        {
-          id: user.id += 1,
-          date: '2020-11-22'
-        }
+    context 'when token is invalid' do
+      context 'when data is valid' do
+        it 'raise NoMethodError' do
+          expect { save_record(date, nil) }.to raise_error(NoMethodError)
+        end
       end
 
-      it 'raise ActiveRecord::RecordNotFound' do
-        expect { save_record(invalid_data) }.to raise_error(ActiveRecord::RecordNotFound)
+      context 'when data is invalid' do
+        it 'raise NoMethodError' do
+          expect { save_record(invalid_data, nil) }.to raise_error(NoMethodError)
+        end
       end
     end
   end
