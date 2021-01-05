@@ -42,15 +42,36 @@ export const unlikeRecord = (recordId: number, i: number, uid?: number) => {
         },
       })
       .then(() => {
+        const records = getState().records.records as Record[];
+        const likeRecords = getState().records.like_records as LikeRecords[];
+        const currentUserId = Number(getState().users.id);
+        const currentUserContainer = likeRecords.find(
+          (ele) => ele.uid === currentUserId
+        );
         if (uid) {
-          const likeRecords = getState().records.like_records as LikeRecords[];
           const found = likeRecords.find((ele) => ele.uid === uid)!;
           found.records[i].likes--;
           found.records[i].liking = false;
+          if (currentUserContainer) {
+            const result = currentUserContainer.records.filter(
+              (ele) => ele.record_id !== recordId
+            );
+            currentUserContainer.records = result;
+          }
+          const found2 = records.find((ele) => ele.record_id === recordId);
+          if (found2) {
+            found2.likes--;
+            found2.liking = false;
+          }
         } else {
-          const records = getState().records.records as Record[];
           records[i].likes--;
           records[i].liking = false;
+          if (currentUserContainer) {
+            const result = currentUserContainer.records.filter(
+              (ele) => ele.record_id !== recordId
+            );
+            currentUserContainer.records = result;
+          }
         }
         dispatch(likeOrUnlikeRecordAction());
       })

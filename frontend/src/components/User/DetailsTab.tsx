@@ -65,6 +65,7 @@ type Props = {
   likes: number;
   setFollowings: React.Dispatch<React.SetStateAction<User[]>>;
   setFollowers: React.Dispatch<React.SetStateAction<User[]>>;
+  setLikes: React.Dispatch<React.SetStateAction<number>>;
   over: (n: number) => void;
   leave: (n: number) => void;
 };
@@ -338,7 +339,13 @@ const DetailsTab: React.FC<Props> = (props) => {
           ))}
         </>
       )}
-      {tabIndex === 3 && <LikeRecordList uid={uid} />}
+      {tabIndex === 3 && (
+        <LikeRecordList
+          uid={uid}
+          likes={props.likes}
+          setLikes={props.setLikes}
+        />
+      )}
     </>
   );
 };

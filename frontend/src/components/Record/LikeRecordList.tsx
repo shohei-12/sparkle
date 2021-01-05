@@ -5,6 +5,7 @@ import ReactLoading from "react-loading";
 import axios from "axios";
 import { push } from "connected-react-router";
 import { switchTabAction } from "../../re-ducks/users/actions";
+import { getUserId } from "../../re-ducks/users/selectors";
 import { Store } from "../../re-ducks/store/types";
 import { Record } from "../../re-ducks/records/types";
 import { getLikeRecords } from "../../re-ducks/records/selectors";
@@ -71,16 +72,21 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   uid: number;
+  likes: number;
+  setLikes: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const LikeRecordList: React.FC<Props> = (props) => {
   const classes = useStyles();
   const uid = props.uid;
+  const likes = props.likes;
+  const setLikes = props.setLikes;
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const found = getLikeRecords(selector).find((ele) => ele.uid === uid)!;
   const likeRecords = found.records;
   const start = found.start;
+  const currentUserId = Number(getUserId(selector));
   const [hasMore, setHasMore] = useState(true);
 
   const goUserDetailsPage = useCallback(
@@ -127,6 +133,10 @@ const LikeRecordList: React.FC<Props> = (props) => {
         throw new Error(error);
       });
   }, [dispatch, uid, start]);
+
+  const decreaseLikes = useCallback(() => {
+    setLikes(likes - 1);
+  }, [likes, setLikes]);
 
   return (
     <InfiniteScroll
@@ -195,9 +205,10 @@ const LikeRecordList: React.FC<Props> = (props) => {
                 <Tooltip title="いいね解除">
                   <IconButton
                     aria-label="いいね解除"
-                    onClick={() =>
-                      dispatch(unlikeRecord(ele.record_id, i, uid))
-                    }
+                    onClick={() => {
+                      dispatch(unlikeRecord(ele.record_id, i, uid));
+                      uid === currentUserId && decreaseLikes();
+                    }}
                   >
                     <FavoriteIcon className={classes.unlikeIcon} />
                   </IconButton>
