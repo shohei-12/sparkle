@@ -225,9 +225,6 @@ const RecordDetails: React.FC<Props> = (props) => {
                 rows="5"
                 type="text"
                 name="appearance"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 value={appearanceMemo}
                 onChange={inputAppearance}
               />

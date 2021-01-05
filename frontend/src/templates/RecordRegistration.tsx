@@ -11,10 +11,11 @@ import { baseURL } from "../config";
 const RecordRegistration: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
-  const uid = getUserId(selector);
-  const year = Number(window.location.pathname.split("/")[2]);
-  const month = Number(window.location.pathname.split("/")[3]);
-  const day = Number(window.location.pathname.split("/")[4]);
+  const currentUserId = getUserId(selector);
+  const uid = window.location.pathname.split("/")[2];
+  const year = Number(window.location.pathname.split("/")[3]);
+  const month = Number(window.location.pathname.split("/")[4]);
+  const day = Number(window.location.pathname.split("/")[5]);
 
   const [appearances, setAppearances] = useState<File[]>([]);
   const [breakfasts, setBreakfasts] = useState<File[]>([]);
@@ -68,8 +69,10 @@ const RecordRegistration: React.FC = () => {
       method: "POST",
       url: `${baseURL}/api/v1/records`,
       data: {
-        id: uid,
         date: new Date(year, month - 1, day + 1),
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
       },
     })
       .then(async (res) => {
@@ -131,13 +134,13 @@ const RecordRegistration: React.FC = () => {
           data.delete("eating_time_id");
         }
         dispatch(flashAction({ type: "success", msg: "記録しました！" }));
-        dispatch(push(`/users/${uid}`));
+        dispatch(push(`/users/${currentUserId}`));
       })
       .catch((error) => {
         throw new Error(error);
       });
   }, [
-    uid,
+    currentUserId,
     year,
     month,
     day,
@@ -156,87 +159,93 @@ const RecordRegistration: React.FC = () => {
 
   return (
     <div className="wrap">
-      <ImageField
-        text="💪 見た目を記録する（最大5枚）"
-        sheets={4}
-        profile={false}
-        setAppearances={setAppearances}
-      />
-      <TextInput
-        fullWidth={true}
-        label="メモ"
-        multiline={true}
-        required={false}
-        rows="5"
-        type="text"
-        name="appearance"
-        onChange={inputAppearance}
-      />
-      <ImageField
-        text="🍙 朝食を記録する（最大3枚）"
-        sheets={2}
-        profile={false}
-        setBreakfasts={setBreakfasts}
-      />
-      <TextInput
-        fullWidth={true}
-        label="メモ"
-        multiline={true}
-        required={false}
-        rows="5"
-        type="text"
-        name="breakfast"
-        onChange={inputBreakfast}
-      />
-      <ImageField
-        text="🍔 昼食を記録する（最大3枚）"
-        sheets={2}
-        profile={false}
-        setLunchs={setLunchs}
-      />
-      <TextInput
-        fullWidth={true}
-        label="メモ"
-        multiline={true}
-        required={false}
-        rows="5"
-        type="text"
-        name="lunch"
-        onChange={inputLunch}
-      />
-      <ImageField
-        text="🍖 夕食を記録する（最大3枚）"
-        sheets={2}
-        profile={false}
-        setDinners={setDinners}
-      />
-      <TextInput
-        fullWidth={true}
-        label="メモ"
-        multiline={true}
-        required={false}
-        rows="5"
-        type="text"
-        name="dinner"
-        onChange={inputDinner}
-      />
-      <ImageField
-        text="🍰 間食を記録する（最大3枚）"
-        sheets={2}
-        profile={false}
-        setSnacks={setSnacks}
-      />
-      <TextInput
-        fullWidth={true}
-        label="メモ"
-        multiline={true}
-        required={false}
-        rows="5"
-        type="text"
-        name="snack"
-        onChange={inputSnack}
-      />
-      <SecondaryButton text="記録する" onClick={createRecord} />
+      {currentUserId === uid ? (
+        <>
+          <ImageField
+            text="💪 見た目を記録する（最大5枚）"
+            sheets={4}
+            profile={false}
+            setAppearances={setAppearances}
+          />
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="appearance"
+            onChange={inputAppearance}
+          />
+          <ImageField
+            text="🍙 朝食を記録する（最大3枚）"
+            sheets={2}
+            profile={false}
+            setBreakfasts={setBreakfasts}
+          />
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="breakfast"
+            onChange={inputBreakfast}
+          />
+          <ImageField
+            text="🍔 昼食を記録する（最大3枚）"
+            sheets={2}
+            profile={false}
+            setLunchs={setLunchs}
+          />
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="lunch"
+            onChange={inputLunch}
+          />
+          <ImageField
+            text="🍖 夕食を記録する（最大3枚）"
+            sheets={2}
+            profile={false}
+            setDinners={setDinners}
+          />
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="dinner"
+            onChange={inputDinner}
+          />
+          <ImageField
+            text="🍰 間食を記録する（最大3枚）"
+            sheets={2}
+            profile={false}
+            setSnacks={setSnacks}
+          />
+          <TextInput
+            fullWidth={true}
+            label="メモ"
+            multiline={true}
+            required={false}
+            rows="5"
+            type="text"
+            name="snack"
+            onChange={inputSnack}
+          />
+          <SecondaryButton text="記録する" onClick={createRecord} />
+        </>
+      ) : (
+        <p>記録がありません</p>
+      )}
     </div>
   );
 };
