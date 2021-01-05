@@ -180,7 +180,7 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="wrap">
-      {likeRecords && (
+      {name && (
         <>
           <h2 className={classes.name}>{name}</h2>
           <img
@@ -228,6 +228,7 @@ const UserDetails: React.FC = () => {
             likes={likes}
             setFollowings={setFollowings}
             setFollowers={setFollowers}
+            setLikes={setLikes}
             over={over}
             leave={leave}
           />
