@@ -83,9 +83,9 @@ const LikeRecordList: React.FC<Props> = (props) => {
   const setLikes = props.setLikes;
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
-  const found = getLikeRecords(selector).find((ele) => ele.uid === uid)!;
-  const likeRecords = found.records;
-  const start = found.start;
+  const found = getLikeRecords(selector).find((ele) => ele.uid === uid);
+  const likeRecords = found?.records;
+  const start = found?.start;
   const currentUserId = Number(getUserId(selector));
   const [hasMore, setHasMore] = useState(true);
 
@@ -111,28 +111,30 @@ const LikeRecordList: React.FC<Props> = (props) => {
   );
 
   const get20LikeRecords = useCallback(() => {
-    axios
-      .get(`${baseURL}/api/v1/users/${uid}/like-records`, {
-        params: {
-          start,
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
-        },
-      })
-      .then((res) => {
-        const twentyLikeRecords: Record[] = res.data;
-        if (twentyLikeRecords.length === 0) {
-          setHasMore(false);
-          return;
-        }
-        const nextStart = start + 20;
-        dispatch(addLikeRecords(uid, twentyLikeRecords, nextStart));
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [dispatch, uid, start]);
+    if (found) {
+      axios
+        .get(`${baseURL}/api/v1/users/${uid}/like-records`, {
+          params: {
+            start,
+            uid: localStorage.getItem("uid"),
+            client: localStorage.getItem("client"),
+            access_token: localStorage.getItem("access_token"),
+          },
+        })
+        .then((res) => {
+          const twentyLikeRecords: Record[] = res.data;
+          if (twentyLikeRecords.length === 0) {
+            setHasMore(false);
+            return;
+          }
+          start !== undefined &&
+            dispatch(addLikeRecords(uid, twentyLikeRecords, start + 20));
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+  }, [found, dispatch, uid, start]);
 
   const decreaseLikes = useCallback(() => {
     setLikes(likes - 1);
@@ -152,7 +154,8 @@ const LikeRecordList: React.FC<Props> = (props) => {
         />
       }
     >
-      {likeRecords.length > 0 &&
+      {likeRecords &&
+        likeRecords.length > 0 &&
         likeRecords.map((ele, i) => (
           <Card key={i} className={classes.likeRecord}>
             {ele.profile.url ? (
