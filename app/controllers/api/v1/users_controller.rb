@@ -6,14 +6,24 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    following_infos = User.get_following_infos(@user.followings, current_api_v1_user)
-    follower_infos = User.get_follower_infos(@user.followers, current_api_v1_user)
     render json: {
       user: @user,
-      follow_list: following_infos,
-      follower_list: follower_infos,
+      followings: @user.followings.length,
+      followers: @user.followers.length,
       likes: @user.like_records.length
     }
+  end
+
+  def twenty_followings
+    twenty_followings = @user.followings.limit(20).offset(params[:start])
+    following_infos = User.get_following_infos(twenty_followings, current_api_v1_user)
+    render json: following_infos
+  end
+
+  def twenty_followers
+    twenty_followers = @user.followers.limit(20).offset(params[:start])
+    follower_infos = User.get_follower_infos(twenty_followers, current_api_v1_user)
+    render json: follower_infos
   end
 
   private
