@@ -4,6 +4,8 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       get '/users/:id', to: 'users#show'
       put '/toggle-theme', to: 'users#toggle_theme'
+      get '/users/:id/followings', to: 'users#twenty_followings'
+      get '/users/:id/followers', to: 'users#twenty_followers'
       post '/records', to: 'records#create'
       get '/record', to: 'records#show'
       get '/records', to: 'records#index'

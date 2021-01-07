@@ -5,13 +5,11 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Store } from "../re-ducks/store/types";
-import {
-  getUserId,
-  getUserName,
-  getUserProfile,
-} from "../re-ducks/users/selectors";
+import { getUserId } from "../re-ducks/users/selectors";
 import { getLikeRecords } from "../re-ducks/records/selectors";
 import { createLikeRecordsContainerAction } from "../re-ducks/records/actions";
+import { getFollowings } from "../re-ducks/relationships/selectors";
+import { createRelationshipContainerAction } from "../re-ducks/relationships/actions";
 import { SecondaryButton } from "../components/UIkit";
 import { DetailsTab } from "../components/User";
 import NoProfile from "../assets/img/no-profile.png";
@@ -36,29 +34,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type User = {
-  id: number;
-  name: string;
-  profile: { url: string | null };
-  following: boolean;
-};
-
 const UserDetails: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = Number(getUserId(selector));
-  const currentUserName = getUserName(selector);
-  const currentUserProfile = getUserProfile(selector);
   const uid = Number(window.location.pathname.split("/")[2]);
   const likeRecords = getLikeRecords(selector).find((ele) => ele.uid === uid);
+  const followings = getFollowings(selector).find((ele) => ele.id === uid);
   const isBrowserBack = useRef(false);
 
   const [name, setName] = useState("");
   const [profile, setProfile] = useState<string | null>("");
   const [following, setFollowing] = useState(false);
-  const [followings, setFollowings] = useState<User[]>([]);
-  const [followers, setFollowers] = useState<User[]>([]);
+  const [followingsLength, setFollowingsLength] = useState(0);
+  const [followersLength, setFollowersLength] = useState(0);
   const [likes, setLikes] = useState(0);
 
   window.onpopstate = () => {
@@ -82,19 +72,11 @@ const UserDetails: React.FC = () => {
         document.getElementById(
           "unfollow-btn-1"
         )!.firstElementChild!.innerHTML = "フォロー解除";
-        followers.push({
-          id: currentUserId,
-          name: currentUserName,
-          profile: { url: currentUserProfile },
-          following: false,
-        });
-        const followersCopy = [...followers];
-        setFollowers(followersCopy);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [uid, followers, currentUserId, currentUserName, currentUserProfile]);
+  }, [uid]);
 
   const unfollow = useCallback(() => {
     axios
@@ -109,13 +91,11 @@ const UserDetails: React.FC = () => {
         setFollowing(false);
         document.getElementById("follow-btn-1")!.firstElementChild!.innerHTML =
           "フォロー";
-        const result = followers.filter((ele) => ele.id !== currentUserId);
-        setFollowers(result);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [uid, followers, currentUserId]);
+  }, [uid]);
 
   const over = useCallback((n: number) => {
     document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
@@ -138,6 +118,7 @@ const UserDetails: React.FC = () => {
           },
         })
         .then((res) => {
+          followings || dispatch(createRelationshipContainerAction(uid));
           likeRecords || dispatch(createLikeRecordsContainerAction(uid));
           axios
             .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
@@ -155,8 +136,8 @@ const UserDetails: React.FC = () => {
             });
           setName(res.data.user.name);
           setProfile(res.data.user.profile.url);
-          setFollowings(res.data.follow_list);
-          setFollowers(res.data.follower_list);
+          setFollowingsLength(res.data.followings);
+          setFollowersLength(res.data.followers);
           setLikes(res.data.likes);
           const scrollYLikeRecords = Number(
             localStorage.getItem("scrollY-like_records")
@@ -176,7 +157,7 @@ const UserDetails: React.FC = () => {
           throw new Error(error);
         });
     }
-  }, [uid, dispatch, likeRecords]);
+  }, [uid, dispatch, likeRecords, followings]);
 
   return (
     <div className="wrap">
@@ -223,11 +204,11 @@ const UserDetails: React.FC = () => {
           <DetailsTab
             uid={uid}
             currentUserId={currentUserId}
-            followings={followings}
-            followers={followers}
+            followingsLength={followingsLength}
+            followersLength={followersLength}
             likes={likes}
-            setFollowings={setFollowings}
-            setFollowers={setFollowers}
+            setFollowingsLength={setFollowingsLength}
+            setFollowersLength={setFollowersLength}
             setLikes={setLikes}
             over={over}
             leave={leave}
