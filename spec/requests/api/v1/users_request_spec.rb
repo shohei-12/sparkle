@@ -3,39 +3,26 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Users', type: :request do
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }
-  let(:token1) { sign_in({ email: user1.email, password: 'password' }) }
-  let(:token2) { sign_in({ email: user2.email, password: 'password' }) }
   let(:record) { create(:record) }
 
   describe 'GET /api/v1/users/:id' do
     context 'when user exists' do
-      before do
-        follow({ **token1, id: user2.id })
-        follow({ **token2, id: user1.id })
+      it 'get user' do
+        user1.follow(user2)
+        user2.follow(user1)
         user1.like(record)
-      end
-
-      context 'when token is valid' do
-        it 'get user' do
-          get_user(user1.id, token1)
-          expect(response.status).to eq 200
-          expect(JSON.parse(response.body)['user']['id']).to eq user1.id
-          expect(JSON.parse(response.body)['follow_list'][0]['id']).to eq user2.id
-          expect(JSON.parse(response.body)['follower_list'][0]['id']).to eq user2.id
-          expect(JSON.parse(response.body)['likes']).to eq 1
-        end
-      end
-
-      context 'when token is invalid' do
-        it 'raise NoMethodError' do
-          expect { get_user(user1.id, nil) }.to raise_error(NoMethodError)
-        end
+        get_user(user1.id)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)['user']['id']).to eq user1.id
+        expect(JSON.parse(response.body)['followings']).to eq 1
+        expect(JSON.parse(response.body)['followers']).to eq 1
+        expect(JSON.parse(response.body)['likes']).to eq 1
       end
     end
 
     context 'when user does not exist' do
       it 'raise ActiveRecord::RecordNotFound' do
-        expect { get_user(user1.id += 1, token1) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get_user(user1.id += 1) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
