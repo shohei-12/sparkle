@@ -109,6 +109,8 @@ const UserDetails: React.FC = () => {
 
   useEffect(() => {
     if (window.location.pathname === `/users/${uid}`) {
+      followings || dispatch(createRelationshipContainerAction(uid));
+      likeRecords || dispatch(createLikeRecordsContainerAction(uid));
       axios
         .get(`${baseURL}/api/v1/users/${uid}`, {
           params: {
@@ -118,8 +120,6 @@ const UserDetails: React.FC = () => {
           },
         })
         .then((res) => {
-          followings || dispatch(createRelationshipContainerAction(uid));
-          likeRecords || dispatch(createLikeRecordsContainerAction(uid));
           axios
             .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
               params: {

@@ -9,7 +9,11 @@ import { getUserId } from "../../re-ducks/users/selectors";
 import { switchTabAction } from "../../re-ducks/users/actions";
 import { getFollowers } from "../../re-ducks/relationships/selectors";
 import { User } from "../../re-ducks/relationships/types";
-import { addFollowers } from "../../re-ducks/relationships/operations";
+import {
+  addFollowers,
+  follow,
+  unfollow,
+} from "../../re-ducks/relationships/operations";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import NoProfile from "../../assets/img/no-profile.png";
@@ -57,6 +61,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   uid: number;
+  over: (n: number) => void;
+  leave: (n: number) => void;
 };
 
 const FollowerList: React.FC<Props> = (props) => {
@@ -129,9 +135,11 @@ const FollowerList: React.FC<Props> = (props) => {
                     className={classes.unfollowBtn}
                     variant="contained"
                     color="primary"
-                    // onClick={() => unfollow(ele.id, i, false)}
-                    // onMouseOver={() => props.over(i)}
-                    // onMouseLeave={() => props.leave(i)}
+                    onClick={() => {
+                      dispatch(unfollow(ele.id, i, uid, "follower"));
+                    }}
+                    onMouseOver={() => props.over(i)}
+                    onMouseLeave={() => props.leave(i)}
                   >
                     フォロー中
                   </Button>
@@ -140,7 +148,9 @@ const FollowerList: React.FC<Props> = (props) => {
                     id={`follow-btn${i}`}
                     variant="outlined"
                     color="primary"
-                    //onClick={() => follow(ele.id, i, false)}
+                    onClick={() => {
+                      dispatch(follow(ele.id, i, uid, "follower"));
+                    }}
                   >
                     フォロー
                   </Button>

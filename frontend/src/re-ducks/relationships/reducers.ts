@@ -7,7 +7,7 @@ export const RelationshipsReducer = (
   action: RelationshipAction
 ) => {
   switch (action.type) {
-    case Actions.ADD_FOLLOWINGS_FOLLOWERS:
+    case Actions.NON_PAYLOAD:
       return {
         ...state,
       };

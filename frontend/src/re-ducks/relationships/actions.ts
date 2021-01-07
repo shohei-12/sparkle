@@ -1,7 +1,7 @@
-export const ADD_FOLLOWINGS_FOLLOWERS = "ADD_FOLLOWINGS_FOLLOWERS";
-export const addFollowingsFollowersAction = () => {
+export const NON_PAYLOAD = "NON_PAYLOAD";
+export const nonPayloadAction = () => {
   return {
-    type: "ADD_FOLLOWINGS_FOLLOWERS",
+    type: "NON_PAYLOAD",
   };
 };
 

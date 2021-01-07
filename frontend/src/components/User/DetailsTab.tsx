@@ -241,8 +241,12 @@ const DetailsTab: React.FC<Props> = (props) => {
           onClickDay={goRecordPage}
         />
       )}
-      {tabIndex === 1 && <FollowList uid={uid} />}
-      {tabIndex === 2 && <FollowerList uid={uid} />}
+      {tabIndex === 1 && (
+        <FollowList uid={uid} over={props.over} leave={props.leave} />
+      )}
+      {tabIndex === 2 && (
+        <FollowerList uid={uid} over={props.over} leave={props.leave} />
+      )}
       {tabIndex === 3 && (
         <LikeRecordList
           uid={uid}
