@@ -9,7 +9,11 @@ import { getUserId } from "../../re-ducks/users/selectors";
 import { switchTabAction } from "../../re-ducks/users/actions";
 import { getFollowings } from "../../re-ducks/relationships/selectors";
 import { User } from "../../re-ducks/relationships/types";
-import { addFollowings } from "../../re-ducks/relationships/operations";
+import {
+  addFollowings,
+  follow,
+  unfollow,
+} from "../../re-ducks/relationships/operations";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import NoProfile from "../../assets/img/no-profile.png";
@@ -57,6 +61,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   uid: number;
+  over: (n: number) => void;
+  leave: (n: number) => void;
 };
 
 const FollowList: React.FC<Props> = (props) => {
@@ -122,17 +128,34 @@ const FollowList: React.FC<Props> = (props) => {
             />
             <p>{ele.name}</p>
             {ele.id !== currentUserId ? (
-              <Button
-                id={`unfollow-btn${i}`}
-                className={classes.unfollowBtn}
-                variant="contained"
-                color="primary"
-                //onClick={() => unfollow(ele.id, i, true)}
-                //onMouseOver={() => props.over(i)}
-                //onMouseLeave={() => props.leave(i)}
-              >
-                フォロー中
-              </Button>
+              <>
+                {ele.following ? (
+                  <Button
+                    id={`unfollow-btn${i}`}
+                    className={classes.unfollowBtn}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      dispatch(unfollow(ele.id, i, uid, "follow"));
+                    }}
+                    onMouseOver={() => props.over(i)}
+                    onMouseLeave={() => props.leave(i)}
+                  >
+                    フォロー中
+                  </Button>
+                ) : (
+                  <Button
+                    id={`follow-btn${i}`}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      dispatch(follow(ele.id, i, uid, "follow"));
+                    }}
+                  >
+                    フォロー
+                  </Button>
+                )}
+              </>
             ) : (
               <Button className={classes.hidden}>Hidden</Button>
             )}
