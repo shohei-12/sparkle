@@ -9,6 +9,7 @@ import { getUserId } from "../re-ducks/users/selectors";
 import { getLikeRecords } from "../re-ducks/records/selectors";
 import { createLikeRecordsContainerAction } from "../re-ducks/records/actions";
 import { getFollowings } from "../re-ducks/relationships/selectors";
+import { follow, unfollow } from "../re-ducks/relationships/operations";
 import { createRelationshipContainerAction } from "../re-ducks/relationships/actions";
 import { SecondaryButton } from "../components/UIkit";
 import { DetailsTab } from "../components/User";
@@ -59,43 +60,15 @@ const UserDetails: React.FC = () => {
     dispatch(push(`/users/${currentUserId}/edit`));
   }, [dispatch, currentUserId]);
 
-  const follow = useCallback(() => {
-    axios
-      .post(`${baseURL}/api/v1/relationships`, {
-        id: uid,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
-      })
-      .then(() => {
-        setFollowing(true);
-        document.getElementById(
-          "unfollow-btn-1"
-        )!.firstElementChild!.innerHTML = "フォロー解除";
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [uid]);
+  const dispatchFollow = useCallback(() => {
+    setFollowing(true);
+    dispatch(follow(uid, -1));
+  }, [dispatch, uid]);
 
-  const unfollow = useCallback(() => {
-    axios
-      .delete(`${baseURL}/api/v1/relationships/${uid}`, {
-        data: {
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
-        },
-      })
-      .then(() => {
-        setFollowing(false);
-        document.getElementById("follow-btn-1")!.firstElementChild!.innerHTML =
-          "フォロー";
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [uid]);
+  const dispatchUnfollow = useCallback(() => {
+    setFollowing(false);
+    dispatch(unfollow(uid, -1));
+  }, [dispatch, uid]);
 
   const over = useCallback((n: number) => {
     document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
@@ -183,7 +156,7 @@ const UserDetails: React.FC = () => {
                   className={classes.unfollowBtn}
                   variant="contained"
                   color="primary"
-                  onClick={unfollow}
+                  onClick={dispatchUnfollow}
                   onMouseOver={() => over(-1)}
                   onMouseLeave={() => leave(-1)}
                 >
@@ -194,7 +167,7 @@ const UserDetails: React.FC = () => {
                   id="follow-btn-1"
                   variant="outlined"
                   color="primary"
-                  onClick={follow}
+                  onClick={dispatchFollow}
                 >
                   フォロー
                 </Button>
