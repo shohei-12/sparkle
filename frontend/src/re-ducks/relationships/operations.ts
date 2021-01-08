@@ -31,12 +31,7 @@ export const addFollowers = (
   };
 };
 
-export const follow = (
-  id: number,
-  i: number,
-  uid: number,
-  tab: "follow" | "follower"
-) => {
+export const follow = (id: number, i: number) => {
   return (dispatch: any, getState: any) => {
     axios
       .post(`${baseURL}/api/v1/relationships`, {
@@ -46,15 +41,19 @@ export const follow = (
         access_token: localStorage.getItem("access_token"),
       })
       .then(() => {
-        if (tab === "follow") {
-          const followings = getState().relationships
-            .followings as Followings[];
-          const found = followings.find((ele) => ele.id === uid)!;
-          found.followings[i].following = true;
-        } else if (tab === "follower") {
-          const followers = getState().relationships.followers as Followers[];
-          const found = followers.find((ele) => ele.id === uid)!;
-          found.followers[i].following = true;
+        const followings = getState().relationships.followings as Followings[];
+        const followers = getState().relationships.followers as Followers[];
+        for (const ele of followings) {
+          const found = ele.followings.find((ele) => ele.id === id);
+          if (found) {
+            found.following = true;
+          }
+        }
+        for (const ele of followers) {
+          const found = ele.followers.find((ele) => ele.id === id);
+          if (found) {
+            found.following = true;
+          }
         }
         dispatch(nonPayloadAction());
         document.getElementById(
@@ -67,12 +66,7 @@ export const follow = (
   };
 };
 
-export const unfollow = (
-  id: number,
-  i: number,
-  uid: number,
-  tab: "follow" | "follower"
-) => {
+export const unfollow = (id: number, i: number) => {
   return (dispatch: any, getState: any) => {
     axios
       .delete(`${baseURL}/api/v1/relationships/${id}`, {
@@ -83,15 +77,19 @@ export const unfollow = (
         },
       })
       .then(() => {
-        if (tab === "follow") {
-          const followings = getState().relationships
-            .followings as Followings[];
-          const found = followings.find((ele) => ele.id === uid)!;
-          found.followings[i].following = false;
-        } else if (tab === "follower") {
-          const followers = getState().relationships.followers as Followers[];
-          const found = followers.find((ele) => ele.id === uid)!;
-          found.followers[i].following = false;
+        const followings = getState().relationships.followings as Followings[];
+        const followers = getState().relationships.followers as Followers[];
+        for (const ele of followings) {
+          const found = ele.followings.find((ele) => ele.id === id);
+          if (found) {
+            found.following = false;
+          }
+        }
+        for (const ele of followers) {
+          const found = ele.followers.find((ele) => ele.id === id);
+          if (found) {
+            found.following = false;
+          }
         }
         dispatch(nonPayloadAction());
         document.getElementById(

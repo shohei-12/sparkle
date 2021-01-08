@@ -136,7 +136,7 @@ const FollowerList: React.FC<Props> = (props) => {
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      dispatch(unfollow(ele.id, i, uid, "follower"));
+                      dispatch(unfollow(ele.id, i));
                     }}
                     onMouseOver={() => props.over(i)}
                     onMouseLeave={() => props.leave(i)}
@@ -149,7 +149,7 @@ const FollowerList: React.FC<Props> = (props) => {
                     variant="outlined"
                     color="primary"
                     onClick={() => {
-                      dispatch(follow(ele.id, i, uid, "follower"));
+                      dispatch(follow(ele.id, i));
                     }}
                   >
                     フォロー
