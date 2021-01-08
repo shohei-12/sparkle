@@ -11,20 +11,6 @@ export const addRecordsAction = (records: Record[], start: number) => {
   };
 };
 
-export const LIKE_OR_UNLIKE_RECORD = "LIKE_OR_UNLIKE_RECORD";
-export const likeOrUnlikeRecordAction = () => {
-  return {
-    type: "LIKE_OR_UNLIKE_RECORD",
-  };
-};
-
-export const ADD_LIKE_RECORDS = "ADD_LIKE_RECORDS";
-export const addLikeRecordsAction = () => {
-  return {
-    type: "ADD_LIKE_RECORDS",
-  };
-};
-
 export const CREATE_LIKE_RECORDS_CONTAINER = "CREATE_LIKE_RECORDS_CONTAINER";
 export const createLikeRecordsContainerAction = (uid: number) => {
   return {
@@ -34,5 +20,12 @@ export const createLikeRecordsContainerAction = (uid: number) => {
       records: [],
       start: 0,
     },
+  };
+};
+
+export const NON_PAYLOAD = "NON_PAYLOAD";
+export const nonPayloadAction = () => {
+  return {
+    type: "NON_PAYLOAD",
   };
 };
