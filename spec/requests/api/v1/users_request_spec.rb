@@ -93,31 +93,33 @@ RSpec.describe 'Api::V1::Users', type: :request do
         end
 
         context 'when there are less than 20 followings' do
-          before do
-            2.times do
-              user = create(:user)
-              user1.follow(user)
+          context 'when there are more than 1 following' do
+            before do
+              2.times do
+                user = create(:user)
+                user1.follow(user)
+              end
+            end
+
+            it 'get 2 followings' do
+              get_20_followings(user1.id, start0, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 2
+            end
+
+            it 'not get followings' do
+              get_20_followings(user1.id, start20, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 0
             end
           end
 
-          it 'get 2 followings' do
-            get_20_followings(user1.id, start0, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 2
-          end
-
-          it 'not get followings' do
-            get_20_followings(user1.id, start20, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 0
-          end
-        end
-
-        context 'when when followings does not exist' do
-          it 'not get followings' do
-            get_20_followings(user1.id, start0, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 0
+          context 'when when followings does not exist' do
+            it 'not get followings' do
+              get_20_followings(user1.id, start0, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 0
+            end
           end
         end
       end
@@ -173,31 +175,33 @@ RSpec.describe 'Api::V1::Users', type: :request do
         end
 
         context 'when there are less than 20 followers' do
-          before do
-            2.times do
-              user = create(:user)
-              user.follow(user1)
+          context 'when there are more than 1 follower' do
+            before do
+              2.times do
+                user = create(:user)
+                user.follow(user1)
+              end
+            end
+
+            it 'get 2 followers' do
+              get_20_followers(user1.id, start0, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 2
+            end
+
+            it 'not get followers' do
+              get_20_followers(user1.id, start20, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 0
             end
           end
 
-          it 'get 2 followers' do
-            get_20_followers(user1.id, start0, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 2
-          end
-
-          it 'not get followers' do
-            get_20_followers(user1.id, start20, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 0
-          end
-        end
-
-        context 'when when followers does not exist' do
-          it 'not get followers' do
-            get_20_followers(user1.id, start0, token)
-            expect(response.status).to eq 200
-            expect(JSON.parse(response.body).length).to eq 0
+          context 'when when followers does not exist' do
+            it 'not get followers' do
+              get_20_followers(user1.id, start0, token)
+              expect(response.status).to eq 200
+              expect(JSON.parse(response.body).length).to eq 0
+            end
           end
         end
       end
