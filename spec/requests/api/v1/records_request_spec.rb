@@ -72,7 +72,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
         }
       end
 
-      it 'not get record' do
+      it 'not get records' do
         get_record(data)
         expect(response.status).to eq 200
         expect(JSON.parse(response.body)).to eq nil
@@ -98,18 +98,28 @@ RSpec.describe 'Api::V1::Records', type: :request do
     end
 
     context 'when there are less than 20 records' do
-      before { create_list(:record, 2) }
+      context 'when there are more than 1 record' do
+        before { create_list(:record, 2) }
 
-      it 'get 2 records' do
-        get_20_records(start0)
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body).length).to eq 2
+        it 'get 2 records' do
+          get_20_records(start0)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body).length).to eq 2
+        end
+
+        it 'not get records' do
+          get_20_records(start20)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body).length).to eq 0
+        end
       end
 
-      it 'not get record' do
-        get_20_records(start20)
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body).length).to eq 0
+      context 'when records does not exist' do
+        it 'not get records' do
+          get_20_records(start0)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body).length).to eq 0
+        end
       end
     end
   end
@@ -140,23 +150,33 @@ RSpec.describe 'Api::V1::Records', type: :request do
       end
 
       context 'when there are less than 20 like records' do
-        before do
-          2.times do
-            record_n = create(:record)
-            @user.like(record_n)
+        context 'when there are more than 1 like record' do
+          before do
+            2.times do
+              record_n = create(:record)
+              @user.like(record_n)
+            end
+          end
+
+          it 'get 2 like records' do
+            get_20_like_records(start0, @user.id)
+            expect(response.status).to eq 200
+            expect(JSON.parse(response.body).length).to eq 2
+          end
+
+          it 'not get like records' do
+            get_20_like_records(start20, @user.id)
+            expect(response.status).to eq 200
+            expect(JSON.parse(response.body).length).to eq 0
           end
         end
 
-        it 'get 2 like records' do
-          get_20_like_records(start0, @user.id)
-          expect(response.status).to eq 200
-          expect(JSON.parse(response.body).length).to eq 2
-        end
-
-        it 'not get like records' do
-          get_20_like_records(start20, @user.id)
-          expect(response.status).to eq 200
-          expect(JSON.parse(response.body).length).to eq 0
+        context 'when like records does not exist' do
+          it 'not get like records' do
+            get_20_like_records(start0, @user.id)
+            expect(response.status).to eq 200
+            expect(JSON.parse(response.body).length).to eq 0
+          end
         end
       end
     end
