@@ -1,10 +1,9 @@
 FactoryBot.define do
   factory :comment do
-    user { nil }
-    record { nil }
-    target { 'MyString' }
-    reply { '' }
-    reply_user_id { 'MyString' }
-    number { 'MyString' }
+    target { 'appearance' }
+    reply_comment_id { nil }
+    reply_user_id { nil }
+    association :user
+    association :record
   end
 end
