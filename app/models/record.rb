@@ -5,6 +5,7 @@ class Record < ApplicationRecord
   has_many :meals, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liking_users, through: :likes, source: :user
+  has_many :comments, dependent: :destroy
 
   validates :date, presence: true
   validates :user, presence: true, uniqueness: { scope: :date }

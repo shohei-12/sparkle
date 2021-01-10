@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_132338) do
+ActiveRecord::Schema.define(version: 2021_01_10_105404) do
 
   create_table "appearances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "image"
@@ -18,6 +18,18 @@ ActiveRecord::Schema.define(version: 2020_12_18_132338) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["record_id"], name: "index_appearances_on_record_id"
+  end
+
+  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "record_id", null: false
+    t.string "target", null: false
+    t.bigint "reply_comment_id"
+    t.bigint "reply_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["record_id"], name: "index_comments_on_record_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "eating_times", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -101,6 +113,8 @@ ActiveRecord::Schema.define(version: 2020_12_18_132338) do
   end
 
   add_foreign_key "appearances", "records"
+  add_foreign_key "comments", "records"
+  add_foreign_key "comments", "users"
   add_foreign_key "likes", "records"
   add_foreign_key "likes", "users"
   add_foreign_key "meals", "eating_times"
