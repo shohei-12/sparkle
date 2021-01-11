@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       resources :memos
       resources :relationships, only: %i[create destroy]
       resources :likes, only: %i[create destroy]
+      resources :comments
     end
   end
 end
