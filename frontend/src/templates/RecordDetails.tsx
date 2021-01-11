@@ -4,7 +4,11 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
-import { AppearancesGallery, MealsGallery } from "../components/Record";
+import {
+  AppearancesGallery,
+  MealsGallery,
+  CommentForm,
+} from "../components/Record";
 import { SecondaryButton, TextInput } from "../components/UIkit";
 import NoImage from "../assets/img/no-image.png";
 import { baseURL } from "../config";
@@ -252,6 +256,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
+      <CommentForm />
       <p>🍙 朝食</p>
       <div className={classes.record}>
         {breakfasts.length > 0 ? (
@@ -297,6 +302,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
+      <CommentForm />
       <p>🍔 昼食</p>
       <div className={classes.record}>
         {lunchs.length > 0 ? (
@@ -342,6 +348,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
+      <CommentForm />
       <p>🍖 夕食</p>
       <div className={classes.record}>
         {dinners.length > 0 ? (
@@ -387,6 +394,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
+      <CommentForm />
       <p>🍰 間食</p>
       <div className={classes.record}>
         {snacks.length > 0 ? (
@@ -432,6 +440,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
+      <CommentForm />
     </div>
   );
 };
