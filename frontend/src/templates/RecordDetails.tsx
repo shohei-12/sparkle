@@ -49,6 +49,7 @@ const RecordDetails: React.FC<Props> = (props) => {
   const classes = useStyles();
   const selector = useSelector((state: Store) => state);
   const uid = Number(getUserId(selector));
+  const recordId = props.recordId;
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
   const lunchsContainer: string[] = [];
@@ -155,7 +156,7 @@ const RecordDetails: React.FC<Props> = (props) => {
 
   useEffect(() => {
     axios
-      .get(`${baseURL}/api/v1/appearances/${props.recordId}`)
+      .get(`${baseURL}/api/v1/appearances/${recordId}`)
       .then((res) => {
         for (const ele of res.data) {
           appearancesContainer.push(ele.image.url);
@@ -166,7 +167,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         throw new Error(error);
       });
     axios
-      .get(`${baseURL}/api/v1/meals/${props.recordId}`)
+      .get(`${baseURL}/api/v1/meals/${recordId}`)
       .then((res) => {
         for (const ele of res.data) {
           switch (ele.eating_time_id) {
@@ -192,7 +193,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         throw new Error(error);
       });
     axios
-      .get(`${baseURL}/api/v1/memos/${props.recordId}`)
+      .get(`${baseURL}/api/v1/memos/${recordId}`)
       .then((res) => {
         if (res.data) {
           setMemoId(res.data.id);
@@ -207,7 +208,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         throw new Error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.recordId]);
+  }, [recordId]);
 
   return (
     <div className="wrap">
@@ -256,7 +257,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm />
+      <CommentForm recordId={recordId} target="appearance" />
       <p>🍙 朝食</p>
       <div className={classes.record}>
         {breakfasts.length > 0 ? (
@@ -302,7 +303,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm />
+      <CommentForm recordId={recordId} target="breakfast" />
       <p>🍔 昼食</p>
       <div className={classes.record}>
         {lunchs.length > 0 ? (
@@ -348,7 +349,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm />
+      <CommentForm recordId={recordId} target="lunch" />
       <p>🍖 夕食</p>
       <div className={classes.record}>
         {dinners.length > 0 ? (
@@ -394,7 +395,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm />
+      <CommentForm recordId={recordId} target="dinner" />
       <p>🍰 間食</p>
       <div className={classes.record}>
         {snacks.length > 0 ? (
@@ -440,7 +441,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm />
+      <CommentForm recordId={recordId} target="snack" />
     </div>
   );
 };
