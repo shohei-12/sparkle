@@ -16,12 +16,13 @@ Rails.application.routes.draw do
       put '/memos/:id/dinner', to: 'memos#update_dinner'
       put '/memos/:id/snack', to: 'memos#update_snack'
       get '/relationships/following/:id', to: 'relationships#following?'
+      get '/comments/:record_id/:target', to: 'comments#twenty_comments'
       resources :appearances
       resources :meals
       resources :memos
       resources :relationships, only: %i[create destroy]
       resources :likes, only: %i[create destroy]
-      resources :comments
+      resources :comments, only: %i[create destroy]
     end
   end
 end

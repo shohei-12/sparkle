@@ -8,6 +8,7 @@ import {
   AppearancesGallery,
   MealsGallery,
   CommentForm,
+  CommentList,
 } from "../components/Record";
 import { SecondaryButton, TextInput } from "../components/UIkit";
 import NoImage from "../assets/img/no-image.png";
@@ -258,6 +259,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         </div>
       </div>
       <CommentForm recordId={recordId} target="appearance" />
+      <CommentList recordId={recordId} target="appearance" />
       <p>🍙 朝食</p>
       <div className={classes.record}>
         {breakfasts.length > 0 ? (
@@ -304,6 +306,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         </div>
       </div>
       <CommentForm recordId={recordId} target="breakfast" />
+      <CommentList recordId={recordId} target="breakfast" />
       <p>🍔 昼食</p>
       <div className={classes.record}>
         {lunchs.length > 0 ? (
@@ -350,6 +353,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         </div>
       </div>
       <CommentForm recordId={recordId} target="lunch" />
+      <CommentList recordId={recordId} target="lunch" />
       <p>🍖 夕食</p>
       <div className={classes.record}>
         {dinners.length > 0 ? (
@@ -396,6 +400,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         </div>
       </div>
       <CommentForm recordId={recordId} target="dinner" />
+      <CommentList recordId={recordId} target="dinner" />
       <p>🍰 間食</p>
       <div className={classes.record}>
         {snacks.length > 0 ? (
@@ -442,6 +447,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         </div>
       </div>
       <CommentForm recordId={recordId} target="snack" />
+      <CommentList recordId={recordId} target="snack" />
     </div>
   );
 };

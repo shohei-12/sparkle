@@ -64,9 +64,6 @@ const useStyles = makeStyles((theme: Theme) =>
     unlikeIcon: {
       color: "#f44336",
     },
-    loader: {
-      margin: "0 auto",
-    },
   })
 );
 
@@ -146,57 +143,35 @@ const LikeRecordList: React.FC<Props> = (props) => {
       hasMore={hasMore}
       threshold={0}
       loader={
-        <ReactLoading
-          key={0}
-          className={classes.loader}
-          type="spin"
-          color="#03a9f4"
-        />
+        <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
       }
     >
       {likeRecords &&
         likeRecords.length > 0 &&
         likeRecords.map((ele, i) => (
           <Card key={i} className={classes.likeRecord}>
-            {ele.profile.url ? (
-              <CardHeader
-                avatar={
-                  <Avatar>
-                    <img
-                      className={`${classes.profile} pointer-h`}
-                      src={baseURL + ele.profile.url}
-                      alt="プロフィール画像"
-                      onClick={() => goUserDetailsPage(ele.author_id)}
-                    />
-                  </Avatar>
-                }
-                title={ele.author}
-                subheader={ele.date}
-              />
-            ) : (
-              <CardHeader
-                avatar={
-                  <Avatar>
-                    <img
-                      className={`${classes.profile} pointer-h`}
-                      src={NoProfile}
-                      alt="プロフィール画像"
-                      onClick={() => goUserDetailsPage(ele.author_id)}
-                    />
-                  </Avatar>
-                }
-                title={ele.author}
-                subheader={ele.date}
-              />
-            )}
-            {ele.appearance ? (
-              <CardMedia
-                className={classes.media}
-                image={baseURL + ele.appearance.image.url}
-              />
-            ) : (
-              <CardMedia className={classes.media} image={NoImage} />
-            )}
+            <CardHeader
+              avatar={
+                <Avatar>
+                  <img
+                    className={`${classes.profile} pointer-h`}
+                    src={
+                      ele.profile.url ? baseURL + ele.profile.url : NoProfile
+                    }
+                    alt="プロフィール画像"
+                    onClick={() => goUserDetailsPage(ele.author_id)}
+                  />
+                </Avatar>
+              }
+              title={ele.author}
+              subheader={ele.date}
+            />
+            <CardMedia
+              className={classes.media}
+              image={
+                ele.appearance ? baseURL + ele.appearance.image.url : NoImage
+              }
+            />
             <CardContent
               className={`${classes.cardContent} pointer-h`}
               onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}

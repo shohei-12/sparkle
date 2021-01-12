@@ -4,6 +4,15 @@ class Api::V1::CommentsController < ApplicationController
     render json: comment
   end
 
+  def twenty_comments
+    twenty_comments = Comment.where(record_id: params[:record_id], target: params[:target])
+                             .order(created_at: 'DESC')
+                             .limit(20)
+                             .offset(params[:start])
+    comment_infos = Comment.get_comment_infos(twenty_comments)
+    render json: comment_infos
+  end
+
   private
 
   def comment_pramas

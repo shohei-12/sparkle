@@ -53,9 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "inline-block",
       },
     },
-    loader: {
-      margin: "0 auto",
-    },
   })
 );
 
@@ -106,12 +103,7 @@ const FollowerList: React.FC<Props> = (props) => {
       hasMore={hasMore}
       threshold={0}
       loader={
-        <ReactLoading
-          key={0}
-          className={classes.loader}
-          type="spin"
-          color="#03a9f4"
-        />
+        <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
       }
     >
       {followers &&
