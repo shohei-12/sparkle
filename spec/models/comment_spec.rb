@@ -60,4 +60,14 @@ RSpec.describe Comment, type: :model do
       end
     end
   end
+
+  describe 'content' do
+    context 'when empty' do
+      before { comment.content = '' }
+
+      it 'return false' do
+        expect(comment.valid?).to eq false
+      end
+    end
+  end
 end

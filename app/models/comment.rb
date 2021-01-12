@@ -5,4 +5,5 @@ class Comment < ApplicationRecord
   validates :user, presence: true
   validates :record, presence: true
   validates :target, presence: true, inclusion: { in: %w[appearance breakfast lunch dinner snack] }
+  validates :content, presence: true
 end
