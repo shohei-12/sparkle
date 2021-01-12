@@ -31,11 +31,11 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
   const createComment = useCallback(() => {
     axios
       .post(`${baseURL}/api/v1/comments`, {
-        recordId,
+        record_id: recordId,
         target,
         content: comment,
-        replyCommentId: null,
-        replyUserId: null,
+        reply_comment_id: null,
+        reply_user_id: null,
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
