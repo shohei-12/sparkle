@@ -26,6 +26,10 @@ body {
   margin: 0 auto;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .pointer-h:hover {
   cursor: pointer;
 }
