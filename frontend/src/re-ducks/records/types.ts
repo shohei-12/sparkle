@@ -15,6 +15,8 @@ export type LikeRecords = {
   start: number;
 };
 
+export type Target = "appearance" | "breakfast" | "lunch" | "dinner" | "snack";
+
 export type RecordState = {
   records: Record[];
   start: number;

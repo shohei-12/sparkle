@@ -4,6 +4,7 @@ import axios from "axios";
 import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
+import { Target } from "../../re-ducks/records/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
@@ -38,8 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-type Target = "appearance" | "breakfast" | "lunch" | "dinner" | "snack";
 
 type Comment = {
   comment_id: number;

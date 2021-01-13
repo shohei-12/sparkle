@@ -4,6 +4,7 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
+import { Target } from "../re-ducks/records/types";
 import {
   AppearancesGallery,
   MealsGallery,
@@ -11,6 +12,8 @@ import {
   CommentList,
 } from "../components/Record";
 import { SecondaryButton, TextInput } from "../components/UIkit";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import NoImage from "../assets/img/no-image.png";
 import { baseURL } from "../config";
 
@@ -37,6 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
         marginRight: 20,
         marginBottom: 20,
       },
+    },
+    openAndCloseCommentAreaText: {
+      display: "flex",
+      alignItems: "center",
     },
   })
 );
@@ -69,6 +76,12 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [lunchMemo, setLunchMemo] = useState("");
   const [dinnerMemo, setDinnerMemo] = useState("");
   const [snackMemo, setSnackMemo] = useState("");
+
+  const [appearanceComment, setAppearanceComment] = useState(false);
+  const [breakfastComment, setBreakfastComment] = useState(false);
+  const [lunchComment, setLunchComment] = useState(false);
+  const [dinnerComment, setDinnerComment] = useState(false);
+  const [snackComment, setSnackComment] = useState(false);
 
   const inputAppearance = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,6 +167,34 @@ const RecordDetails: React.FC<Props> = (props) => {
         throw new Error(error);
       });
   }, [memoId, snackMemo]);
+
+  const openAndCloseCommentArea = useCallback(
+    (target: Target) => {
+      switch (target) {
+        case "appearance":
+          setAppearanceComment(!appearanceComment);
+          break;
+        case "breakfast":
+          setBreakfastComment(!breakfastComment);
+          break;
+        case "lunch":
+          setLunchComment(!lunchComment);
+          break;
+        case "dinner":
+          setDinnerComment(!dinnerComment);
+          break;
+        case "snack":
+          setSnackComment(!snackComment);
+      }
+    },
+    [
+      appearanceComment,
+      breakfastComment,
+      lunchComment,
+      dinnerComment,
+      snackComment,
+    ]
+  );
 
   useEffect(() => {
     axios
@@ -258,8 +299,31 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm recordId={recordId} target="appearance" />
-      <CommentList recordId={recordId} target="appearance" />
+      {appearanceComment ? (
+        <>
+          <div className="inline-block pointer-h">
+            <div
+              className={classes.openAndCloseCommentAreaText}
+              onClick={() => openAndCloseCommentArea("appearance")}
+            >
+              <span>コメントを非表示</span>
+              <ArrowDropUpIcon />
+            </div>
+          </div>
+          <CommentForm recordId={recordId} target="appearance" />
+          <CommentList recordId={recordId} target="appearance" />
+        </>
+      ) : (
+        <div className="inline-block pointer-h">
+          <div
+            className={classes.openAndCloseCommentAreaText}
+            onClick={() => openAndCloseCommentArea("appearance")}
+          >
+            <span>コメントを表示</span>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
+      )}
       <p>🍙 朝食</p>
       <div className={classes.record}>
         {breakfasts.length > 0 ? (
@@ -305,8 +369,31 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm recordId={recordId} target="breakfast" />
-      <CommentList recordId={recordId} target="breakfast" />
+      {breakfastComment ? (
+        <>
+          <div className="inline-block pointer-h">
+            <div
+              className={classes.openAndCloseCommentAreaText}
+              onClick={() => openAndCloseCommentArea("breakfast")}
+            >
+              <span>コメントを非表示</span>
+              <ArrowDropUpIcon />
+            </div>
+          </div>
+          <CommentForm recordId={recordId} target="breakfast" />
+          <CommentList recordId={recordId} target="breakfast" />
+        </>
+      ) : (
+        <div className="inline-block pointer-h">
+          <div
+            className={classes.openAndCloseCommentAreaText}
+            onClick={() => openAndCloseCommentArea("breakfast")}
+          >
+            <span>コメントを表示</span>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
+      )}
       <p>🍔 昼食</p>
       <div className={classes.record}>
         {lunchs.length > 0 ? (
@@ -352,8 +439,31 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm recordId={recordId} target="lunch" />
-      <CommentList recordId={recordId} target="lunch" />
+      {lunchComment ? (
+        <>
+          <div className="inline-block pointer-h">
+            <div
+              className={classes.openAndCloseCommentAreaText}
+              onClick={() => openAndCloseCommentArea("lunch")}
+            >
+              <span>コメントを非表示</span>
+              <ArrowDropUpIcon />
+            </div>
+          </div>
+          <CommentForm recordId={recordId} target="lunch" />
+          <CommentList recordId={recordId} target="lunch" />
+        </>
+      ) : (
+        <div className="inline-block pointer-h">
+          <div
+            className={classes.openAndCloseCommentAreaText}
+            onClick={() => openAndCloseCommentArea("lunch")}
+          >
+            <span>コメントを表示</span>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
+      )}
       <p>🍖 夕食</p>
       <div className={classes.record}>
         {dinners.length > 0 ? (
@@ -399,8 +509,31 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm recordId={recordId} target="dinner" />
-      <CommentList recordId={recordId} target="dinner" />
+      {dinnerComment ? (
+        <>
+          <div className="inline-block pointer-h">
+            <div
+              className={classes.openAndCloseCommentAreaText}
+              onClick={() => openAndCloseCommentArea("dinner")}
+            >
+              <span>コメントを非表示</span>
+              <ArrowDropUpIcon />
+            </div>
+          </div>
+          <CommentForm recordId={recordId} target="dinner" />
+          <CommentList recordId={recordId} target="dinner" />
+        </>
+      ) : (
+        <div className="inline-block pointer-h">
+          <div
+            className={classes.openAndCloseCommentAreaText}
+            onClick={() => openAndCloseCommentArea("dinner")}
+          >
+            <span>コメントを表示</span>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
+      )}
       <p>🍰 間食</p>
       <div className={classes.record}>
         {snacks.length > 0 ? (
@@ -446,8 +579,31 @@ const RecordDetails: React.FC<Props> = (props) => {
           )}
         </div>
       </div>
-      <CommentForm recordId={recordId} target="snack" />
-      <CommentList recordId={recordId} target="snack" />
+      {snackComment ? (
+        <>
+          <div className="inline-block pointer-h">
+            <div
+              className={classes.openAndCloseCommentAreaText}
+              onClick={() => openAndCloseCommentArea("snack")}
+            >
+              <span>コメントを非表示</span>
+              <ArrowDropUpIcon />
+            </div>
+          </div>
+          <CommentForm recordId={recordId} target="snack" />
+          <CommentList recordId={recordId} target="snack" />
+        </>
+      ) : (
+        <div className="inline-block pointer-h">
+          <div
+            className={classes.openAndCloseCommentAreaText}
+            onClick={() => openAndCloseCommentArea("snack")}
+          >
+            <span>コメントを表示</span>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

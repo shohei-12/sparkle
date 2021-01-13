@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { TextInput, SecondaryButton } from "../UIkit";
+import { Target } from "../../re-ducks/records/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { baseURL } from "../../config";
 
@@ -9,8 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
     commentBox: {},
   })
 );
-
-type Target = "appearance" | "breakfast" | "lunch" | "dinner" | "snack";
 
 type Props = {
   recordId: number;
