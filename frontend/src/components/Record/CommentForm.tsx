@@ -2,14 +2,7 @@ import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { TextInput, SecondaryButton } from "../UIkit";
 import { Target, Comment } from "../../re-ducks/records/types";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { baseURL } from "../../config";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    commentBox: {},
-  })
-);
 
 type Props = {
   recordId: number;
@@ -19,7 +12,6 @@ type Props = {
 };
 
 const CommentForm: React.FC<Props> = React.memo((props) => {
-  const classes = useStyles();
   const recordId = props.recordId;
   const target = props.target;
   const commentList = props.commentList;
@@ -71,7 +63,6 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
         disabled={comment ? false : true}
         onClick={createComment}
       />
-      <div className={classes.commentBox}></div>
     </>
   );
 });

@@ -14,6 +14,11 @@ class Api::V1::CommentsController < ApplicationController
     render json: comment_infos
   end
 
+  def destroy
+    comment = Comment.find(params[:id])
+    comment.destroy if comment.user_id == current_api_v1_user.id
+  end
+
   private
 
   def comment_pramas
