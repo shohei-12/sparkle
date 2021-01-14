@@ -1,7 +1,8 @@
 class Api::V1::CommentsController < ApplicationController
   def create
     comment = current_api_v1_user.comments.create(comment_pramas)
-    render json: comment
+    comment_info = Comment.get_comment_infos([comment])
+    render json: comment_info
   end
 
   def twenty_comments

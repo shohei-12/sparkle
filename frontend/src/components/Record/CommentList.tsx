@@ -4,7 +4,7 @@ import axios from "axios";
 import { push } from "connected-react-router";
 import InfiniteScroll from "react-infinite-scroller";
 import ReactLoading from "react-loading";
-import { Target } from "../../re-ducks/records/types";
+import { Target, Comment } from "../../re-ducks/records/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
@@ -40,20 +40,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Comment = {
-  comment_id: number;
-  author_id: number;
-  author_profile: {
-    url: string | null;
-  };
-  author_name: string;
-  content: string;
-  created_at: string;
-};
-
 type Props = {
   recordId: number;
   target: Target;
+  commentList: Comment[];
+  setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
 };
 
 const CommentList: React.FC<Props> = React.memo((props) => {
@@ -61,8 +52,9 @@ const CommentList: React.FC<Props> = React.memo((props) => {
   const dispatch = useDispatch();
   const recordId = props.recordId;
   const target = props.target;
+  const commentList = props.commentList;
+  const setCommentList = props.setCommentList;
 
-  const [comments, setComments] = useState<Comment[]>([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
@@ -79,13 +71,13 @@ const CommentList: React.FC<Props> = React.memo((props) => {
           setHasMore(false);
           return;
         }
-        setComments([...comments, ...twentyComments]);
+        setCommentList([...commentList, ...twentyComments]);
         setStart(start + 20);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [recordId, target, start, comments]);
+  }, [recordId, target, start, commentList, setCommentList]);
 
   return (
     <div className={classes.scrollY}>
@@ -103,8 +95,8 @@ const CommentList: React.FC<Props> = React.memo((props) => {
         }
         useWindow={false}
       >
-        {comments.length > 0 &&
-          comments.map((ele, i) => (
+        {commentList.length > 0 &&
+          commentList.map((ele, i) => (
             <div key={i} className={classes.comment}>
               <div className={classes.left}>
                 <img
