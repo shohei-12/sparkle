@@ -7,10 +7,6 @@ class Comment < ApplicationRecord
   validates :target, presence: true, inclusion: { in: %w[appearance breakfast lunch dinner snack] }
   validates :content, presence: true
 
-  def self.get_comments(current_user, record_id, target)
-    current_user.comments.where(record_id: record_id, target: target).order(created_at: 'DESC')
-  end
-
   def self.get_comment_infos(comments)
     comment_infos = []
     comments.each do |comment|
