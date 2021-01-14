@@ -17,6 +17,17 @@ export type LikeRecords = {
 
 export type Target = "appearance" | "breakfast" | "lunch" | "dinner" | "snack";
 
+export type Comment = {
+  comment_id: number;
+  author_id: number;
+  author_profile: {
+    url: string | null;
+  };
+  author_name: string;
+  content: string;
+  created_at: string;
+};
+
 export type RecordState = {
   records: Record[];
   start: number;

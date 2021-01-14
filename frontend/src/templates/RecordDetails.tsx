@@ -4,7 +4,7 @@ import axios from "axios";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
-import { Target } from "../re-ducks/records/types";
+import { Target, Comment } from "../re-ducks/records/types";
 import {
   AppearancesGallery,
   MealsGallery,
@@ -82,6 +82,16 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [lunchComment, setLunchComment] = useState(false);
   const [dinnerComment, setDinnerComment] = useState(false);
   const [snackComment, setSnackComment] = useState(false);
+
+  const [appearanceCommentList, setAppearanceCommentList] = useState<Comment[]>(
+    []
+  );
+  const [breakfastCommentList, setBreakfastCommentList] = useState<Comment[]>(
+    []
+  );
+  const [lunchCommentList, setLunchCommentList] = useState<Comment[]>([]);
+  const [dinnerCommentList, setDinnerCommentList] = useState<Comment[]>([]);
+  const [snackCommentList, setSnackCommentList] = useState<Comment[]>([]);
 
   const inputAppearance = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,18 +182,23 @@ const RecordDetails: React.FC<Props> = (props) => {
     (target: Target) => {
       switch (target) {
         case "appearance":
+          setAppearanceCommentList([]);
           setAppearanceComment(!appearanceComment);
           break;
         case "breakfast":
+          setBreakfastCommentList([]);
           setBreakfastComment(!breakfastComment);
           break;
         case "lunch":
+          setLunchCommentList([]);
           setLunchComment(!lunchComment);
           break;
         case "dinner":
+          setDinnerCommentList([]);
           setDinnerComment(!dinnerComment);
           break;
         case "snack":
+          setSnackCommentList([]);
           setSnackComment(!snackComment);
       }
     },
@@ -310,8 +325,18 @@ const RecordDetails: React.FC<Props> = (props) => {
               <ArrowDropUpIcon />
             </div>
           </div>
-          <CommentForm recordId={recordId} target="appearance" />
-          <CommentList recordId={recordId} target="appearance" />
+          <CommentForm
+            recordId={recordId}
+            target="appearance"
+            commentList={appearanceCommentList}
+            setCommentList={setAppearanceCommentList}
+          />
+          <CommentList
+            recordId={recordId}
+            target="appearance"
+            commentList={appearanceCommentList}
+            setCommentList={setAppearanceCommentList}
+          />
         </>
       ) : (
         <div className="inline-block pointer-h">
@@ -380,8 +405,18 @@ const RecordDetails: React.FC<Props> = (props) => {
               <ArrowDropUpIcon />
             </div>
           </div>
-          <CommentForm recordId={recordId} target="breakfast" />
-          <CommentList recordId={recordId} target="breakfast" />
+          <CommentForm
+            recordId={recordId}
+            target="breakfast"
+            commentList={breakfastCommentList}
+            setCommentList={setBreakfastCommentList}
+          />
+          <CommentList
+            recordId={recordId}
+            target="breakfast"
+            commentList={breakfastCommentList}
+            setCommentList={setBreakfastCommentList}
+          />
         </>
       ) : (
         <div className="inline-block pointer-h">
@@ -450,8 +485,18 @@ const RecordDetails: React.FC<Props> = (props) => {
               <ArrowDropUpIcon />
             </div>
           </div>
-          <CommentForm recordId={recordId} target="lunch" />
-          <CommentList recordId={recordId} target="lunch" />
+          <CommentForm
+            recordId={recordId}
+            target="lunch"
+            commentList={lunchCommentList}
+            setCommentList={setLunchCommentList}
+          />
+          <CommentList
+            recordId={recordId}
+            target="lunch"
+            commentList={lunchCommentList}
+            setCommentList={setLunchCommentList}
+          />
         </>
       ) : (
         <div className="inline-block pointer-h">
@@ -520,8 +565,18 @@ const RecordDetails: React.FC<Props> = (props) => {
               <ArrowDropUpIcon />
             </div>
           </div>
-          <CommentForm recordId={recordId} target="dinner" />
-          <CommentList recordId={recordId} target="dinner" />
+          <CommentForm
+            recordId={recordId}
+            target="dinner"
+            commentList={dinnerCommentList}
+            setCommentList={setDinnerCommentList}
+          />
+          <CommentList
+            recordId={recordId}
+            target="dinner"
+            commentList={dinnerCommentList}
+            setCommentList={setDinnerCommentList}
+          />
         </>
       ) : (
         <div className="inline-block pointer-h">
@@ -590,8 +645,18 @@ const RecordDetails: React.FC<Props> = (props) => {
               <ArrowDropUpIcon />
             </div>
           </div>
-          <CommentForm recordId={recordId} target="snack" />
-          <CommentList recordId={recordId} target="snack" />
+          <CommentForm
+            recordId={recordId}
+            target="snack"
+            commentList={snackCommentList}
+            setCommentList={setSnackCommentList}
+          />
+          <CommentList
+            recordId={recordId}
+            target="snack"
+            commentList={snackCommentList}
+            setCommentList={setSnackCommentList}
+          />
         </>
       ) : (
         <div className="inline-block pointer-h">

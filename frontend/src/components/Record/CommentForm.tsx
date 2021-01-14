@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { TextInput, SecondaryButton } from "../UIkit";
-import { Target } from "../../re-ducks/records/types";
+import { Target, Comment } from "../../re-ducks/records/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { baseURL } from "../../config";
 
@@ -14,12 +14,16 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   recordId: number;
   target: Target;
+  commentList: Comment[];
+  setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
 };
 
 const CommentForm: React.FC<Props> = React.memo((props) => {
   const classes = useStyles();
   const recordId = props.recordId;
   const target = props.target;
+  const commentList = props.commentList;
+  const setCommentList = props.setCommentList;
 
   const [comment, setComment] = useState("");
 
@@ -41,11 +45,12 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
       })
       .then((res) => {
         setComment("");
+        setCommentList([...res.data, ...commentList]);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [recordId, target, comment]);
+  }, [recordId, target, comment, commentList, setCommentList]);
 
   return (
     <>
