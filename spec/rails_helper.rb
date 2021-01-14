@@ -35,6 +35,7 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include AppearancesHelper
+  config.include CommentsHelper
   config.include DeviseHelper
   config.include LikesHelper
   config.include MealsHelper
