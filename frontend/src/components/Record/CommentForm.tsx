@@ -51,10 +51,11 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
         label="コメントを書く"
         multiline={true}
         required={false}
-        rows="3"
+        rows="1"
         type="text"
         name="comment"
         value={comment}
+        rowsMax={4}
         onChange={inputComment}
       />
       <div className="space-m"></div>
