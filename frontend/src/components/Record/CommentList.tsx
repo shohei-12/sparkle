@@ -7,6 +7,7 @@ import ReactLoading from "react-loading";
 import { Target, Comment } from "../../re-ducks/records/types";
 import { Store } from "../../re-ducks/store/types";
 import { getUserId } from "../../re-ducks/users/selectors";
+import { ReplyCommentForm } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -42,6 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 5,
       color: "#9e9e9e",
     },
+    rightBottom: {
+      display: "flex",
+      alignItems: "center",
+    },
     deleteIcon: {
       width: 19,
       height: 19,
@@ -68,6 +73,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
 
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [commentId, setCommentId] = useState(0);
 
   const deleteComment = useCallback(
     (id: number) => {
@@ -131,34 +137,52 @@ const CommentList: React.FC<Props> = React.memo((props) => {
       >
         {commentList.length > 0 &&
           commentList.map((ele, i) => (
-            <div key={i} className={classes.comment}>
-              <div className={classes.left}>
-                <img
-                  className={`${classes.profile} pointer-h`}
-                  src={
-                    ele.author_profile.url
-                      ? baseURL + ele.author_profile.url
-                      : NoProfile
-                  }
-                  alt="プロフィール画像"
-                  onClick={() => dispatch(push(`/users/${ele.author_id}`))}
-                />
-              </div>
-              <div>
-                <span>{ele.author_name}</span>
-                <span className={classes.date}>{ele.created_at}</span>
-                <p className={classes.content}>{ele.content}</p>
-                {ele.author_id === currentUserId && (
-                  <Tooltip title="削除" placement="right">
-                    <IconButton
-                      aria-label="コメントを削除する"
-                      onClick={() => deleteComment(ele.comment_id)}
+            <div key={i}>
+              <div className={classes.comment}>
+                <div className={classes.left}>
+                  <img
+                    className={`${classes.profile} pointer-h`}
+                    src={
+                      ele.author_profile.url
+                        ? baseURL + ele.author_profile.url
+                        : NoProfile
+                    }
+                    alt="プロフィール画像"
+                    onClick={() => dispatch(push(`/users/${ele.author_id}`))}
+                  />
+                </div>
+                <div>
+                  <span>{ele.author_name}</span>
+                  <span className={classes.date}>{ele.created_at}</span>
+                  <p className={classes.content}>{ele.content}</p>
+                  <div className={classes.rightBottom}>
+                    <span
+                      className="pointer-h"
+                      onClick={() => setCommentId(ele.comment_id)}
                     >
-                      <DeleteIcon className={classes.deleteIcon} />
-                    </IconButton>
-                  </Tooltip>
-                )}
+                      返信
+                    </span>
+                    {ele.author_id === currentUserId && (
+                      <Tooltip title="削除" placement="right">
+                        <IconButton
+                          aria-label="コメントを削除する"
+                          onClick={() => deleteComment(ele.comment_id)}
+                        >
+                          <DeleteIcon className={classes.deleteIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </div>
+                </div>
               </div>
+              {commentId === ele.comment_id && (
+                <ReplyCommentForm
+                  recordId={recordId}
+                  target={target}
+                  commentId={ele.comment_id}
+                  setCommentId={setCommentId}
+                />
+              )}
             </div>
           ))}
       </InfiniteScroll>
