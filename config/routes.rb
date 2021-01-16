@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       put '/memos/:id/snack', to: 'memos#update_snack'
       get '/relationships/following/:id', to: 'relationships#following?'
       get '/comments/:record_id/:target', to: 'comments#twenty_comments'
+      get '/comments/:id/reply/list', to: 'comments#ten_reply_comments'
       resources :appearances
       resources :meals
       resources :memos

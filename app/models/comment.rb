@@ -10,6 +10,7 @@ class Comment < ApplicationRecord
   def self.get_comment_infos(comments)
     comment_infos = []
     comments.each do |comment|
+      reply_count = Comment.where(reply_comment_id: comment.id).length
       str = comment.created_at.strftime('%Y-%m-%d')
       comment_infos.push({
                            comment_id: comment.id,
@@ -17,7 +18,8 @@ class Comment < ApplicationRecord
                            author_profile: comment.user.profile,
                            author_name: comment.user.name,
                            content: comment.content,
-                           created_at: str
+                           created_at: str,
+                           reply_count: reply_count
                          })
     end
     comment_infos

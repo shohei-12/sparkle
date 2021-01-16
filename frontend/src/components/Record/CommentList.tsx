@@ -7,10 +7,12 @@ import ReactLoading from "react-loading";
 import { Target, Comment } from "../../re-ducks/records/types";
 import { Store } from "../../re-ducks/store/types";
 import { getUserId } from "../../re-ducks/users/selectors";
-import { ReplyCommentForm } from "../Record";
+import { ReplyCommentForm, ReplyCommentList } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Tooltip from "@material-ui/core/Tooltip";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
@@ -43,7 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 5,
       color: "#9e9e9e",
     },
-    rightBottom: {
+    commentTrigger: {
+      height: 43,
+    },
+    alignItemsCenter: {
       display: "flex",
       alignItems: "center",
     },
@@ -74,6 +79,8 @@ const CommentList: React.FC<Props> = React.memo((props) => {
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [commentId, setCommentId] = useState(0);
+  const [openReplyComments, setOpenReplyComments] = useState(0);
+  const [replyComments, setReplyComments] = useState<Comment[]>([]);
 
   const deleteComment = useCallback(
     (id: number) => {
@@ -97,6 +104,21 @@ const CommentList: React.FC<Props> = React.memo((props) => {
     },
     [commentList, setCommentList]
   );
+
+  const get10ReplyComments = useCallback((id: number) => {
+    axios
+      .get(`${baseURL}/api/v1/comments/${id}/reply/list`, {
+        params: {
+          start: 0,
+        },
+      })
+      .then((res) => {
+        setReplyComments(res.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, []);
 
   const get20Comments = useCallback(() => {
     axios
@@ -155,7 +177,9 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                   <span>{ele.author_name}</span>
                   <span className={classes.date}>{ele.created_at}</span>
                   <p className={classes.content}>{ele.content}</p>
-                  <div className={classes.rightBottom}>
+                  <div
+                    className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
+                  >
                     <span
                       className="pointer-h"
                       onClick={() => setCommentId(ele.comment_id)}
@@ -173,6 +197,36 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       </Tooltip>
                     )}
                   </div>
+                  {ele.reply_count > 0 && openReplyComments !== ele.comment_id && (
+                    <div
+                      className={`${classes.alignItemsCenter} pointer-h`}
+                      onClick={() => {
+                        setOpenReplyComments(ele.comment_id);
+                        get10ReplyComments(ele.comment_id);
+                      }}
+                    >
+                      <ArrowDropDownIcon />
+                      <span>{ele.reply_count}件の返信を表示</span>
+                    </div>
+                  )}
+                  {openReplyComments === ele.comment_id && (
+                    <>
+                      <div
+                        className={`${classes.alignItemsCenter} pointer-h`}
+                        onClick={() => {
+                          setOpenReplyComments(0);
+                        }}
+                      >
+                        <ArrowDropUpIcon />
+                        <span>{ele.reply_count}件の返信を非表示</span>
+                      </div>
+                      <ReplyCommentList
+                        replyComments={replyComments}
+                        setReplyComments={setReplyComments}
+                        deleteComment={deleteComment}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               {commentId === ele.comment_id && (
