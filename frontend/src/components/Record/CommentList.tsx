@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
     left: {
       marginRight: 20,
     },
+    right: {
+      width: "100%",
+    },
     profile: {
       width: 40,
       height: 40,
@@ -173,7 +176,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                     onClick={() => dispatch(push(`/users/${ele.author_id}`))}
                   />
                 </div>
-                <div>
+                <div className={classes.right}>
                   <span>{ele.author_name}</span>
                   <span className={classes.date}>{ele.created_at}</span>
                   <p className={classes.content}>{ele.content}</p>
@@ -197,6 +200,19 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       </Tooltip>
                     )}
                   </div>
+                  {commentId === ele.comment_id && (
+                    <ReplyCommentForm
+                      recordId={recordId}
+                      target={target}
+                      commentId={ele.comment_id}
+                      setCommentId={setCommentId}
+                      replyComments={replyComments}
+                      setReplyComments={setReplyComments}
+                      commentList={commentList}
+                      setCommentList={setCommentList}
+                      commentListIndex={i}
+                    />
+                  )}
                   {ele.reply_count > 0 && openReplyComments !== ele.comment_id && (
                     <div
                       className={`${classes.alignItemsCenter} pointer-h`}
@@ -229,14 +245,6 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                   )}
                 </div>
               </div>
-              {commentId === ele.comment_id && (
-                <ReplyCommentForm
-                  recordId={recordId}
-                  target={target}
-                  commentId={ele.comment_id}
-                  setCommentId={setCommentId}
-                />
-              )}
             </div>
           ))}
       </InfiniteScroll>
