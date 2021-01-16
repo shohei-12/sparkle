@@ -5,3 +5,4 @@ export { default as DateSwitch } from "./DateSwitch";
 export { default as LikeRecordList } from "./LikeRecordList";
 export { default as MealsGallery } from "./MealsGallery";
 export { default as ReplyCommentForm } from "./ReplyCommentForm";
+export { default as ReplyCommentList } from "./ReplyCommentList";
