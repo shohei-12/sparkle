@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { TextInput, SecondaryButton } from "../UIkit";
-import { Target } from "../../re-ducks/records/types";
+import { Target, Comment } from "../../re-ducks/records/types";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { baseURL } from "../../config";
@@ -22,6 +22,11 @@ type Props = {
   target: Target;
   commentId: number;
   setCommentId: React.Dispatch<React.SetStateAction<number>>;
+  replyComments: Comment[];
+  setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  commentList: Comment[];
+  setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
+  commentListIndex: number;
 };
 
 const ReplyCommentForm: React.FC<Props> = (props) => {
@@ -30,6 +35,11 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
   const target = props.target;
   const commentId = props.commentId;
   const setCommentId = props.setCommentId;
+  const replyComments = props.replyComments;
+  const setReplyComments = props.setReplyComments;
+  const commentList = props.commentList;
+  const setCommentList = props.setCommentList;
+  const commentListIndex = props.commentListIndex;
 
   const [reply, setReply] = useState("");
 
@@ -55,11 +65,24 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
       })
       .then((res) => {
         setReply("");
+        commentList[commentListIndex].reply_count++;
+        setCommentList(commentList);
+        setReplyComments([...res.data, ...replyComments]);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [recordId, target, reply, commentId]);
+  }, [
+    recordId,
+    target,
+    reply,
+    commentId,
+    replyComments,
+    setReplyComments,
+    commentList,
+    setCommentList,
+    commentListIndex,
+  ]);
 
   return (
     <>
