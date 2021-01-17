@@ -25,7 +25,6 @@ type Props = {
   replyComments: Comment[];
   setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   commentList: Comment[];
-  setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
   commentListIndex: number;
 };
 
@@ -38,7 +37,6 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
   const replyComments = props.replyComments;
   const setReplyComments = props.setReplyComments;
   const commentList = props.commentList;
-  const setCommentList = props.setCommentList;
   const commentListIndex = props.commentListIndex;
 
   const [reply, setReply] = useState("");
@@ -66,7 +64,6 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
       .then((res) => {
         setReply("");
         commentList[commentListIndex].reply_count++;
-        setCommentList(commentList);
         setReplyComments([...res.data, ...replyComments]);
       })
       .catch((error) => {
@@ -80,7 +77,6 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
     replyComments,
     setReplyComments,
     commentList,
-    setCommentList,
     commentListIndex,
   ]);
 
