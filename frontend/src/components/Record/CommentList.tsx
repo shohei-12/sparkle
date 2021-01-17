@@ -55,10 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
     },
-    deleteIcon: {
-      width: 19,
-      height: 19,
-    },
   })
 );
 
@@ -206,7 +202,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                           aria-label="コメントを削除する"
                           onClick={() => deleteComment(ele.comment_id, false)}
                         >
-                          <DeleteIcon className={classes.deleteIcon} />
+                          <DeleteIcon style={{ fontSize: 19 }} />
                         </IconButton>
                       </Tooltip>
                     )}
@@ -251,6 +247,8 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                         setReplyComments={setReplyComments}
                         commentListIndex={i}
                         deleteComment={deleteComment}
+                        replyCount={ele.reply_count - 10}
+                        commentId={ele.comment_id}
                       />
                     </>
                   )}

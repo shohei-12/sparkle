@@ -2,13 +2,13 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
-import { Target, Comment } from "../../re-ducks/records/types";
+import { Comment } from "../../re-ducks/records/types";
 import { Store } from "../../re-ducks/store/types";
 import { getUserId } from "../../re-ducks/users/selectors";
-import { ReplyCommentForm } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
@@ -48,9 +48,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
     },
-    deleteIcon: {
-      width: 19,
-      height: 19,
+    otherReply: {
+      position: "relative",
+      top: -6,
     },
   })
 );
@@ -64,6 +64,8 @@ type Props = {
     replyComment: boolean,
     commentListIndex?: number
   ) => void;
+  replyCount: number;
+  commentId: number;
 };
 
 const ReplyCommentList: React.FC<Props> = (props) => {
@@ -75,6 +77,30 @@ const ReplyCommentList: React.FC<Props> = (props) => {
   const setReplyComments = props.setReplyComments;
   const commentListIndex = props.commentListIndex;
   const deleteComment = props.deleteComment;
+  const commentId = props.commentId;
+
+  const [replyStart, setReplyStart] = useState(10);
+  const [replyCount, setReplyCount] = useState(props.replyCount);
+
+  const get10ReplyComments = useCallback(
+    (id: number) => {
+      axios
+        .get(`${baseURL}/api/v1/comments/${id}/reply/list`, {
+          params: {
+            start: replyStart,
+          },
+        })
+        .then((res) => {
+          setReplyCount(replyCount - 10);
+          setReplyComments([...replyComments, ...res.data]);
+          setReplyStart(replyStart + 10);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    },
+    [replyStart, replyComments, setReplyComments, replyCount]
+  );
 
   return (
     <>
@@ -111,7 +137,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
                         deleteComment(ele.comment_id, true, commentListIndex)
                       }
                     >
-                      <DeleteIcon className={classes.deleteIcon} />
+                      <DeleteIcon style={{ fontSize: 19 }} />
                     </IconButton>
                   </Tooltip>
                 )}
@@ -120,6 +146,15 @@ const ReplyCommentList: React.FC<Props> = (props) => {
           </div>
         </div>
       ))}
+      {replyCount > 0 && (
+        <div
+          className="inline-block pointer-h"
+          onClick={() => get10ReplyComments(commentId)}
+        >
+          <SubdirectoryArrowRightIcon />
+          <span className={classes.otherReply}>他の返信を表示</span>
+        </div>
+      )}
     </>
   );
 };
