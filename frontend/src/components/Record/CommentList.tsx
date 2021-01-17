@@ -86,7 +86,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
   const [replyComments, setReplyComments] = useState<Comment[]>([]);
 
   const deleteComment = useCallback(
-    (id: number) => {
+    (id: number, replyComment: boolean, commentListIndex?: number) => {
       if (window.confirm("本当に削除しますか？")) {
         axios
           .delete(`${baseURL}/api/v1/comments/${id}`, {
@@ -97,15 +97,26 @@ const CommentList: React.FC<Props> = React.memo((props) => {
             },
           })
           .then(() => {
-            const result = commentList.filter((ele) => ele.comment_id !== id);
-            setCommentList(result);
+            if (replyComment && commentListIndex) {
+              if (replyComments.length === 1) {
+                setOpenReplyComments(0);
+              }
+              commentList[commentListIndex].reply_count--;
+              const result = replyComments.filter(
+                (ele) => ele.comment_id !== id
+              );
+              setReplyComments(result);
+            } else {
+              const result = commentList.filter((ele) => ele.comment_id !== id);
+              setCommentList(result);
+            }
           })
           .catch((error) => {
             throw new Error(error);
           });
       }
     },
-    [commentList, setCommentList]
+    [commentList, setCommentList, replyComments]
   );
 
   const get10ReplyComments = useCallback((id: number) => {
@@ -193,7 +204,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       <Tooltip title="削除" placement="right">
                         <IconButton
                           aria-label="コメントを削除する"
-                          onClick={() => deleteComment(ele.comment_id)}
+                          onClick={() => deleteComment(ele.comment_id, false)}
                         >
                           <DeleteIcon className={classes.deleteIcon} />
                         </IconButton>
@@ -209,7 +220,6 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       replyComments={replyComments}
                       setReplyComments={setReplyComments}
                       commentList={commentList}
-                      setCommentList={setCommentList}
                       commentListIndex={i}
                     />
                   )}
@@ -225,7 +235,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       <span>{ele.reply_count}件の返信を表示</span>
                     </div>
                   )}
-                  {openReplyComments === ele.comment_id && (
+                  {ele.reply_count > 0 && openReplyComments === ele.comment_id && (
                     <>
                       <div
                         className={`${classes.alignItemsCenter} pointer-h`}
@@ -239,6 +249,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       <ReplyCommentList
                         replyComments={replyComments}
                         setReplyComments={setReplyComments}
+                        commentListIndex={i}
                         deleteComment={deleteComment}
                       />
                     </>

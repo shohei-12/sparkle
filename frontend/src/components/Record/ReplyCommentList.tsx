@@ -58,7 +58,12 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   replyComments: Comment[];
   setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  deleteComment: (id: number) => void;
+  commentListIndex: number;
+  deleteComment: (
+    id: number,
+    replyComment: boolean,
+    commentListIndex?: number
+  ) => void;
 };
 
 const ReplyCommentList: React.FC<Props> = (props) => {
@@ -68,6 +73,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
   const currentUserId = Number(getUserId(selector));
   const replyComments = props.replyComments;
   const setReplyComments = props.setReplyComments;
+  const commentListIndex = props.commentListIndex;
   const deleteComment = props.deleteComment;
 
   return (
@@ -101,7 +107,9 @@ const ReplyCommentList: React.FC<Props> = (props) => {
                   <Tooltip title="削除" placement="right">
                     <IconButton
                       aria-label="コメントを削除する"
-                      onClick={() => deleteComment(ele.comment_id)}
+                      onClick={() =>
+                        deleteComment(ele.comment_id, true, commentListIndex)
+                      }
                     >
                       <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
