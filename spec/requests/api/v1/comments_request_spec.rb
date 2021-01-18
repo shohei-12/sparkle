@@ -16,6 +16,17 @@ RSpec.describe 'Api::V1::Comments', type: :request do
       }
     }
   end
+  let(:valid_data2) do
+    {
+      comment: {
+        record_id: record.id,
+        target: 'appearance',
+        content: 'comment',
+        reply_comment_id: comment.id,
+        reply_user_id: nil
+      }
+    }
+  end
   let(:invalid_data) do
     {
       comment: {
@@ -29,6 +40,9 @@ RSpec.describe 'Api::V1::Comments', type: :request do
   end
   let(:start0) do
     { start: 0 }
+  end
+  let(:start10) do
+    { start: 10 }
   end
   let(:start20) do
     { start: 20 }
@@ -102,6 +116,52 @@ RSpec.describe 'Api::V1::Comments', type: :request do
       context 'when comments does not exist' do
         it 'not get comments' do
           get_20_comments(record.id, 'appearance', start0)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body).length).to eq 0
+        end
+      end
+    end
+  end
+
+  describe 'GET /api/v1/comments/:id/reply/list' do
+    context 'when there are more than 10 reply comments' do
+      before do
+        11.times do
+          make_comment(valid_data2, token)
+        end
+      end
+
+      it 'get 10 reply comments' do
+        get_10_reply_comments(comment.id, start0)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body).length).to eq 10
+      end
+
+      it 'get 1 reply comment' do
+        get_10_reply_comments(comment.id, start10)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body).length).to eq 1
+      end
+    end
+
+    context 'when there are less than 10 reply comments' do
+      context 'when there are more than 1 reply comment' do
+        before do
+          2.times do
+            make_comment(valid_data2, token)
+          end
+        end
+
+        it 'get 2 reply comments' do
+          get_10_reply_comments(comment.id, start0)
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body).length).to eq 2
+        end
+      end
+
+      context 'when reply comments does not exist' do
+        it 'not get reply comments' do
+          get_10_reply_comments(comment.id, start0)
           expect(response.status).to eq 200
           expect(JSON.parse(response.body).length).to eq 0
         end
