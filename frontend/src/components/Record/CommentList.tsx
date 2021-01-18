@@ -217,6 +217,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                       setReplyComments={setReplyComments}
                       commentList={commentList}
                       commentListIndex={i}
+                      userId={null}
                     />
                   )}
                   {ele.reply_count > 0 && openReplyComments !== ele.comment_id && (
@@ -243,8 +244,11 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                         <span>{ele.reply_count}件の返信を非表示</span>
                       </div>
                       <ReplyCommentList
+                        recordId={recordId}
+                        target={target}
                         replyComments={replyComments}
                         setReplyComments={setReplyComments}
+                        commentList={commentList}
                         commentListIndex={i}
                         deleteComment={deleteComment}
                         replyCount={ele.reply_count - 10}

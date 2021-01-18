@@ -26,6 +26,7 @@ type Props = {
   setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   commentList: Comment[];
   commentListIndex: number;
+  userId: number | null;
 };
 
 const ReplyCommentForm: React.FC<Props> = (props) => {
@@ -38,6 +39,7 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
   const setReplyComments = props.setReplyComments;
   const commentList = props.commentList;
   const commentListIndex = props.commentListIndex;
+  const userId = props.userId;
 
   const [reply, setReply] = useState("");
 
@@ -56,15 +58,15 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
         target,
         content: reply,
         reply_comment_id: commentId,
-        reply_user_id: null,
+        reply_user_id: userId,
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
       })
       .then((res) => {
-        setReply("");
+        setCommentId(0);
         commentList[commentListIndex].reply_count++;
-        setReplyComments([...res.data, ...replyComments]);
+        setReplyComments([...replyComments, ...res.data]);
       })
       .catch((error) => {
         throw new Error(error);
@@ -78,6 +80,8 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
     setReplyComments,
     commentList,
     commentListIndex,
+    userId,
+    setCommentId,
   ]);
 
   return (

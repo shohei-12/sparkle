@@ -34,6 +34,14 @@ body {
   cursor: pointer;
 }
 
+.link {
+  color: #3ea6ff;
+}
+
+.link:hover {
+  cursor: pointer;
+}
+
 .tabs {
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;
