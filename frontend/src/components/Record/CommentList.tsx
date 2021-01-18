@@ -93,7 +93,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
             },
           })
           .then(() => {
-            if (replyComment && commentListIndex) {
+            if (replyComment && commentListIndex !== undefined) {
               if (replyComments.length === 1) {
                 setOpenReplyComments(0);
               }
