@@ -79,8 +79,10 @@ RSpec.describe Comment, type: :model do
         comments = [comment2, comment3]
         comment_infos = described_class.get_comment_infos(comments)
         comments.each_with_index do |comment, index|
-          reply_count = described_class.where(reply_comment_id: comment.id).length
           str = comment.created_at.strftime('%Y-%m-%d')
+          reply_count = described_class.where(reply_comment_id: comment.id).length
+          reply_user_id = comment.reply_user_id
+          reply_user_name = reply_user_id ? User.find(reply_user_id).name : nil
           expect(comment_infos[index][:comment_id]).to eq comment.id
           expect(comment_infos[index][:author_id]).to eq comment.user_id
           expect(comment_infos[index][:author_profile]).to eq comment.user.profile
@@ -88,6 +90,8 @@ RSpec.describe Comment, type: :model do
           expect(comment_infos[index][:content]).to eq comment.content
           expect(comment_infos[index][:created_at]).to eq str
           expect(comment_infos[index][:reply_count]).to eq reply_count
+          expect(comment_infos[index][:reply_user_id]).to eq reply_user_id
+          expect(comment_infos[index][:reply_user_name]).to eq reply_user_name
         end
       end
     end

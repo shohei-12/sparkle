@@ -20,7 +20,6 @@ class Api::V1::CommentsController < ApplicationController
 
   def ten_reply_comments
     ten_reply_comments = Comment.where(reply_comment_id: @comment.id)
-                                .order(created_at: 'DESC')
                                 .limit(10)
                                 .offset(params[:start])
     comment_infos = Comment.get_comment_infos(ten_reply_comments)

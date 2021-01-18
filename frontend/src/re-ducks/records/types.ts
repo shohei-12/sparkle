@@ -27,6 +27,8 @@ export type Comment = {
   content: string;
   created_at: string;
   reply_count: number;
+  reply_user_id: number | null;
+  reply_user_name: string | null;
 };
 
 export type RecordState = {

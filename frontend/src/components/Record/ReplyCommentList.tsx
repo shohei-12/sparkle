@@ -2,9 +2,10 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
-import { Comment } from "../../re-ducks/records/types";
+import { Target, Comment } from "../../re-ducks/records/types";
 import { Store } from "../../re-ducks/store/types";
 import { getUserId } from "../../re-ducks/users/selectors";
+import { ReplyCommentForm } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     left: {
       marginRight: 20,
+    },
+    right: {
+      width: "100%",
     },
     profile: {
       width: 40,
@@ -56,8 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
+  recordId: number;
+  target: Target;
   replyComments: Comment[];
   setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  commentList: Comment[];
   commentListIndex: number;
   deleteComment: (
     id: number,
@@ -73,14 +80,18 @@ const ReplyCommentList: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = Number(getUserId(selector));
+  const recordId = props.recordId;
+  const target = props.target;
   const replyComments = props.replyComments;
   const setReplyComments = props.setReplyComments;
+  const commentList = props.commentList;
   const commentListIndex = props.commentListIndex;
   const deleteComment = props.deleteComment;
   const commentId = props.commentId;
 
   const [replyStart, setReplyStart] = useState(10);
   const [replyCount, setReplyCount] = useState(props.replyCount);
+  const [replyCommentId, setReplyCommentId] = useState(0);
 
   const get10ReplyComments = useCallback(
     (id: number) => {
@@ -119,14 +130,29 @@ const ReplyCommentList: React.FC<Props> = (props) => {
                 onClick={() => dispatch(push(`/users/${ele.author_id}`))}
               />
             </div>
-            <div>
+            <div className={classes.right}>
               <span>{ele.author_name}</span>
               <span className={classes.date}>{ele.created_at}</span>
-              <p className={classes.content}>{ele.content}</p>
+              <p className={classes.content}>
+                {ele.reply_user_id && ele.reply_user_name && (
+                  <span
+                    className="link"
+                    onClick={() =>
+                      dispatch(push(`/users/${ele.reply_user_id}`))
+                    }
+                  >
+                    {`@${ele.reply_user_name}`}{" "}
+                  </span>
+                )}
+                {ele.content}
+              </p>
               <div
                 className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
               >
-                <span className="pointer-h" onClick={() => console.log("hoge")}>
+                <span
+                  className="pointer-h"
+                  onClick={() => setReplyCommentId(ele.comment_id)}
+                >
                   返信
                 </span>
                 {ele.author_id === currentUserId && (
@@ -142,6 +168,19 @@ const ReplyCommentList: React.FC<Props> = (props) => {
                   </Tooltip>
                 )}
               </div>
+              {replyCommentId === ele.comment_id && (
+                <ReplyCommentForm
+                  recordId={recordId}
+                  target={target}
+                  commentId={commentId}
+                  setCommentId={setReplyCommentId}
+                  replyComments={replyComments}
+                  setReplyComments={setReplyComments}
+                  commentList={commentList}
+                  commentListIndex={commentListIndex}
+                  userId={ele.author_id}
+                />
+              )}
             </div>
           </div>
         </div>
