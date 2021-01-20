@@ -18,6 +18,7 @@ const signInAfterSavingToken = (
       id: String(responseData.id),
       name: responseData.name,
       email: responseData.email,
+      selfIntroduction: responseData.self_introduction,
       profile: responseData.profile.url,
       theme: responseData.theme,
       tabIndex: 0,
@@ -45,6 +46,7 @@ export const listenAuthState = (tabIndex: number) => {
             id: String(responseData.id),
             name: responseData.name,
             email: responseData.email,
+            selfIntroduction: responseData.self_introduction,
             profile: responseData.profile.url,
             theme: responseData.theme,
             tabIndex,
@@ -154,6 +156,7 @@ export const deleteUser = () => {
         localStorage.removeItem("client");
         localStorage.removeItem("access_token");
         dispatch(signOutAction());
+        dispatch(push("/signin"));
       })
       .catch((error) => {
         throw new Error(error);

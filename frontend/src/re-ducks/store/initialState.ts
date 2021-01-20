@@ -8,6 +8,7 @@ const initialUserState: UserState = {
   id: "",
   name: "",
   email: "",
+  selfIntroduction: "",
   profile: "",
   theme: "light",
   tabIndex: 0,
