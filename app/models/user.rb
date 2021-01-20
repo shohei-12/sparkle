@@ -19,6 +19,7 @@ class User < ApplicationRecord
             length: { maximum: 256 },
             uniqueness: true,
             format: { with: /\A[\w+.-]+@[a-z\d.-]+\.[a-z]+\z/i }
+  validates :self_introduction, length: { maximum: 160 }
   validates :password,
             presence: true, on: :create,
             length: { minimum: 6 },

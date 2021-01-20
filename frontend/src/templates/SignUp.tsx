@@ -12,6 +12,7 @@ import { baseURL } from "../config";
 type Inputs = {
   name: string;
   email: string;
+  selfIntroduction: string;
   password: string;
   confirmPassword: string;
 };
@@ -22,6 +23,7 @@ const SignUp: React.FC = () => {
     defaultValues: {
       name: "",
       email: "",
+      selfIntroduction: "",
       password: "",
       confirmPassword: "",
     },
@@ -34,36 +36,38 @@ const SignUp: React.FC = () => {
   const [profile, setProfile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [selfIntroduction, setSelfIntroduction] = useState("");
   const [duplicateEmail, setDuplicateEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const inputName = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setName(e.target.value);
-    },
-    [setName]
-  );
+  const inputName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }, []);
 
-  const inputEmail = useCallback(
+  const inputEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const inputSelfIntroduction = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(e.target.value);
+      setSelfIntroduction(e.target.value);
     },
-    [setEmail]
+    []
   );
 
   const inputPassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
     },
-    [setPassword]
+    []
   );
 
   const inputConfirmPassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setConfirmPassword(e.target.value);
     },
-    [setConfirmPassword]
+    []
   );
 
   const signUp = () => {
@@ -71,6 +75,7 @@ const SignUp: React.FC = () => {
     profile && data.append("profile", profile);
     data.append("name", name);
     data.append("email", email);
+    data.append("self_introduction", selfIntroduction);
     data.append("password", password);
     data.append("password_confirmation", confirmPassword);
     data.append("theme", theme);
@@ -160,6 +165,24 @@ const SignUp: React.FC = () => {
             "このメールアドレスはすでに存在します。")
         }
         onChange={inputEmail}
+      />
+      <TextInput
+        fullWidth={true}
+        label="自己紹介（任意・160文字以内）"
+        multiline={true}
+        required={false}
+        rows="3"
+        type="text"
+        name="selfIntroduction"
+        inputRef={register({
+          maxLength: {
+            value: 160,
+            message: "160文字以内で入力してください。",
+          },
+        })}
+        error={Boolean(errors.selfIntroduction)}
+        helperText={errors.selfIntroduction && errors.selfIntroduction.message}
+        onChange={inputSelfIntroduction}
       />
       <TextInput
         fullWidth={true}

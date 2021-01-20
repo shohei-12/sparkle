@@ -20,6 +20,11 @@ export const getUserEmail = createSelector(
   (state) => state.email
 );
 
+export const getUserSelfIntroduction = createSelector(
+  [usersSelector],
+  (state) => state.selfIntroduction
+);
+
 export const getUserProfile = createSelector(
   [usersSelector],
   (state) => state.profile

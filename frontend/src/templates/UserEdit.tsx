@@ -8,6 +8,7 @@ import {
   getUserId,
   getUserName,
   getUserEmail,
+  getUserSelfIntroduction,
   getUserProfile,
 } from "../re-ducks/users/selectors";
 import { Store } from "../re-ducks/store/types";
@@ -19,6 +20,7 @@ import { baseURL } from "../config";
 type Inputs = {
   name: string;
   email: string;
+  selfIntroduction: string;
   password: string;
   confirmPassword: string;
 };
@@ -29,6 +31,7 @@ const UserEdit: React.FC = () => {
   const uid = getUserId(selector);
   const uname = getUserName(selector);
   const uemail = getUserEmail(selector);
+  const uSelfIntroduction = getUserSelfIntroduction(selector);
   const uprofile = getUserProfile(selector);
 
   const { register, handleSubmit, reset, errors } = useForm<Inputs>({
@@ -36,6 +39,7 @@ const UserEdit: React.FC = () => {
     defaultValues: {
       name: uname,
       email: uemail,
+      selfIntroduction: uSelfIntroduction,
       password: "",
       confirmPassword: "",
     },
@@ -44,45 +48,47 @@ const UserEdit: React.FC = () => {
   const [profile, setProfile] = useState<File | null>(null);
   const [name, setName] = useState(uname);
   const [email, setEmail] = useState(uemail);
+  const [selfIntroduction, setSelfIntroduction] = useState(uSelfIntroduction);
   const [duplicateEmail, setDuplicateEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [differentPassword, setDifferentPassword] = useState(false);
 
-  const inputName = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setName(e.target.value);
-    },
-    [setName]
-  );
+  const inputName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }, []);
 
-  const inputEmail = useCallback(
+  const inputEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const inputSelfIntroduction = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(e.target.value);
+      setSelfIntroduction(e.target.value);
     },
-    [setEmail]
+    []
   );
 
   const inputPassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
     },
-    [setPassword]
+    []
   );
 
   const inputConfirmPassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setConfirmPassword(e.target.value);
     },
-    [setConfirmPassword]
+    []
   );
 
   const inputCurrentPassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setCurrentPassword(e.target.value);
     },
-    [setCurrentPassword]
+    []
   );
 
   const updateUser = () => {
@@ -91,6 +97,7 @@ const UserEdit: React.FC = () => {
       data.append("profile", profile);
       data.append("name", name);
       data.append("email", email);
+      data.append("self_introduction", selfIntroduction);
       data.append("password", password);
       data.append("password_confirmation", confirmPassword);
       data.append("current_password", currentPassword);
@@ -120,7 +127,14 @@ const UserEdit: React.FC = () => {
             })
           );
           const imageURL = res.data.data.profile.url as string;
-          dispatch(updateUserAction({ name, email, profile: imageURL }));
+          dispatch(
+            updateUserAction({
+              name,
+              email,
+              selfIntroduction,
+              profile: imageURL,
+            })
+          );
           localStorage.setItem("uid", email);
         })
         .catch((error) => {
@@ -147,11 +161,10 @@ const UserEdit: React.FC = () => {
       data: {
         name,
         email,
+        self_introduction: selfIntroduction,
         password,
         password_confirmation: confirmPassword,
         current_password: currentPassword,
-      },
-      params: {
         uid: localStorage.getItem("uid"),
         client: localStorage.getItem("client"),
         access_token: localStorage.getItem("access_token"),
@@ -164,7 +177,7 @@ const UserEdit: React.FC = () => {
         dispatch(
           flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
         );
-        dispatch(updateUserAction({ name, email }));
+        dispatch(updateUserAction({ name, email, selfIntroduction }));
         localStorage.setItem("uid", email);
       })
       .catch((error) => {
@@ -266,6 +279,31 @@ const UserEdit: React.FC = () => {
             : undefined
         }
         onChange={inputEmail}
+      />
+      <TextInput
+        fullWidth={true}
+        label="自己紹介（任意・160文字以内）"
+        multiline={true}
+        required={false}
+        rows="3"
+        type="text"
+        name="selfIntroduction"
+        inputRef={register({
+          maxLength: {
+            value: 160,
+            message: "160文字以内で入力してください。",
+          },
+        })}
+        error={Boolean(errors.selfIntroduction)}
+        helperText={errors.selfIntroduction && errors.selfIntroduction.message}
+        inputProps={
+          uid === "1"
+            ? {
+                readOnly: true,
+              }
+            : undefined
+        }
+        onChange={inputSelfIntroduction}
       />
       <TextInput
         fullWidth={true}

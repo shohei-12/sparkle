@@ -3,6 +3,7 @@ export type UserState = {
   id: string;
   name: string;
   email: string;
+  selfIntroduction: string;
   profile: string;
   theme: "light" | "dark";
   tabIndex: number;
@@ -11,6 +12,7 @@ export type UserState = {
 export type UserUpdate = {
   name: string;
   email: string;
+  selfIntroduction?: string;
   profile?: string;
 };
 
