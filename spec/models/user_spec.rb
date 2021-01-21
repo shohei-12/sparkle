@@ -71,6 +71,16 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe 'self_introduction' do
+    context 'when over 160 characters' do
+      before { user1.self_introduction = 'a' * 161 }
+
+      it 'return false' do
+        expect(user1.valid?).to eq false
+      end
+    end
+  end
+
   describe 'password' do
     context 'when empty' do
       before do

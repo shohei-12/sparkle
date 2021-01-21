@@ -10,6 +10,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           profile: image,
           name: 'test',
           email: 'test@example.com',
+          self_introduction: 'This is a test.',
           password: 'password',
           password_confirmation: 'password',
           theme: 'light'
@@ -27,6 +28,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         {
           name: '',
           email: 'test@example.com',
+          self_introduction: 'This is a test.',
           password: 'password',
           password_confirmation: 'password',
           theme: 'light'
@@ -52,6 +54,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           profile: image,
           name: 'testupdate',
           email: 'testupdate@example.com',
+          self_introduction: 'This is a update test.',
           password: 'passwordupdate',
           password_confirmation: 'passwordupdate',
           current_password: 'password'
@@ -65,6 +68,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         expect(@user.profile_identifier).to eq 'test.jpg'
         expect(@user.name).to eq 'testupdate'
         expect(@user.email).to eq 'testupdate@example.com'
+        expect(@user.self_introduction).to eq 'This is a update test.'
         expect(sign_in({ email: 'testupdate@example.com', password: 'passwordupdate' })).to be_truthy
         expect(response.status).to eq 200
       end
@@ -76,6 +80,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           profile: image,
           name: '',
           email: '',
+          self_introduction: '',
           password: '',
           password_confirmation: '',
           current_password: ''
@@ -89,6 +94,7 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         expect(@user.profile_identifier).to eq nil
         expect(@user.name).to eq 'test'
         expect(@user.email).to eq @user.email
+        expect(@user.self_introduction).to eq 'This is a test.'
         expect(sign_in({ email: @user.email, password: 'password' })).to be_truthy
         expect(response.status).to eq 200
       end
