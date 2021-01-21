@@ -25,25 +25,6 @@ import NoProfile from "../assets/img/no-profile.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    record: {
-      display: "inline-block",
-      [theme.breakpoints.up("xs")]: {
-        width: "100%",
-        margin: "8px 0",
-      },
-      [theme.breakpoints.up("sm")]: {
-        width: "calc(50% - 16px)",
-        margin: 8,
-      },
-      [theme.breakpoints.up("lg")]: {
-        width: "calc(33.3333% - 16px)",
-        margin: 8,
-      },
-      [theme.breakpoints.up("xl")]: {
-        width: "calc(25% - 16px)",
-        margin: 8,
-      },
-    },
     profile: {
       width: 40,
       height: 40,
@@ -122,7 +103,7 @@ const RecordList: React.FC = () => {
     >
       {records.length > 0 &&
         records.map((ele, i) => (
-          <Card key={i} className={classes.record}>
+          <Card key={i} className="inline-block record">
             <CardHeader
               avatar={
                 <Avatar>

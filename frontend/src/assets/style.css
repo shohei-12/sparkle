@@ -42,6 +42,50 @@ body {
   cursor: pointer;
 }
 
+@media all and (max-width: 399px) {
+  .record,
+  .like-record {
+    width: 100%;
+    margin: 8px 0;
+  }
+}
+
+@media all and (min-width: 400px) {
+  .record,
+  .like-record {
+    width: calc(50% - 16px);
+    margin: 8px;
+  }
+}
+
+@media all and (min-width: 600px) {
+  .like-record {
+    width: calc(33.3333% - 16px);
+    margin: 8px;
+  }
+}
+
+@media all and (min-width: 750px) {
+  .record {
+    width: calc(33.3333% - 16px);
+    margin: 8px;
+  }
+}
+
+@media all and (min-width: 1200px) {
+  .record {
+    width: calc(25% - 16px);
+    margin: 8px;
+  }
+}
+
+@media all and (min-width: 1800px) {
+  .record {
+    width: calc(20% - 16px);
+    margin: 8px;
+  }
+}
+
 .tabs {
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;
@@ -68,6 +112,52 @@ body {
 
 .loader {
   margin: 0 auto;
+}
+
+/* user details page */
+.user {
+  display: inline-block;
+  text-align: center;
+  margin: 8px;
+}
+
+@media all and (max-width: 379px) {
+  .user {
+    width: calc(50% - 16px);
+  }
+}
+
+@media all and (min-width: 380px) {
+  .user {
+    width: calc(33.3333% - 16px);
+  }
+}
+
+@media all and (min-width: 600px) {
+  .user {
+    width: calc(25% - 16px);
+  }
+}
+
+@media all and (min-width: 960px) {
+  .user {
+    width: calc(20% - 16px);
+  }
+}
+
+.profile {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.unfollow-btn:hover {
+  background-color: #f44336 !important;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 /* react-calendar */
