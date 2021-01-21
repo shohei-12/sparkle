@@ -14,47 +14,9 @@ import {
   follow,
   unfollow,
 } from "../../re-ducks/relationships/operations";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import NoProfile from "../../assets/img/no-profile.png";
 import { baseURL } from "../../config";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    user: {
-      display: "inline-block",
-      textAlign: "center",
-      margin: 8,
-      [theme.breakpoints.up("xs")]: {
-        width: "calc(50% - 16px)",
-      },
-      [theme.breakpoints.up("sm")]: {
-        width: "calc(33.3333% - 16px)",
-      },
-      [theme.breakpoints.up("md")]: {
-        width: "calc(20% - 16px)",
-      },
-    },
-    profile: {
-      width: 100,
-      height: 100,
-      objectFit: "cover",
-      borderRadius: "50%",
-    },
-    unfollowBtn: {
-      "&:hover": {
-        backgroundColor: "#f44336",
-      },
-    },
-    hidden: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        visibility: "hidden",
-        display: "inline-block",
-      },
-    },
-  })
-);
 
 type Props = {
   uid: number;
@@ -63,7 +25,6 @@ type Props = {
 };
 
 const FollowerList: React.FC<Props> = (props) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const uid = props.uid;
   const selector = useSelector((state: Store) => state);
@@ -108,9 +69,9 @@ const FollowerList: React.FC<Props> = (props) => {
     >
       {followers &&
         followers.map((ele, i) => (
-          <div key={i} className={classes.user}>
+          <div key={i} className="user">
             <img
-              className={`${classes.profile} pointer-h`}
+              className="profile pointer-h"
               src={ele.profile.url ? baseURL + ele.profile.url : NoProfile}
               alt="プロフィール画像"
               onClick={() => {
@@ -124,7 +85,7 @@ const FollowerList: React.FC<Props> = (props) => {
                 {ele.following ? (
                   <Button
                     id={`unfollow-btn${i}`}
-                    className={classes.unfollowBtn}
+                    className="unfollow-btn"
                     variant="contained"
                     color="primary"
                     onClick={() => {
@@ -149,7 +110,7 @@ const FollowerList: React.FC<Props> = (props) => {
                 )}
               </>
             ) : (
-              <Button className={classes.hidden}>Hidden</Button>
+              <Button className="hidden">Hidden</Button>
             )}
           </div>
         ))}

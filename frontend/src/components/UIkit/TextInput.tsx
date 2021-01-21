@@ -17,7 +17,8 @@ type Props = {
   InputLabelProps?: object;
   value?: string;
   rowsMax?: number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  variant?: "filled" | "outlined" | "standard";
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const TextInput: React.FC<Props> = React.memo((props) => {
@@ -39,6 +40,7 @@ const TextInput: React.FC<Props> = React.memo((props) => {
       InputLabelProps={props.InputLabelProps}
       value={props.value}
       rowsMax={props.rowsMax}
+      variant={props.variant}
       onChange={props.onChange}
     />
   );
