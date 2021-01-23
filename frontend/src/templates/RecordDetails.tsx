@@ -227,17 +227,17 @@ const RecordDetails: React.FC<Props> = (props) => {
       .get(`${baseURL}/api/v1/meals/${recordId}`)
       .then((res) => {
         for (const ele of res.data) {
-          switch (ele.eating_time_id) {
-            case 1:
+          switch (ele.meal_type) {
+            case "breakfast":
               breakfastsContainer.push(ele.image.url);
               break;
-            case 2:
+            case "lunch":
               lunchsContainer.push(ele.image.url);
               break;
-            case 3:
+            case "dinner":
               dinnersContainer.push(ele.image.url);
               break;
-            case 4:
+            case "snack":
               snacksContainer.push(ele.image.url);
           }
         }

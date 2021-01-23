@@ -1,11 +1,3 @@
-# eating_times
-EatingTime.create!([
-                     { name: 'breakfast' },
-                     { name: 'lunch' },
-                     { name: 'dinner' },
-                     { name: 'snack' }
-                   ])
-
 # guest user
 User.create!(
   profile: open("#{Rails.root}/db/fixtures/guest-profile.jpg"),
@@ -88,32 +80,32 @@ end
   rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/breakfasts/meal#{n + 1}.jpg"),
-      record_id: i + 1,
-      eating_time_id: 1
+      meal_type: 'breakfast',
+      record_id: i + 1
     )
   end
 
   rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/lunchs/meal#{n + 1}.jpg"),
-      record_id: i + 1,
-      eating_time_id: 2
+      meal_type: 'lunch',
+      record_id: i + 1
     )
   end
 
   rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/dinners/meal#{n + 1}.jpg"),
-      record_id: i + 1,
-      eating_time_id: 3
+      meal_type: 'dinner',
+      record_id: i + 1
     )
   end
 
   rand(0..3).times do |n|
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/snacks/meal#{n + 1}.jpg"),
-      record_id: i + 1,
-      eating_time_id: 4
+      meal_type: 'snack',
+      record_id: i + 1
     )
   end
 end

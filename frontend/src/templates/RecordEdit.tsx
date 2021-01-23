@@ -107,13 +107,13 @@ const RecordEdit: React.FC = () => {
         });
     }
     const meals = [
-      { eating_time_id: "1", meal: breakfasts },
-      { eating_time_id: "2", meal: lunchs },
-      { eating_time_id: "3", meal: dinners },
-      { eating_time_id: "4", meal: snacks },
+      { meal_type: "breakfast", meal: breakfasts },
+      { meal_type: "lunch", meal: lunchs },
+      { meal_type: "dinner", meal: dinners },
+      { meal_type: "snack", meal: snacks },
     ];
     for (const ele of meals) {
-      data.append("eating_time_id", ele.eating_time_id);
+      data.append("meal_type", ele.meal_type);
       for (const meal of ele.meal) {
         data.append("image", meal);
         await axios
@@ -129,7 +129,7 @@ const RecordEdit: React.FC = () => {
             throw new Error(error);
           });
       }
-      data.delete("eating_time_id");
+      data.delete("meal_type");
     }
     dispatch(flashAction({ type: "success", msg: "更新しました！" }));
     dispatch(push(`/record/${currentUserId}/${year}/${month}/${day}`));
