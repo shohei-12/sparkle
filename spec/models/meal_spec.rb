@@ -24,22 +24,4 @@ RSpec.describe Meal, type: :model do
       end
     end
   end
-
-  describe 'eating_time_id' do
-    context 'when empty' do
-      before { meal.eating_time_id = '' }
-
-      it 'return false' do
-        expect(meal.valid?).to eq false
-      end
-    end
-
-    context 'when eating_time does not exist' do
-      before { meal.eating_time_id += 1 }
-
-      it 'return false' do
-        expect(meal.valid?).to eq false
-      end
-    end
-  end
 end

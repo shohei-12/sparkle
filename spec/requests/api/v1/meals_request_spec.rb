@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Meals', type: :request do
   let(:record) { create(:record) }
-  let(:eating_time) { create(:eating_time) }
   let(:meal) { create(:meal) }
   let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
 
@@ -11,9 +10,8 @@ RSpec.describe 'Api::V1::Meals', type: :request do
       let(:valid_data) do
         {
           image: image,
-          time: '2020-11-22 15:18:23',
-          record_id: record.id,
-          eating_time_id: eating_time.id
+          meal_type: 'breakfast',
+          record_id: record.id
         }
       end
 
@@ -27,9 +25,8 @@ RSpec.describe 'Api::V1::Meals', type: :request do
       let(:invalid_data) do
         {
           image: image,
-          time: '2020-11-22 15:18:23',
-          record_id: record.id += 1,
-          eating_time_id: eating_time.id
+          meal_type: 'breakfast',
+          record_id: record.id += 1
         }
       end
 

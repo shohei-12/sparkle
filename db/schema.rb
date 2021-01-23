@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_131514) do
 
   create_table "meals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "image"
-    t.string "type", null: false
+    t.string "meal_type", null: false
     t.bigint "record_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
