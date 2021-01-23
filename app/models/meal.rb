@@ -3,5 +3,6 @@ class Meal < ApplicationRecord
 
   belongs_to :record
 
+  validates :meal_type, presence: true, inclusion: { in: %w[breakfast lunch dinner snack] }
   validates :record, presence: true
 end
