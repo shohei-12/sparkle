@@ -18,10 +18,7 @@ Metrics/BlockLength:
     - "spec/**/*"
 
 Metrics/AbcSize:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
+  Max: 25
 
 Rails:
   Enabled: true

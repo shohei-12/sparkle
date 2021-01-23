@@ -26,14 +26,18 @@ class Api::V1::RecordsController < ApplicationController
 
   def related
     record = current_api_v1_user.records.find_by(date: params[:date])
-    appearances = record.appearances
-    breakfasts = record.meals.where(eating_time_id: 1)
-    lunchs = record.meals.where(eating_time_id: 2)
-    dinners = record.meals.where(eating_time_id: 3)
-    snacks = record.meals.where(eating_time_id: 4)
-    memo = record.memo
-    record_related = Record.get_record_related(appearances, breakfasts, lunchs, dinners, snacks, memo)
-    render json: { record_related: record_related, record_id: record.id }
+    appearances = Record.slice_images(record.appearances)
+    breakfasts = Record.slice_images(record.meals.where(eating_time_id: 1))
+    lunchs = Record.slice_images(record.meals.where(eating_time_id: 2))
+    dinners = Record.slice_images(record.meals.where(eating_time_id: 3))
+    snacks = Record.slice_images(record.meals.where(eating_time_id: 4))
+    memo = record.memo.slice('appearance', 'breakfast', 'lunch', 'dinner', 'snack')
+    render json: { record_related: { appearances: appearances,
+                                     breakfasts: breakfasts,
+                                     lunchs: lunchs,
+                                     dinners: dinners,
+                                     snacks: snacks,
+                                     memo: memo }, record_id: record.id }
   end
 
   def delete_images
