@@ -2,13 +2,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
-      get '/users/:id', to: 'users#show'
       put '/toggle-theme', to: 'users#toggle_theme'
       get '/users/:id/followings', to: 'users#twenty_followings'
       get '/users/:id/followers', to: 'users#twenty_followers'
-      post '/records', to: 'records#create'
       get '/record', to: 'records#show'
-      get '/records', to: 'records#index'
+      get '/records/related', to: 'records#related'
+      delete '/records/images/delete', to: 'records#delete_images'
       get '/users/:id/like-records', to: 'records#twenty_like_records'
       put '/memos/:id/appearance', to: 'memos#update_appearance'
       put '/memos/:id/breakfast', to: 'memos#update_breakfast'
@@ -18,6 +17,8 @@ Rails.application.routes.draw do
       get '/relationships/following/:id', to: 'relationships#following?'
       get '/comments/:record_id/:target', to: 'comments#twenty_comments'
       get '/comments/:id/reply/list', to: 'comments#ten_reply_comments'
+      resources :users, only: %i[show]
+      resources :records, only: %i[index create]
       resources :appearances
       resources :meals
       resources :memos

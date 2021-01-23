@@ -1,4 +1,5 @@
 export { default as RecordDetails } from "./RecordDetails";
+export { default as RecordEdit } from "./RecordEdit";
 export { default as RecordList } from "./RecordList";
 export { default as RecordRegistration } from "./RecordRegistration";
 export { default as SignIn } from "./SignIn";
