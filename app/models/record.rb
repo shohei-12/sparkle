@@ -30,4 +30,46 @@ class Record < ApplicationRecord
     end
     record_infos
   end
+
+  def self.get_record_related(appearances, breakfasts, lunchs, dinners, snacks, memo)
+    appearances_container = []
+    breakfasts_container = []
+    lunchs_container = []
+    dinners_container = []
+    snacks_container = []
+    appearances.each do |i|
+      appearances_container.push([i.id, i.image.url])
+    end
+    breakfasts.each do |i|
+      breakfasts_container.push([i.id, i.image.url])
+    end
+    lunchs.each do |i|
+      lunchs_container.push([i.id, i.image.url])
+    end
+    dinners.each do |i|
+      dinners_container.push([i.id, i.image.url])
+    end
+    snacks.each do |i|
+      snacks_container.push([i.id, i.image.url])
+    end
+    { appearances: appearances_container,
+      breakfasts: breakfasts_container,
+      lunchs: lunchs_container,
+      dinners: dinners_container,
+      snacks: snacks_container,
+      memo: memo.slice('appearance', 'breakfast', 'lunch', 'dinner', 'snack') }
+  end
+
+  def self.delete_images(appearances, meals, current_user_id)
+    appearances.each do |i|
+      appearance = Appearance.find(i)
+      user_id = appearance.record.user_id
+      appearance.destroy if user_id == current_user_id
+    end
+    meals.each do |i|
+      meal = Meal.find(i)
+      user_id = meal.record.user_id
+      meal.destroy if user_id == current_user_id
+    end
+  end
 end

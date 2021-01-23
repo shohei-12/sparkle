@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
@@ -8,7 +8,7 @@ import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { baseURL } from "../config";
 
-const RecordRegistration: React.FC = () => {
+const RecordEdit: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = getUserId(selector);
@@ -17,11 +17,22 @@ const RecordRegistration: React.FC = () => {
   const month = Number(window.location.pathname.split("/")[4]);
   const day = Number(window.location.pathname.split("/")[5]);
 
+  const [recordId, setRecordId] = useState("");
+
+  const [appearancesId, setAppearancesId] = useState<number[]>([]);
+  const [mealsId, setMealsId] = useState<number[]>([]);
+
   const [appearances, setAppearances] = useState<File[]>([]);
   const [breakfasts, setBreakfasts] = useState<File[]>([]);
   const [lunchs, setLunchs] = useState<File[]>([]);
   const [dinners, setDinners] = useState<File[]>([]);
   const [snacks, setSnacks] = useState<File[]>([]);
+
+  const [appearancePath, setAppearancePath] = useState<[number, string][]>([]);
+  const [breakfastPath, setBreakfastPath] = useState<[number, string][]>([]);
+  const [lunchPath, setLunchPath] = useState<[number, string][]>([]);
+  const [dinnerPath, setDinnerPath] = useState<[number, string][]>([]);
+  const [snackPath, setSnackPath] = useState<[number, string][]>([]);
 
   const [appearanceMemo, setAppearanceMemo] = useState("");
   const [breakfastMemo, setBreakfastMemo] = useState("");
@@ -64,98 +75,109 @@ const RecordRegistration: React.FC = () => {
     []
   );
 
-  const createRecord = useCallback(() => {
-    axios({
-      method: "POST",
-      url: `${baseURL}/api/v1/records`,
-      data: {
-        date: new Date(year, month - 1, day + 1),
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
-      .then(async (res) => {
-        const recordId = String(res.data.id);
-        axios({
-          method: "POST",
-          url: `${baseURL}/api/v1/memos`,
-          data: {
-            appearance: appearanceMemo,
-            breakfast: breakfastMemo,
-            lunch: lunchMemo,
-            dinner: dinnerMemo,
-            snack: snackMemo,
-            record_id: recordId,
-          },
-        }).catch((error) => {
-          throw new Error(error);
-        });
-        const data = new FormData();
-        data.append("record_id", recordId);
-        for (const ele of appearances) {
-          data.append("image", ele);
-          await axios
-            .post(`${baseURL}/api/v1/appearances`, data, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(() => {
-              data.delete("image");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        }
-        const meals = [
-          { eating_time_id: "1", meal: breakfasts },
-          { eating_time_id: "2", meal: lunchs },
-          { eating_time_id: "3", meal: dinners },
-          { eating_time_id: "4", meal: snacks },
-        ];
-        for (const ele of meals) {
-          data.append("eating_time_id", ele.eating_time_id);
-          for (const meal of ele.meal) {
-            data.append("image", meal);
-            await axios
-              .post(`${baseURL}/api/v1/meals`, data, {
-                headers: {
-                  "content-type": "multipart/form-data",
-                },
-              })
-              .then(() => {
-                data.delete("image");
-              })
-              .catch((error) => {
-                throw new Error(error);
-              });
-          }
-          data.delete("eating_time_id");
-        }
-        dispatch(flashAction({ type: "success", msg: "記録しました！" }));
-        dispatch(push(`/users/${currentUserId}`));
+  const updateRecord = useCallback(async () => {
+    await axios
+      .delete(`${baseURL}/api/v1/records/images/delete`, {
+        data: {
+          appearances: appearancesId,
+          meals: mealsId,
+          uid: localStorage.getItem("uid"),
+          client: localStorage.getItem("client"),
+          access_token: localStorage.getItem("access_token"),
+        },
       })
       .catch((error) => {
         throw new Error(error);
       });
+    const data = new FormData();
+    data.append("record_id", recordId);
+    for (const ele of appearances) {
+      data.append("image", ele);
+      await axios
+        .post(`${baseURL}/api/v1/appearances`, data, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          data.delete("image");
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+    const meals = [
+      { eating_time_id: "1", meal: breakfasts },
+      { eating_time_id: "2", meal: lunchs },
+      { eating_time_id: "3", meal: dinners },
+      { eating_time_id: "4", meal: snacks },
+    ];
+    for (const ele of meals) {
+      data.append("eating_time_id", ele.eating_time_id);
+      for (const meal of ele.meal) {
+        data.append("image", meal);
+        await axios
+          .post(`${baseURL}/api/v1/meals`, data, {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            data.delete("image");
+          })
+          .catch((error) => {
+            throw new Error(error);
+          });
+      }
+      data.delete("eating_time_id");
+    }
+    dispatch(flashAction({ type: "success", msg: "更新しました！" }));
+    dispatch(push(`/record/${currentUserId}/${year}/${month}/${day}`));
   }, [
-    currentUserId,
-    year,
-    month,
-    day,
+    recordId,
     appearances,
     breakfasts,
     lunchs,
     dinners,
     snacks,
-    appearanceMemo,
-    breakfastMemo,
-    lunchMemo,
-    dinnerMemo,
-    snackMemo,
     dispatch,
+    appearancesId,
+    mealsId,
+    currentUserId,
+    year,
+    month,
+    day,
   ]);
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/api/v1/records/related`, {
+        params: {
+          date: new Date(year, month - 1, day + 1),
+          uid: localStorage.getItem("uid"),
+          client: localStorage.getItem("client"),
+          access_token: localStorage.getItem("access_token"),
+        },
+      })
+      .then((res) => {
+        const recordRelated = res.data.record_related;
+        const memo = recordRelated.memo;
+        setAppearanceMemo(memo.appearance);
+        setBreakfastMemo(memo.breakfast);
+        setLunchMemo(memo.lunch);
+        setDinnerMemo(memo.dinner);
+        setSnackMemo(memo.snack);
+        setAppearancePath(recordRelated.appearances);
+        setBreakfastPath(recordRelated.breakfasts);
+        setLunchPath(recordRelated.lunchs);
+        setDinnerPath(recordRelated.dinners);
+        setSnackPath(recordRelated.snacks);
+        setRecordId(String(res.data.record_id));
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [year, month, day]);
 
   return (
     <div className="wrap">
@@ -165,7 +187,9 @@ const RecordRegistration: React.FC = () => {
             text="見た目を記録する（最大5枚）"
             sheets={4}
             profile={false}
+            imagePath={appearancePath}
             setAppearances={setAppearances}
+            setAppearancesId={setAppearancesId}
           />
           <TextInput
             fullWidth={true}
@@ -175,13 +199,16 @@ const RecordRegistration: React.FC = () => {
             rows="5"
             type="text"
             name="appearance"
+            value={appearanceMemo}
             onChange={inputAppearance}
           />
           <ImageField
             text="朝食を記録する（最大3枚）"
             sheets={2}
             profile={false}
+            imagePath={breakfastPath}
             setBreakfasts={setBreakfasts}
+            setMealsId={setMealsId}
           />
           <TextInput
             fullWidth={true}
@@ -191,13 +218,16 @@ const RecordRegistration: React.FC = () => {
             rows="5"
             type="text"
             name="breakfast"
+            value={breakfastMemo}
             onChange={inputBreakfast}
           />
           <ImageField
             text="昼食を記録する（最大3枚）"
             sheets={2}
             profile={false}
+            imagePath={lunchPath}
             setLunchs={setLunchs}
+            setMealsId={setMealsId}
           />
           <TextInput
             fullWidth={true}
@@ -207,13 +237,16 @@ const RecordRegistration: React.FC = () => {
             rows="5"
             type="text"
             name="lunch"
+            value={lunchMemo}
             onChange={inputLunch}
           />
           <ImageField
             text="夕食を記録する（最大3枚）"
             sheets={2}
             profile={false}
+            imagePath={dinnerPath}
             setDinners={setDinners}
+            setMealsId={setMealsId}
           />
           <TextInput
             fullWidth={true}
@@ -223,13 +256,16 @@ const RecordRegistration: React.FC = () => {
             rows="5"
             type="text"
             name="dinner"
+            value={dinnerMemo}
             onChange={inputDinner}
           />
           <ImageField
             text="間食を記録する（最大3枚）"
             sheets={2}
             profile={false}
+            imagePath={snackPath}
             setSnacks={setSnacks}
+            setMealsId={setMealsId}
           />
           <TextInput
             fullWidth={true}
@@ -239,9 +275,10 @@ const RecordRegistration: React.FC = () => {
             rows="5"
             type="text"
             name="snack"
+            value={snackMemo}
             onChange={inputSnack}
           />
-          <SecondaryButton text="記録する" onClick={createRecord} />
+          <SecondaryButton text="記録する" onClick={updateRecord} />
         </>
       ) : (
         <p>記録がありません</p>
@@ -250,4 +287,4 @@ const RecordRegistration: React.FC = () => {
   );
 };
 
-export default RecordRegistration;
+export default RecordEdit;
