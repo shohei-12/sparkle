@@ -27,10 +27,10 @@ class Api::V1::RecordsController < ApplicationController
   def related
     record = current_api_v1_user.records.find_by(date: params[:date])
     render json: { record_related: { appearances: Record.slice_images(record.appearances),
-                                     breakfasts: Record.slice_images(record.meals.where(eating_time_id: 1)),
-                                     lunchs: Record.slice_images(record.meals.where(eating_time_id: 2)),
-                                     dinners: Record.slice_images(record.meals.where(eating_time_id: 3)),
-                                     snacks: Record.slice_images(record.meals.where(eating_time_id: 4)),
+                                     breakfasts: Record.slice_images(record.meals.where(meal_type: 'breakfast')),
+                                     lunchs: Record.slice_images(record.meals.where(meal_type: 'lunch')),
+                                     dinners: Record.slice_images(record.meals.where(meal_type: 'dinner')),
+                                     snacks: Record.slice_images(record.meals.where(meal_type: 'snack')),
                                      memo: record.memo.slice('appearance', 'breakfast', 'lunch', 'dinner', 'snack') },
                    record_id: record.id }
   end
