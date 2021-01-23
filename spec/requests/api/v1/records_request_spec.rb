@@ -187,4 +187,38 @@ RSpec.describe 'Api::V1::Records', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/records/related' do
+    context 'when token is valid' do
+      context 'when record exists' do
+        it 'get record related' do
+        end
+      end
+
+      context 'when record does not exist' do
+        it 'raise NoMethodError' do
+          expect { get_record_related(date, token) }.to raise_error(NoMethodError)
+        end
+      end
+    end
+
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { get_record_related(date, nil) }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/records/images/delete' do
+    context 'when token is valid' do
+      it 'delete images' do
+      end
+    end
+
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { delete_images({}, nil) }.to raise_error(NoMethodError)
+      end
+    end
+  end
 end
