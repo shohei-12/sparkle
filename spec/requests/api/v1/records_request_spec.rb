@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Records', type: :request do
   let(:user) { create(:user) }
   let(:record) { create(:record) }
-  let(:date) do
+  let(:valid_data) do
     { date: '2020-11-22' }
   end
   let(:invalid_data) do
@@ -21,7 +21,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
     context 'when token is valid' do
       context 'when data is valid' do
         it 'save record' do
-          expect { save_record(date, token) }.to change(Record, :count).by(1)
+          expect { save_record(valid_data, token) }.to change(Record, :count).by(1)
           expect(response.status).to eq 200
         end
       end
@@ -36,7 +36,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
     context 'when token is invalid' do
       context 'when data is valid' do
         it 'raise NoMethodError' do
-          expect { save_record(date, nil) }.to raise_error(NoMethodError)
+          expect { save_record(valid_data, nil) }.to raise_error(NoMethodError)
         end
       end
 
@@ -191,33 +191,114 @@ RSpec.describe 'Api::V1::Records', type: :request do
   describe 'GET /api/v1/records/related' do
     context 'when token is valid' do
       context 'when record exists' do
+        before do
+          @record = create(:record, user_id: user.id)
+          @memo = create(:memo, record_id: @record.id)
+          @appearances = create_list(:appearance, 2, record_id: @record.id)
+          @breakfasts = create_list(:meal, 2, record_id: @record.id)
+          @lunchs = create_list(:meal, 2, meal_type: 'lunch', record_id: @record.id)
+          @dinners = create_list(:meal, 2, meal_type: 'dinner', record_id: @record.id)
+          @snacks = create_list(:meal, 2, meal_type: 'snack', record_id: @record.id)
+        end
+
         it 'get record related' do
+          get_record_related(valid_data, token)
+          expect(response.status).to eq 200
+          record_related = JSON.parse(response.body)['record_related']
+          expect(record_related['appearances']).to eq [
+            [@appearances[0].id, @appearances[0].image.url],
+            [@appearances[1].id, @appearances[1].image.url]
+          ]
+          expect(record_related['breakfasts']).to eq [
+            [@breakfasts[0].id, @breakfasts[0].image.url],
+            [@breakfasts[1].id, @breakfasts[1].image.url]
+          ]
+          expect(record_related['lunchs']).to eq [
+            [@lunchs[0].id, @lunchs[0].image.url],
+            [@lunchs[1].id, @lunchs[1].image.url]
+          ]
+          expect(record_related['dinners']).to eq [
+            [@dinners[0].id, @dinners[0].image.url],
+            [@dinners[1].id, @dinners[1].image.url]
+          ]
+          expect(record_related['snacks']).to eq [
+            [@snacks[0].id, @snacks[0].image.url],
+            [@snacks[1].id, @snacks[1].image.url]
+          ]
+          expect(record_related['memo']).to eq({
+                                                 'appearance' => @memo.appearance,
+                                                 'breakfast' => @memo.breakfast,
+                                                 'lunch' => @memo.lunch,
+                                                 'dinner' => @memo.dinner,
+                                                 'snack' => @memo.snack
+                                               })
+          expect(JSON.parse(response.body)['record_id']).to eq @record.id
         end
       end
 
       context 'when record does not exist' do
         it 'raise NoMethodError' do
-          expect { get_record_related(date, token) }.to raise_error(NoMethodError)
+          expect { get_record_related(valid_data, token) }.to raise_error(NoMethodError)
         end
       end
     end
 
     context 'when token is invalid' do
       it 'raise NoMethodError' do
-        expect { get_record_related(date, nil) }.to raise_error(NoMethodError)
+        expect { get_record_related(valid_data, nil) }.to raise_error(NoMethodError)
       end
     end
   end
 
   describe 'DELETE /api/v1/records/images/delete' do
     context 'when token is valid' do
-      it 'delete images' do
+      context 'when images belongs to me' do
+        before do
+          record = create(:record, user_id: user.id)
+          @appearance1 = create(:appearance, record_id: record.id)
+          @appearance2 = create(:appearance, record_id: record.id)
+          @meal1 = create(:meal, record_id: record.id)
+          @meal2 = create(:meal, record_id: record.id)
+        end
+
+        it 'delete images' do
+          expect(Appearance.count).to eq 2
+          expect(Meal.count).to eq 2
+          delete_images({
+                          appearances: [@appearance1.id, @appearance2.id],
+                          meals: [@meal1.id, @meal2.id]
+                        }, token)
+          expect(response.status).to eq 204
+          expect(Appearance.count).to eq 0
+          expect(Meal.count).to eq 0
+        end
+      end
+
+      context 'when images belongs to someone else' do
+        before do
+          @appearance1 = create(:appearance, record_id: record.id)
+          @appearance2 = create(:appearance, record_id: record.id)
+          @meal1 = create(:meal, record_id: record.id)
+          @meal2 = create(:meal, record_id: record.id)
+        end
+
+        it 'not delete images' do
+          expect(Appearance.count).to eq 2
+          expect(Meal.count).to eq 2
+          delete_images({
+                          appearances: [@appearance1.id, @appearance2.id],
+                          meals: [@meal1.id, @meal2.id]
+                        }, token)
+          expect(response.status).to eq 204
+          expect(Appearance.count).to eq 2
+          expect(Meal.count).to eq 2
+        end
       end
     end
 
     context 'when token is invalid' do
       it 'raise NoMethodError' do
-        expect { delete_images({}, nil) }.to raise_error(NoMethodError)
+        expect { delete_images({ appearances: [], meals: [] }, nil) }.to raise_error(NoMethodError)
       end
     end
   end
