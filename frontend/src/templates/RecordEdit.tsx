@@ -131,6 +131,20 @@ const RecordEdit: React.FC = () => {
       }
       data.delete("meal_type");
     }
+    axios
+      .put(`${baseURL}/api/v1/memos/${recordId}`, {
+        appearance: appearanceMemo,
+        breakfast: breakfastMemo,
+        lunch: lunchMemo,
+        dinner: dinnerMemo,
+        snack: snackMemo,
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
     dispatch(flashAction({ type: "success", msg: "更新しました！" }));
     dispatch(push(`/record/${currentUserId}/${year}/${month}/${day}`));
   }, [
@@ -147,6 +161,11 @@ const RecordEdit: React.FC = () => {
     year,
     month,
     day,
+    appearanceMemo,
+    breakfastMemo,
+    lunchMemo,
+    dinnerMemo,
+    snackMemo,
   ]);
 
   useEffect(() => {
@@ -278,7 +297,7 @@ const RecordEdit: React.FC = () => {
             value={snackMemo}
             onChange={inputSnack}
           />
-          <SecondaryButton text="記録する" onClick={updateRecord} />
+          <SecondaryButton text="更新する" onClick={updateRecord} />
         </>
       ) : (
         <p>記録がありません</p>

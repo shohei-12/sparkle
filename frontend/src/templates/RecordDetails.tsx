@@ -11,7 +11,7 @@ import {
   CommentForm,
   CommentList,
 } from "../components/Record";
-import { SecondaryButton, TextInput } from "../components/UIkit";
+import { TextInput } from "../components/UIkit";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import NoImage from "../assets/img/no-image.png";
@@ -70,7 +70,6 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [dinners, setDinners] = useState<string[]>([]);
   const [snacks, setSnacks] = useState<string[]>([]);
 
-  const [memoId, setMemoId] = useState(0);
   const [appearanceMemo, setAppearanceMemo] = useState("");
   const [breakfastMemo, setBreakfastMemo] = useState("");
   const [lunchMemo, setLunchMemo] = useState("");
@@ -127,56 +126,6 @@ const RecordDetails: React.FC<Props> = (props) => {
     },
     [setSnackMemo]
   );
-
-  const updateAppearanceMemo = useCallback(() => {
-    axios
-      .put(`${baseURL}/api/v1/memos/${memoId}/appearance`, {
-        appearance: appearanceMemo,
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [memoId, appearanceMemo]);
-
-  const updateBreakfastMemo = useCallback(() => {
-    axios
-      .put(`${baseURL}/api/v1/memos/${memoId}/breakfast`, {
-        breakfast: breakfastMemo,
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [memoId, breakfastMemo]);
-
-  const updateLunchMemo = useCallback(() => {
-    axios
-      .put(`${baseURL}/api/v1/memos/${memoId}/lunch`, {
-        lunch: lunchMemo,
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [memoId, lunchMemo]);
-
-  const updateDinnerMemo = useCallback(() => {
-    axios
-      .put(`${baseURL}/api/v1/memos/${memoId}/dinner`, {
-        dinner: dinnerMemo,
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [memoId, dinnerMemo]);
-
-  const updateSnackMemo = useCallback(() => {
-    axios
-      .put(`${baseURL}/api/v1/memos/${memoId}/snack`, {
-        snack: snackMemo,
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [memoId, snackMemo]);
 
   const openAndCloseCommentArea = useCallback(
     (target: Target) => {
@@ -253,7 +202,6 @@ const RecordDetails: React.FC<Props> = (props) => {
       .get(`${baseURL}/api/v1/memos/${recordId}`)
       .then((res) => {
         if (res.data) {
-          setMemoId(res.data.id);
           setAppearanceMemo(res.data.appearance);
           setBreakfastMemo(res.data.breakfast);
           setLunchMemo(res.data.lunch);
@@ -278,24 +226,17 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.recordRight}>
           {uid === props.urlUid ? (
-            <>
-              <TextInput
-                fullWidth={true}
-                label="メモ"
-                multiline={true}
-                required={false}
-                rows="5"
-                type="text"
-                name="appearance"
-                value={appearanceMemo}
-                onChange={inputAppearance}
-              />
-              <div className="space-m" />
-              <SecondaryButton
-                text="メモを更新する"
-                onClick={updateAppearanceMemo}
-              />
-            </>
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="appearance"
+              value={appearanceMemo}
+              onChange={inputAppearance}
+            />
           ) : (
             <TextInput
               fullWidth={true}
@@ -358,24 +299,17 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.recordRight}>
           {uid === props.urlUid ? (
-            <>
-              <TextInput
-                fullWidth={true}
-                label="メモ"
-                multiline={true}
-                required={false}
-                rows="5"
-                type="text"
-                name="breakfast"
-                value={breakfastMemo}
-                onChange={inputBreakfast}
-              />
-              <div className="space-m" />
-              <SecondaryButton
-                text="メモを更新する"
-                onClick={updateBreakfastMemo}
-              />
-            </>
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="breakfast"
+              value={breakfastMemo}
+              onChange={inputBreakfast}
+            />
           ) : (
             <TextInput
               fullWidth={true}
@@ -438,24 +372,17 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.recordRight}>
           {uid === props.urlUid ? (
-            <>
-              <TextInput
-                fullWidth={true}
-                label="メモ"
-                multiline={true}
-                required={false}
-                rows="5"
-                type="text"
-                name="lunch"
-                value={lunchMemo}
-                onChange={inputLunch}
-              />
-              <div className="space-m" />
-              <SecondaryButton
-                text="メモを更新する"
-                onClick={updateLunchMemo}
-              />
-            </>
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="lunch"
+              value={lunchMemo}
+              onChange={inputLunch}
+            />
           ) : (
             <TextInput
               fullWidth={true}
@@ -518,24 +445,17 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.recordRight}>
           {uid === props.urlUid ? (
-            <>
-              <TextInput
-                fullWidth={true}
-                label="メモ"
-                multiline={true}
-                required={false}
-                rows="5"
-                type="text"
-                name="dinner"
-                value={dinnerMemo}
-                onChange={inputDinner}
-              />
-              <div className="space-m" />
-              <SecondaryButton
-                text="メモを更新する"
-                onClick={updateDinnerMemo}
-              />
-            </>
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="dinner"
+              value={dinnerMemo}
+              onChange={inputDinner}
+            />
           ) : (
             <TextInput
               fullWidth={true}
@@ -598,24 +518,17 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.recordRight}>
           {uid === props.urlUid ? (
-            <>
-              <TextInput
-                fullWidth={true}
-                label="メモ"
-                multiline={true}
-                required={false}
-                rows="5"
-                type="text"
-                name="snack"
-                value={snackMemo}
-                onChange={inputSnack}
-              />
-              <div className="space-m" />
-              <SecondaryButton
-                text="メモを更新する"
-                onClick={updateSnackMemo}
-              />
-            </>
+            <TextInput
+              fullWidth={true}
+              label="メモ"
+              multiline={true}
+              required={false}
+              rows="5"
+              type="text"
+              name="snack"
+              value={snackMemo}
+              onChange={inputSnack}
+            />
           ) : (
             <TextInput
               fullWidth={true}
