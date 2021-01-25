@@ -17,13 +17,13 @@ class Api::V1::MemosController < ApplicationController
   end
 
   def update
-    if @record.user_id == current_api_v1_user.id
-      @record.memo.update(appearance: params[:appearance],
-                          breakfast: params[:breakfast],
-                          lunch: params[:lunch],
-                          dinner: params[:dinner],
-                          snack: params[:snack])
-    end
+    return unless @record.user_id == current_api_v1_user.id
+
+    @record.memo.update(appearance: params[:appearance],
+                        breakfast: params[:breakfast],
+                        lunch: params[:lunch],
+                        dinner: params[:dinner],
+                        snack: params[:snack])
   end
 
   private
