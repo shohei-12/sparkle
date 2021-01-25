@@ -3,20 +3,41 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Memos', type: :request do
   let(:record) { create(:record) }
   let(:memo) { create(:memo) }
+  let(:user) { create(:user) }
+  let(:token1) { sign_in({ email: record.user.email, password: 'password' }) }
+  let(:token2) { sign_in({ email: user.email, password: 'password' }) }
+  let(:valid_data) do
+    {
+      appearance: 'memo',
+      breakfast: 'memo',
+      lunch: 'memo',
+      dinner: 'memo',
+      snack: 'memo',
+      record_id: record.id
+    }
+  end
+  let(:invalid_data) do
+    {
+      appearance: 'memo',
+      breakfast: 'memo',
+      lunch: 'memo',
+      dinner: 'memo',
+      snack: 'memo',
+      record_id: record.id + 1
+    }
+  end
+  let(:update) do
+    {
+      appearance: 'memo update',
+      breakfast: 'memo update',
+      lunch: 'memo update',
+      dinner: 'memo update',
+      snack: 'memo update'
+    }
+  end
 
   describe 'POST /api/v1/memos' do
     context 'when data is valid' do
-      let(:valid_data) do
-        {
-          appearance: 'memo',
-          breakfast: 'memo',
-          lunch: 'memo',
-          dinner: 'memo',
-          snack: 'memo',
-          record_id: record.id
-        }
-      end
-
       it 'save memo' do
         expect { save_memo(valid_data) }.to change(Memo, :count).by(1)
         expect(response.status).to eq 204
@@ -24,17 +45,6 @@ RSpec.describe 'Api::V1::Memos', type: :request do
     end
 
     context 'when data is invalid' do
-      let(:invalid_data) do
-        {
-          appearance: 'memo',
-          breakfast: 'memo',
-          lunch: 'memo',
-          dinner: 'memo',
-          snack: 'memo',
-          record_id: record.id + 1
-        }
-      end
-
       it 'not save memo' do
         expect { save_memo(invalid_data) }.to change(Memo, :count).by(0)
         expect(response.status).to eq 204
@@ -64,6 +74,44 @@ RSpec.describe 'Api::V1::Memos', type: :request do
     context 'when record does not exist' do
       it 'raise ActiveRecord::RecordNotFound' do
         expect { get_memo(record.id + 1) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe 'PUT /api/v1/memos/:id' do
+    context 'when token is valid' do
+      context 'when record creator matchs current user' do
+        it 'update memo' do
+          save_memo(valid_data)
+          update_memo(record.id, update, token1)
+          expect(response.status).to eq 204
+          memo = Memo.first
+          expect(memo.appearance).to eq update[:appearance]
+          expect(memo.breakfast).to eq update[:breakfast]
+          expect(memo.lunch).to eq update[:lunch]
+          expect(memo.dinner).to eq update[:dinner]
+          expect(memo.snack).to eq update[:snack]
+        end
+      end
+
+      context 'when record creator does not match current user' do
+        it 'not update memo' do
+          save_memo(valid_data)
+          update_memo(record.id, update, token2)
+          expect(response.status).to eq 204
+          memo = Memo.first
+          expect(memo.appearance).to eq valid_data[:appearance]
+          expect(memo.breakfast).to eq valid_data[:breakfast]
+          expect(memo.lunch).to eq valid_data[:lunch]
+          expect(memo.dinner).to eq valid_data[:dinner]
+          expect(memo.snack).to eq valid_data[:snack]
+        end
+      end
+    end
+
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { update_memo(record.id, update, nil) }.to raise_error(NoMethodError)
       end
     end
   end
