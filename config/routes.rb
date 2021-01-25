@@ -9,11 +9,6 @@ Rails.application.routes.draw do
       get '/records/related', to: 'records#related'
       delete '/records/images/delete', to: 'records#delete_images'
       get '/users/:id/like-records', to: 'records#twenty_like_records'
-      put '/memos/:id/appearance', to: 'memos#update_appearance'
-      put '/memos/:id/breakfast', to: 'memos#update_breakfast'
-      put '/memos/:id/lunch', to: 'memos#update_lunch'
-      put '/memos/:id/dinner', to: 'memos#update_dinner'
-      put '/memos/:id/snack', to: 'memos#update_snack'
       get '/relationships/following/:id', to: 'relationships#following?'
       get '/comments/:record_id/:target', to: 'comments#twenty_comments'
       get '/comments/:id/reply/list', to: 'comments#ten_reply_comments'
@@ -21,7 +16,7 @@ Rails.application.routes.draw do
       resources :records, only: %i[index create]
       resources :appearances
       resources :meals
-      resources :memos
+      resources :memos, only: %i[show update]
       resources :relationships, only: %i[create destroy]
       resources :likes, only: %i[create destroy]
       resources :comments, only: %i[create destroy]
