@@ -96,7 +96,6 @@ const RecordList: React.FC = () => {
     <InfiniteScroll
       loadMore={get20Records}
       hasMore={hasMore}
-      threshold={0}
       loader={
         <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
       }

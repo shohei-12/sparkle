@@ -2,7 +2,20 @@ import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { TextInput, SecondaryButton } from "../UIkit";
 import { Target, Comment } from "../../re-ducks/records/types";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 import { baseURL } from "../../config";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    buttonGroup: {
+      textAlign: "right",
+    },
+    marginRight: {
+      marginRight: 10,
+    },
+  })
+);
 
 type Props = {
   recordId: number;
@@ -12,6 +25,7 @@ type Props = {
 };
 
 const CommentForm: React.FC<Props> = React.memo((props) => {
+  const classes = useStyles();
   const recordId = props.recordId;
   const target = props.target;
   const commentList = props.commentList;
@@ -21,6 +35,10 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
 
   const inputComment = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
+  }, []);
+
+  const cancelComment = useCallback(() => {
+    setComment("");
   }, []);
 
   const createComment = useCallback(() => {
@@ -59,11 +77,22 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
         onChange={inputComment}
       />
       <div className="space-m"></div>
-      <SecondaryButton
-        text="コメント"
-        disabled={comment ? false : true}
-        onClick={createComment}
-      />
+      <div className={classes.buttonGroup}>
+        <Button
+          classes={{
+            root: classes.marginRight,
+          }}
+          variant="contained"
+          onClick={cancelComment}
+        >
+          キャンセル
+        </Button>
+        <SecondaryButton
+          text="コメント"
+          disabled={comment ? false : true}
+          onClick={createComment}
+        />
+      </div>
     </>
   );
 });

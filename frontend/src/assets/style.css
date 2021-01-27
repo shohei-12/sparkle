@@ -160,6 +160,44 @@ body {
   visibility: hidden;
 }
 
+/* record details page */
+@media all and (max-width: 719px) {
+  .record-details-page-wrap {
+    max-width: 350px;
+  }
+}
+
+.record-image-memo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+@media all and (min-width: 720px) {
+  .record-image-memo {
+    display: flex;
+    margin-bottom: 0;
+    text-align: start;
+  }
+}
+
+.image-gallery,
+.record-details-page-no-image {
+  max-width: 350px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+@media all and (max-width: 719px) {
+  .image-gallery,
+  .record-details-page-no-image {
+    margin: 0;
+  }
+}
+
+.record-details-page-no-image {
+  width: 100%;
+}
+
 /* react-calendar */
 .react-calendar {
   border: none;
@@ -183,18 +221,6 @@ body {
 }
 
 /* react-image-gallery */
-.image-gallery {
-  max-width: 350px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-
-@media all and (max-width: 959px) {
-  .image-gallery {
-    margin: 0 auto;
-  }
-}
-
 .image-gallery-left-nav .image-gallery-svg,
 .image-gallery-right-nav .image-gallery-svg {
   height: 72px;

@@ -32,6 +32,8 @@ const DateSwitch: React.FC<Props> = (props) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
+  const strMonth = ("0" + month).slice(-2);
+  const strDay = ("0" + day).slice(-2);
 
   const oneDayLater = useCallback(() => {
     date.setDate(day + 1);
@@ -61,7 +63,7 @@ const DateSwitch: React.FC<Props> = (props) => {
         className={`${classes.switch} pointer-h`}
         onClick={oneDayAgo}
       />
-      <h2 className={classes.date}>{`${year}-${month}-${day}`}</h2>
+      <h2 className={classes.date}>{`${year}-${strMonth}-${strDay}`}</h2>
       <ArrowForwardIosIcon
         className={`${classes.switch} pointer-h`}
         onClick={oneDayLater}

@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { push } from "connected-react-router";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Store } from "../re-ducks/store/types";
-import { getUserId } from "../re-ducks/users/selectors";
 import { Target, Comment } from "../re-ducks/records/types";
 import {
   AppearancesGallery,
@@ -11,34 +10,35 @@ import {
   CommentForm,
   CommentList,
 } from "../components/Record";
-import { TextInput } from "../components/UIkit";
+import { SecondaryButton } from "../components/UIkit";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import Button from "@material-ui/core/Button";
 import NoImage from "../assets/img/no-image.png";
 import { baseURL } from "../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    record: {
-      marginBottom: 20,
-      textAlign: "center",
-      [theme.breakpoints.up("md")]: {
-        display: "flex",
-        marginBottom: 0,
-        textAlign: "start",
-      },
+    btnGroup: {
+      marginTop: 10,
+      textAlign: "right",
     },
-    recordRight: {
-      maxWidth: 330,
-      width: "100%",
-      margin: "0 auto",
+    marginLeft: {
+      marginLeft: 10,
     },
-    noImage: {
+    text: {
+      fontWeight: 400,
+      color: theme.palette.primary["main"],
+    },
+    memo: {
+      whiteSpace: "pre-wrap",
       maxWidth: 350,
       width: "100%",
-      [theme.breakpoints.up("md")]: {
-        marginRight: 20,
-        marginBottom: 20,
+      margin: "0 auto",
+      textAlign: "left",
+      "& > h3": {
+        fontWeight: 400,
+        marginTop: 0,
       },
     },
     openAndCloseCommentAreaText: {
@@ -55,14 +55,14 @@ type Props = {
 
 const RecordDetails: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const selector = useSelector((state: Store) => state);
-  const uid = Number(getUserId(selector));
+  const dispatch = useDispatch();
   const recordId = props.recordId;
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
   const lunchsContainer: string[] = [];
   const dinnersContainer: string[] = [];
   const snacksContainer: string[] = [];
+  const path = window.location.pathname;
 
   const [appearances, setAppearances] = useState<string[]>([]);
   const [breakfasts, setBreakfasts] = useState<string[]>([]);
@@ -91,41 +91,6 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [lunchCommentList, setLunchCommentList] = useState<Comment[]>([]);
   const [dinnerCommentList, setDinnerCommentList] = useState<Comment[]>([]);
   const [snackCommentList, setSnackCommentList] = useState<Comment[]>([]);
-
-  const inputAppearance = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setAppearanceMemo(event.target.value);
-    },
-    [setAppearanceMemo]
-  );
-
-  const inputBreakfast = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setBreakfastMemo(event.target.value);
-    },
-    [setBreakfastMemo]
-  );
-
-  const inputLunch = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setLunchMemo(event.target.value);
-    },
-    [setLunchMemo]
-  );
-
-  const inputDinner = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDinnerMemo(event.target.value);
-    },
-    [setDinnerMemo]
-  );
-
-  const inputSnack = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSnackMemo(event.target.value);
-    },
-    [setSnackMemo]
-  );
 
   const openAndCloseCommentArea = useCallback(
     (target: Target) => {
@@ -159,6 +124,8 @@ const RecordDetails: React.FC<Props> = (props) => {
       snackComment,
     ]
   );
+
+  const deleteRecord = useCallback(() => {}, []);
 
   useEffect(() => {
     axios
@@ -212,47 +179,45 @@ const RecordDetails: React.FC<Props> = (props) => {
       .catch((error) => {
         throw new Error(error);
       });
+    setAppearanceComment(false);
+    setBreakfastComment(false);
+    setLunchComment(false);
+    setDinnerComment(false);
+    setSnackComment(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordId]);
 
   return (
-    <div className="wrap">
-      <p>💪 見た目</p>
-      <div className={classes.record}>
+    <div className="wrap record-details-page-wrap">
+      <div className={classes.btnGroup}>
+        <SecondaryButton
+          text="編集する"
+          onClick={() => dispatch(push(`${path}/edit`))}
+        />
+        <Button
+          classes={{
+            root: classes.marginLeft,
+          }}
+          variant="contained"
+          onClick={deleteRecord}
+        >
+          削除
+        </Button>
+      </div>
+      <h3 className={classes.text}>見た目</h3>
+      <div className="record-image-memo">
         {appearances.length > 0 ? (
           <AppearancesGallery appearances={appearances} />
         ) : (
-          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+          <img
+            className="record-details-page-no-image"
+            src={NoImage}
+            alt="画像なし"
+          />
         )}
-        <div className={classes.recordRight}>
-          {uid === props.urlUid ? (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="appearance"
-              value={appearanceMemo}
-              onChange={inputAppearance}
-            />
-          ) : (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="appearance"
-              inputProps={{
-                readOnly: true,
-              }}
-              value={appearanceMemo}
-              onChange={inputAppearance}
-            />
-          )}
+        <div className={classes.memo}>
+          <h3>メモ</h3>
+          <p>{appearanceMemo}</p>
         </div>
       </div>
       {appearanceComment ? (
@@ -290,42 +255,20 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <p>🍙 朝食</p>
-      <div className={classes.record}>
+      <h3 className={classes.text}>朝食</h3>
+      <div className="record-image-memo">
         {breakfasts.length > 0 ? (
           <MealsGallery meals={breakfasts} />
         ) : (
-          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+          <img
+            className="record-details-page-no-image"
+            src={NoImage}
+            alt="画像なし"
+          />
         )}
-        <div className={classes.recordRight}>
-          {uid === props.urlUid ? (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="breakfast"
-              value={breakfastMemo}
-              onChange={inputBreakfast}
-            />
-          ) : (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="breakfast"
-              inputProps={{
-                readOnly: true,
-              }}
-              value={breakfastMemo}
-              onChange={inputBreakfast}
-            />
-          )}
+        <div className={classes.memo}>
+          <h3>メモ</h3>
+          <p>{breakfastMemo}</p>
         </div>
       </div>
       {breakfastComment ? (
@@ -363,42 +306,20 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <p>🍔 昼食</p>
-      <div className={classes.record}>
+      <h3 className={classes.text}>昼食</h3>
+      <div className="record-image-memo">
         {lunchs.length > 0 ? (
           <MealsGallery meals={lunchs} />
         ) : (
-          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+          <img
+            className="record-details-page-no-image"
+            src={NoImage}
+            alt="画像なし"
+          />
         )}
-        <div className={classes.recordRight}>
-          {uid === props.urlUid ? (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="lunch"
-              value={lunchMemo}
-              onChange={inputLunch}
-            />
-          ) : (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="lunch"
-              inputProps={{
-                readOnly: true,
-              }}
-              value={lunchMemo}
-              onChange={inputLunch}
-            />
-          )}
+        <div className={classes.memo}>
+          <h3>メモ</h3>
+          <p>{lunchMemo}</p>
         </div>
       </div>
       {lunchComment ? (
@@ -436,42 +357,20 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <p>🍖 夕食</p>
-      <div className={classes.record}>
+      <h3 className={classes.text}>夕食</h3>
+      <div className="record-image-memo">
         {dinners.length > 0 ? (
           <MealsGallery meals={dinners} />
         ) : (
-          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+          <img
+            className="record-details-page-no-image"
+            src={NoImage}
+            alt="画像なし"
+          />
         )}
-        <div className={classes.recordRight}>
-          {uid === props.urlUid ? (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="dinner"
-              value={dinnerMemo}
-              onChange={inputDinner}
-            />
-          ) : (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="dinner"
-              inputProps={{
-                readOnly: true,
-              }}
-              value={dinnerMemo}
-              onChange={inputDinner}
-            />
-          )}
+        <div className={classes.memo}>
+          <h3>メモ</h3>
+          <p>{dinnerMemo}</p>
         </div>
       </div>
       {dinnerComment ? (
@@ -509,42 +408,20 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <p>🍰 間食</p>
-      <div className={classes.record}>
+      <h3 className={classes.text}>間食</h3>
+      <div className="record-image-memo">
         {snacks.length > 0 ? (
           <MealsGallery meals={snacks} />
         ) : (
-          <img className={classes.noImage} src={NoImage} alt="画像なし" />
+          <img
+            className="record-details-page-no-image"
+            src={NoImage}
+            alt="画像なし"
+          />
         )}
-        <div className={classes.recordRight}>
-          {uid === props.urlUid ? (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="snack"
-              value={snackMemo}
-              onChange={inputSnack}
-            />
-          ) : (
-            <TextInput
-              fullWidth={true}
-              label="メモ"
-              multiline={true}
-              required={false}
-              rows="5"
-              type="text"
-              name="snack"
-              inputProps={{
-                readOnly: true,
-              }}
-              value={snackMemo}
-              onChange={inputSnack}
-            />
-          )}
+        <div className={classes.memo}>
+          <h3>メモ</h3>
+          <p>{snackMemo}</p>
         </div>
       </div>
       {snackComment ? (

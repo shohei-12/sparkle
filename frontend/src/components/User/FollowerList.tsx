@@ -62,7 +62,6 @@ const FollowerList: React.FC<Props> = (props) => {
     <InfiniteScroll
       loadMore={get20Followers}
       hasMore={hasMore}
-      threshold={0}
       loader={
         <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
       }
