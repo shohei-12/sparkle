@@ -100,10 +100,15 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
       />
       <div className="space-m"></div>
       <div className={classes.buttonGroup}>
-        <Button variant="contained" onClick={cancelReply}>
+        <Button
+          classes={{
+            root: classes.marginRight,
+          }}
+          variant="contained"
+          onClick={cancelReply}
+        >
           キャンセル
         </Button>
-        <div className={`inline-block ${classes.marginRight}`}></div>
         <SecondaryButton
           text="返信"
           disabled={reply ? false : true}

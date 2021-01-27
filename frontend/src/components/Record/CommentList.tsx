@@ -1,9 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
-import InfiniteScroll from "react-infinite-scroller";
-import ReactLoading from "react-loading";
 import { Target, Comment } from "../../re-ducks/records/types";
 import { Store } from "../../re-ducks/store/types";
 import { getUserId } from "../../re-ducks/users/selectors";
@@ -11,6 +9,7 @@ import { ReplyCommentForm, ReplyCommentList } from "../Record";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -19,11 +18,6 @@ import { baseURL } from "../../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    scrollY: {
-      width: "100%",
-      height: 200,
-      overflowY: "scroll",
-    },
     comment: {
       display: "flex",
       marginTop: 30,
@@ -54,6 +48,10 @@ const useStyles = makeStyles((theme: Theme) =>
     alignItemsCenter: {
       display: "flex",
       alignItems: "center",
+    },
+    otherComment: {
+      position: "relative",
+      top: -3,
     },
   })
 );
@@ -151,117 +149,113 @@ const CommentList: React.FC<Props> = React.memo((props) => {
       });
   }, [recordId, target, start, commentList, setCommentList]);
 
+  useEffect(() => {
+    get20Comments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className={classes.scrollY}>
-      <InfiniteScroll
-        loadMore={get20Comments}
-        hasMore={hasMore}
-        threshold={0}
-        loader={
-          <ReactLoading
-            key={0}
-            className="loader"
-            type="spin"
-            color="#03a9f4"
-          />
-        }
-        useWindow={false}
-      >
-        {commentList.length > 0 &&
-          commentList.map((ele, i) => (
-            <div key={i}>
-              <div className={classes.comment}>
-                <div className={classes.left}>
-                  <img
-                    className={`${classes.profile} pointer-h`}
-                    src={
-                      ele.author_profile.url
-                        ? baseURL + ele.author_profile.url
-                        : NoProfile
-                    }
-                    alt="プロフィール画像"
-                    onClick={() => dispatch(push(`/users/${ele.author_id}`))}
-                  />
-                </div>
-                <div className={classes.right}>
-                  <span>{ele.author_name}</span>
-                  <span className={classes.date}>{ele.created_at}</span>
-                  <p className={classes.content}>{ele.content}</p>
-                  <div
-                    className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
+    <>
+      {commentList.length > 0 &&
+        commentList.map((ele, i) => (
+          <div key={i}>
+            <div className={classes.comment}>
+              <div className={classes.left}>
+                <img
+                  className={`${classes.profile} pointer-h`}
+                  src={
+                    ele.author_profile.url
+                      ? baseURL + ele.author_profile.url
+                      : NoProfile
+                  }
+                  alt="プロフィール画像"
+                  onClick={() => dispatch(push(`/users/${ele.author_id}`))}
+                />
+              </div>
+              <div className={classes.right}>
+                <span>{ele.author_name}</span>
+                <span className={classes.date}>{ele.created_at}</span>
+                <p className={classes.content}>{ele.content}</p>
+                <div
+                  className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
+                >
+                  <span
+                    className="pointer-h"
+                    onClick={() => setCommentId(ele.comment_id)}
                   >
-                    <span
-                      className="pointer-h"
-                      onClick={() => setCommentId(ele.comment_id)}
-                    >
-                      返信
-                    </span>
-                    {ele.author_id === currentUserId && (
-                      <Tooltip title="削除" placement="right">
-                        <IconButton
-                          aria-label="コメントを削除する"
-                          onClick={() => deleteComment(ele.comment_id, false)}
-                        >
-                          <DeleteIcon style={{ fontSize: 19 }} />
-                        </IconButton>
-                      </Tooltip>
-                    )}
+                    返信
+                  </span>
+                  {ele.author_id === currentUserId && (
+                    <Tooltip title="削除" placement="right">
+                      <IconButton
+                        aria-label="コメントを削除する"
+                        onClick={() => deleteComment(ele.comment_id, false)}
+                      >
+                        <DeleteIcon style={{ fontSize: 19 }} />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </div>
+                {commentId === ele.comment_id && (
+                  <ReplyCommentForm
+                    recordId={recordId}
+                    target={target}
+                    commentId={ele.comment_id}
+                    setCommentId={setCommentId}
+                    replyComments={replyComments}
+                    setReplyComments={setReplyComments}
+                    commentList={commentList}
+                    commentListIndex={i}
+                    userId={null}
+                  />
+                )}
+                {ele.reply_count > 0 && openReplyComments !== ele.comment_id && (
+                  <div
+                    className={`${classes.alignItemsCenter} pointer-h`}
+                    onClick={() => {
+                      setOpenReplyComments(ele.comment_id);
+                      get10ReplyComments(ele.comment_id);
+                    }}
+                  >
+                    <ArrowDropDownIcon />
+                    <span>{ele.reply_count}件の返信を表示</span>
                   </div>
-                  {commentId === ele.comment_id && (
-                    <ReplyCommentForm
+                )}
+                {ele.reply_count > 0 && openReplyComments === ele.comment_id && (
+                  <>
+                    <div
+                      className={`${classes.alignItemsCenter} pointer-h`}
+                      onClick={() => {
+                        setOpenReplyComments(0);
+                      }}
+                    >
+                      <ArrowDropUpIcon />
+                      <span>{ele.reply_count}件の返信を非表示</span>
+                    </div>
+                    <ReplyCommentList
                       recordId={recordId}
                       target={target}
-                      commentId={ele.comment_id}
-                      setCommentId={setCommentId}
                       replyComments={replyComments}
                       setReplyComments={setReplyComments}
                       commentList={commentList}
                       commentListIndex={i}
-                      userId={null}
+                      deleteComment={deleteComment}
+                      replyCount={ele.reply_count - 10}
+                      commentId={ele.comment_id}
                     />
-                  )}
-                  {ele.reply_count > 0 && openReplyComments !== ele.comment_id && (
-                    <div
-                      className={`${classes.alignItemsCenter} pointer-h`}
-                      onClick={() => {
-                        setOpenReplyComments(ele.comment_id);
-                        get10ReplyComments(ele.comment_id);
-                      }}
-                    >
-                      <ArrowDropDownIcon />
-                      <span>{ele.reply_count}件の返信を表示</span>
-                    </div>
-                  )}
-                  {ele.reply_count > 0 && openReplyComments === ele.comment_id && (
-                    <>
-                      <div
-                        className={`${classes.alignItemsCenter} pointer-h`}
-                        onClick={() => {
-                          setOpenReplyComments(0);
-                        }}
-                      >
-                        <ArrowDropUpIcon />
-                        <span>{ele.reply_count}件の返信を非表示</span>
-                      </div>
-                      <ReplyCommentList
-                        recordId={recordId}
-                        target={target}
-                        replyComments={replyComments}
-                        setReplyComments={setReplyComments}
-                        commentList={commentList}
-                        commentListIndex={i}
-                        deleteComment={deleteComment}
-                        replyCount={ele.reply_count - 10}
-                        commentId={ele.comment_id}
-                      />
-                    </>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
             </div>
-          ))}
-      </InfiniteScroll>
-    </div>
+          </div>
+        ))}
+      {hasMore && (
+        <div className="inline-block pointer-h" onClick={get20Comments}>
+          <SubdirectoryArrowRightIcon />
+          <span className={classes.otherComment}>他のコメントを表示</span>
+        </div>
+      )}
+    </>
   );
 });
 

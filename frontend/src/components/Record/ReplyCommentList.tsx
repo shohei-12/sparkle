@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     otherReply: {
       position: "relative",
-      top: -6,
+      top: -3,
     },
   })
 );
