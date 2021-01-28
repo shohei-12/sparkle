@@ -11,7 +11,7 @@ import { createLikeRecordsContainerAction } from "../re-ducks/records/actions";
 import { getFollowings } from "../re-ducks/relationships/selectors";
 import { follow, unfollow } from "../re-ducks/relationships/operations";
 import { createRelationshipContainerAction } from "../re-ducks/relationships/actions";
-import { TextInput, SecondaryButton } from "../components/UIkit";
+import { SecondaryButton } from "../components/UIkit";
 import { DetailsTab } from "../components/User";
 import NoProfile from "../assets/img/no-profile.png";
 import { baseURL } from "../config";
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: "center",
       [theme.breakpoints.up("sm")]: {
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         textAlign: "start",
       },
     },
@@ -47,9 +47,14 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "50%",
     },
     right: {
+      whiteSpace: "pre-wrap",
+      textAlign: "left",
       width: "100%",
       [theme.breakpoints.up("sm")]: {
         marginLeft: 15,
+      },
+      "& > p": {
+        margin: 0,
       },
     },
     unfollowBtn: {
@@ -175,55 +180,42 @@ const UserDetails: React.FC = () => {
               />
             </div>
             <div className={classes.right}>
-              <TextInput
-                fullWidth={true}
-                label="自己紹介"
-                multiline={true}
-                required={false}
-                rows="7"
-                type="text"
-                name="selfIntroduction"
-                inputProps={{
-                  disabled: true,
-                }}
-                value={selfIntroduction}
-                variant="outlined"
-              />
-              <div className="space-m"></div>
-              {currentUserId === uid && (
-                <SecondaryButton
-                  text="ユーザー情報を編集する"
-                  onClick={goUserEditPage}
-                />
-              )}
-              {currentUserId !== uid && (
-                <>
-                  {following ? (
-                    <Button
-                      id="unfollow-btn-1"
-                      className={classes.unfollowBtn}
-                      variant="contained"
-                      color="primary"
-                      onClick={dispatchUnfollow}
-                      onMouseOver={() => over(-1)}
-                      onMouseLeave={() => leave(-1)}
-                    >
-                      フォロー中
-                    </Button>
-                  ) : (
-                    <Button
-                      id="follow-btn-1"
-                      variant="outlined"
-                      color="primary"
-                      onClick={dispatchFollow}
-                    >
-                      フォロー
-                    </Button>
-                  )}
-                </>
-              )}
+              <p>{selfIntroduction}</p>
             </div>
           </div>
+          {currentUserId === uid && (
+            <SecondaryButton
+              text="ユーザー情報を編集する"
+              onClick={goUserEditPage}
+            />
+          )}
+          {currentUserId !== uid && (
+            <>
+              {following ? (
+                <Button
+                  id="unfollow-btn-1"
+                  className={classes.unfollowBtn}
+                  variant="contained"
+                  color="primary"
+                  onClick={dispatchUnfollow}
+                  onMouseOver={() => over(-1)}
+                  onMouseLeave={() => leave(-1)}
+                >
+                  フォロー中
+                </Button>
+              ) : (
+                <Button
+                  id="follow-btn-1"
+                  variant="outlined"
+                  color="primary"
+                  onClick={dispatchFollow}
+                >
+                  フォロー
+                </Button>
+              )}
+            </>
+          )}
+          <div className="space-m"></div>
           <DetailsTab
             uid={uid}
             currentUserId={currentUserId}
