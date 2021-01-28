@@ -39,6 +39,11 @@ class Api::V1::RecordsController < ApplicationController
     Record.delete_images(params[:appearances], params[:meals], current_api_v1_user.id)
   end
 
+  def destroy
+    record = Record.find(params[:id])
+    record.destroy if record.user_id == current_api_v1_user.id
+  end
+
   private
 
   def set_user

@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Target, Comment } from "../re-ducks/records/types";
+import { Store } from "../re-ducks/store/types";
+import { getUserId } from "../re-ducks/users/selectors";
+import { flashAction } from "../re-ducks/flash/actions";
 import {
   AppearancesGallery,
   MealsGallery,
@@ -23,8 +26,13 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: 10,
       textAlign: "right",
     },
-    marginLeft: {
+    deleteBtn: {
       marginLeft: 10,
+      color: "#fff",
+      backgroundColor: "#f44336",
+      "&:hover": {
+        backgroundColor: "rgb(170, 46, 37)",
+      },
     },
     text: {
       fontWeight: 400,
@@ -56,6 +64,8 @@ type Props = {
 const RecordDetails: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: Store) => state);
+  const currentUserId = getUserId(selector);
   const recordId = props.recordId;
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
@@ -125,7 +135,25 @@ const RecordDetails: React.FC<Props> = (props) => {
     ]
   );
 
-  const deleteRecord = useCallback(() => {}, []);
+  const deleteRecord = useCallback(() => {
+    if (window.confirm("本当に削除しますか？")) {
+      axios
+        .delete(`${baseURL}/api/v1/records/${recordId}`, {
+          data: {
+            uid: localStorage.getItem("uid"),
+            client: localStorage.getItem("client"),
+            access_token: localStorage.getItem("access_token"),
+          },
+        })
+        .then(() => {
+          dispatch(push(`/users/${currentUserId}`));
+          dispatch(flashAction({ type: "success", msg: "削除しました！" }));
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+  }, [recordId, dispatch, currentUserId]);
 
   useEffect(() => {
     axios
@@ -196,7 +224,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         />
         <Button
           classes={{
-            root: classes.marginLeft,
+            root: classes.deleteBtn,
           }}
           variant="contained"
           onClick={deleteRecord}
