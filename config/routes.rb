@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       get '/comments/:record_id/:target', to: 'comments#twenty_comments'
       get '/comments/:id/reply/list', to: 'comments#ten_reply_comments'
       resources :users, only: %i[show]
-      resources :records, only: %i[index create]
+      resources :records, only: %i[index create destroy]
       resources :appearances
       resources :meals
       resources :memos, only: %i[create show update]
