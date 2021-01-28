@@ -10,6 +10,7 @@ RSpec.describe 'Api::V1::Records', type: :request do
     { date: 'a' }
   end
   let(:token) { sign_in({ email: user.email, password: 'password' }) }
+  let(:token2) { sign_in({ email: record.user.email, password: 'password' }) }
   let(:start0) do
     { start: 0 }
   end
@@ -299,6 +300,40 @@ RSpec.describe 'Api::V1::Records', type: :request do
     context 'when token is invalid' do
       it 'raise NoMethodError' do
         expect { delete_images({ appearances: [], meals: [] }, nil) }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/records/:id' do
+    context 'when record exists' do
+      context 'when token is valid' do
+        context 'when record creator matchs current user' do
+          it 'delete record' do
+            delete_record(record.id, token2)
+            expect(Record.count).to eq 0
+            expect(response.status).to eq 204
+          end
+        end
+
+        context 'when record creator does not match current user' do
+          it 'not delete record' do
+            delete_record(record.id, token)
+            expect(Record.count).to eq 1
+            expect(response.status).to eq 204
+          end
+        end
+      end
+
+      context 'when token is invalid' do
+        it 'raise NoMethodError' do
+          expect { delete_record(record.id, nil) }.to raise_error(NoMethodError)
+        end
+      end
+    end
+
+    context 'when record does not exist' do
+      it 'raise ActiveRecord::RecordNotFound' do
+        expect { delete_record(record.id + 1, token) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

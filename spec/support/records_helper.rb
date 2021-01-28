@@ -22,4 +22,8 @@ module RecordsHelper
   def delete_images(data, token)
     delete '/api/v1/records/images/delete', params: data, headers: token
   end
+
+  def delete_record(id, token)
+    delete "/api/v1/records/#{id}", headers: token
+  end
 end
