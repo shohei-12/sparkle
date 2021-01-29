@@ -171,7 +171,7 @@ const SignUp: React.FC = () => {
         label="自己紹介（任意・160文字以内）"
         multiline={true}
         required={false}
-        rows="3"
+        rows="5"
         type="text"
         name="selfIntroduction"
         inputRef={register({
