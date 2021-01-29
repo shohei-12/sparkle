@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { push } from "connected-react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
@@ -34,7 +35,7 @@ const UserEdit: React.FC = () => {
   const uSelfIntroduction = getUserSelfIntroduction(selector);
   const uprofile = getUserProfile(selector);
 
-  const { register, handleSubmit, reset, errors } = useForm<Inputs>({
+  const { register, handleSubmit, errors } = useForm<Inputs>({
     mode: "onTouched",
     defaultValues: {
       name: uname,
@@ -92,93 +93,42 @@ const UserEdit: React.FC = () => {
   );
 
   const updateUser = () => {
-    if (profile) {
-      const data = new FormData();
-      data.append("profile", profile);
-      data.append("name", name);
-      data.append("email", email);
-      data.append("self_introduction", selfIntroduction);
-      data.append("password", password);
-      data.append("password_confirmation", confirmPassword);
-      data.append("current_password", currentPassword);
-      data.append("uid", localStorage.getItem("uid") as string);
-      data.append("client", localStorage.getItem("client") as string);
-      data.append(
-        "access_token",
-        localStorage.getItem("access_token") as string
-      );
-      axios({
-        method: "PUT",
-        url: `${baseURL}/api/v1/auth`,
-        data,
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          document.getElementById("delete-preview")!.click();
-          password && reset({ password: "", confirmPassword: "" });
-          setCurrentPassword("");
-          differentPassword && setDifferentPassword(false);
-          dispatch(
-            flashAction({
-              type: "success",
-              msg: "ユーザー情報を更新しました！",
-            })
-          );
-          const imageURL = res.data.data.profile.url as string;
-          dispatch(
-            updateUserAction({
-              name,
-              email,
-              selfIntroduction,
-              profile: imageURL,
-            })
-          );
-          localStorage.setItem("uid", email);
-        })
-        .catch((error) => {
-          const errorData = error.response.data;
-          if (
-            errorData.errors.full_messages.includes(
-              "Email has already been taken"
-            )
-          ) {
-            setDuplicateEmail(email);
-          }
-          if (
-            errorData.errors.full_messages.includes(
-              "Current password is invalid"
-            )
-          ) {
-            setDifferentPassword(true);
-          }
-        });
-    }
+    const data = new FormData();
+    profile && data.append("profile", profile);
+    data.append("name", name);
+    data.append("email", email);
+    data.append("self_introduction", selfIntroduction);
+    data.append("password", password);
+    data.append("password_confirmation", confirmPassword);
+    data.append("current_password", currentPassword);
+    data.append("uid", localStorage.getItem("uid") as string);
+    data.append("client", localStorage.getItem("client") as string);
+    data.append("access_token", localStorage.getItem("access_token") as string);
     axios({
       method: "PUT",
       url: `${baseURL}/api/v1/auth`,
-      data: {
-        name,
-        email,
-        self_introduction: selfIntroduction,
-        password,
-        password_confirmation: confirmPassword,
-        current_password: currentPassword,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+      data,
+      headers: {
+        "content-type": "multipart/form-data",
       },
     })
-      .then(() => {
-        password && reset({ password: "", confirmPassword: "" });
-        setCurrentPassword("");
-        differentPassword && setDifferentPassword(false);
+      .then((res) => {
         dispatch(
-          flashAction({ type: "success", msg: "ユーザー情報を更新しました！" })
+          updateUserAction({
+            name,
+            email,
+            selfIntroduction,
+            profile: res.data.data.profile.url,
+          })
         );
-        dispatch(updateUserAction({ name, email, selfIntroduction }));
         localStorage.setItem("uid", email);
+        dispatch(push(`/users/${uid}`));
+        dispatch(
+          flashAction({
+            type: "success",
+            msg: "ユーザー情報を更新しました！",
+          })
+        );
       })
       .catch((error) => {
         const errorData = error.response.data;
@@ -285,7 +235,7 @@ const UserEdit: React.FC = () => {
         label="自己紹介（任意・160文字以内）"
         multiline={true}
         required={false}
-        rows="3"
+        rows="5"
         type="text"
         name="selfIntroduction"
         inputRef={register({
