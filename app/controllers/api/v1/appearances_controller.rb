@@ -1,11 +1,19 @@
 class Api::V1::AppearancesController < ApplicationController
+  before_action :set_record
+
   def create
-    Appearance.create(image: params[:image], record_id: params[:record_id])
+    return unless current_api_v1_user.records.include?(@record)
+
+    Appearance.create(image: params[:image], record_id: @record.id)
   end
 
   def show
-    record = Record.find(params[:id])
-    images = record.appearances
-    render json: images
+    render json: @record.appearances
+  end
+
+  private
+
+  def set_record
+    @record = Record.find(params[:id])
   end
 end
