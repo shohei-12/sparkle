@@ -1,6 +1,6 @@
 module MealsHelper
-  def save_meal(data)
-    post '/api/v1/meals', params: data
+  def add_meal(data, token)
+    post '/api/v1/meals', params: data, headers: token
   end
 
   def get_meals(data)
