@@ -1,6 +1,6 @@
 module AppearancesHelper
-  def save_appearance(data)
-    post '/api/v1/appearances', params: data
+  def add_appearance(data, token)
+    post '/api/v1/appearances', params: data, headers: token
   end
 
   def get_appearances(data)
