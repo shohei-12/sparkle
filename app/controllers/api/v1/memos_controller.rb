@@ -1,14 +1,16 @@
 class Api::V1::MemosController < ApplicationController
-  before_action :set_record, only: %i[show update]
+  before_action :set_record
 
   def create
+    return unless current_api_v1_user.records.include?(@record)
+
     Memo.create(
       appearance: params[:appearance],
       breakfast: params[:breakfast],
       lunch: params[:lunch],
       dinner: params[:dinner],
       snack: params[:snack],
-      record_id: params[:record_id]
+      record_id: @record.id
     )
   end
 

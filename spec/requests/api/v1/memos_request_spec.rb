@@ -13,7 +13,7 @@ RSpec.describe 'Api::V1::Memos', type: :request do
       lunch: 'memo',
       dinner: 'memo',
       snack: 'memo',
-      record_id: record.id
+      id: record.id
     }
   end
   let(:invalid_data) do
@@ -23,7 +23,7 @@ RSpec.describe 'Api::V1::Memos', type: :request do
       lunch: 'memo',
       dinner: 'memo',
       snack: 'memo',
-      record_id: record.id + 1
+      id: record.id + 1
     }
   end
   let(:update) do
@@ -37,17 +37,25 @@ RSpec.describe 'Api::V1::Memos', type: :request do
   end
 
   describe 'POST /api/v1/memos' do
-    context 'when data is valid' do
-      it 'save memo' do
-        expect { save_memo(valid_data) }.to change(Memo, :count).by(1)
-        expect(response.status).to eq 204
+    context 'when token is valid' do
+      context 'when it is record for current user' do
+        it 'add memo' do
+          expect { add_memo(valid_data, token1) }.to change(Memo, :count).by(1)
+          expect(response.status).to eq 204
+        end
+      end
+
+      context 'when it is not record for current user' do
+        it 'not add memo' do
+          expect { add_memo(valid_data, token2) }.to change(Memo, :count).by(0)
+          expect(response.status).to eq 204
+        end
       end
     end
 
-    context 'when data is invalid' do
-      it 'not save memo' do
-        expect { save_memo(invalid_data) }.to change(Memo, :count).by(0)
-        expect(response.status).to eq 204
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { add_memo(valid_data, nil) }.to raise_error(NoMethodError)
       end
     end
   end
@@ -82,7 +90,7 @@ RSpec.describe 'Api::V1::Memos', type: :request do
     context 'when token is valid' do
       context 'when record creator matchs current user' do
         it 'update memo' do
-          save_memo(valid_data)
+          add_memo(valid_data, token1)
           update_memo(record.id, update, token1)
           expect(response.status).to eq 204
           memo = Memo.first
@@ -96,7 +104,7 @@ RSpec.describe 'Api::V1::Memos', type: :request do
 
       context 'when record creator does not match current user' do
         it 'not update memo' do
-          save_memo(valid_data)
+          add_memo(valid_data, token1)
           update_memo(record.id, update, token2)
           expect(response.status).to eq 204
           memo = Memo.first
