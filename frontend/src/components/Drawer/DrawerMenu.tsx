@@ -120,21 +120,21 @@ const DrawerMenu = () => {
 
   const dispatchToggleLightTheme = useCallback(() => {
     isSignedIn
-      ? dispatch(toggleTheme(uid, "light"))
+      ? dispatch(toggleTheme("light"))
       : dispatch(toggleThemeAction({ theme: "light" }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
-  }, [dispatch, handleDrawerToggle, uid, isSignedIn]);
+  }, [dispatch, handleDrawerToggle, isSignedIn]);
 
   const dispatchToggleDarkTheme = useCallback(() => {
     isSignedIn
-      ? dispatch(toggleTheme(uid, "dark"))
+      ? dispatch(toggleTheme("dark"))
       : dispatch(toggleThemeAction({ theme: "dark" }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
-  }, [dispatch, handleDrawerToggle, uid, isSignedIn]);
+  }, [dispatch, handleDrawerToggle, isSignedIn]);
 
   const dispatchDeleteUser = useCallback(() => {
     if (window.confirm("アカウントを削除しますか？")) {

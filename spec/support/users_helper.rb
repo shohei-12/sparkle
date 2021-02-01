@@ -1,6 +1,6 @@
 module UsersHelper
-  def toggle_theme(data)
-    put '/api/v1/toggle-theme', params: data
+  def toggle_theme(data, token)
+    put '/api/v1/toggle-theme', params: data, headers: token
   end
 
   def get_user(id)

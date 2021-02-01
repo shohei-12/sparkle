@@ -164,14 +164,16 @@ export const deleteUser = () => {
   };
 };
 
-export const toggleTheme = (uid: string, theme: "light" | "dark") => {
+export const toggleTheme = (theme: "light" | "dark") => {
   return async (dispatch: any) => {
     axios({
       method: "PUT",
       url: `${baseURL}/api/v1/toggle-theme`,
       data: {
-        id: uid,
         theme,
+        uid: localStorage.getItem("uid"),
+        client: localStorage.getItem("client"),
+        access_token: localStorage.getItem("access_token"),
       },
     })
       .then(() => {
