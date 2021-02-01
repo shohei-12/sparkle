@@ -35,35 +35,23 @@ RSpec.describe 'Api::V1::Users', type: :request do
   end
 
   describe 'PUT /api/v1/toggle-theme' do
-    context 'when data is valid' do
-      let(:valid_data) do
-        {
-          id: user1.id,
-          theme: 'dark'
-        }
+    context 'when token is valid' do
+      before do
+        @user = create(:user)
+        @token = sign_in({ email: @user.email, password: 'password' })
       end
 
       it 'toggle theme' do
-        toggle_theme(valid_data)
+        expect(@user.theme).to eq 'light'
+        toggle_theme({ theme: 'dark' }, @token)
         expect(response.status).to eq 204
-        user1.reload
-        expect(user1.theme).to eq 'dark'
+        expect(@user.reload.theme).to eq 'dark'
       end
     end
 
-    context 'when data is invalid' do
-      let(:invalid_data) do
-        {
-          id: user1.id,
-          theme: 'darkk'
-        }
-      end
-
-      it 'not toggle theme' do
-        toggle_theme(invalid_data)
-        expect(response.status).to eq 204
-        user1.reload
-        expect(user1.theme).to eq 'light'
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { toggle_theme({ theme: 'dark' }, nil) }.to raise_error(NoMethodError)
       end
     end
   end

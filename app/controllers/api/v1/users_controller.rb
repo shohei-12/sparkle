@@ -1,8 +1,8 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user
+  before_action :set_user, only: %i[show twenty_followings twenty_followers]
 
   def toggle_theme
-    @user.update(theme: params[:theme])
+    current_api_v1_user.update(theme: params[:theme])
   end
 
   def show
