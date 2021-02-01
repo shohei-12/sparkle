@@ -1,6 +1,6 @@
 module MemosHelper
-  def save_memo(data)
-    post '/api/v1/memos', params: data
+  def add_memo(data, token)
+    post '/api/v1/memos', params: data, headers: token
   end
 
   def get_memo(data)

@@ -86,7 +86,10 @@ const RecordRegistration: React.FC = () => {
             lunch: lunchMemo,
             dinner: dinnerMemo,
             snack: snackMemo,
-            record_id: recordId,
+            id: recordId,
+            uid: localStorage.getItem("uid"),
+            client: localStorage.getItem("client"),
+            access_token: localStorage.getItem("access_token"),
           },
         }).catch((error) => {
           throw new Error(error);
