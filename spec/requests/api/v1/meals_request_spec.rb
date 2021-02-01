@@ -2,37 +2,44 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Meals', type: :request do
   let(:record) { create(:record) }
+  let(:user) { create(:user) }
+  let(:token) { sign_in({ email: user.email, password: 'password' }) }
   let(:meal) { create(:meal) }
   let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/test.jpg'), 'image/jpeg') }
+  let(:data) do
+    {
+      image: image,
+      meal_type: 'breakfast',
+      id: record.id
+    }
+  end
 
   describe 'POST /api/v1/meals' do
-    context 'when data is valid' do
-      let(:valid_data) do
-        {
-          image: image,
-          meal_type: 'breakfast',
-          record_id: record.id
-        }
+    context 'when token is valid' do
+      context 'when it is record for current user' do
+        before do
+          record = create(:record)
+          @token = sign_in({ email: record.user.email, password: 'password' })
+          @data = { image: image, meal_type: 'breakfast', id: record.id }
+        end
+
+        it 'add meal' do
+          expect { add_meal(@data, @token) }.to change(Meal, :count).by(1)
+          expect(response.status).to eq 204
+        end
       end
 
-      it 'save meal' do
-        expect { save_meal(valid_data) }.to change(Meal, :count).by(1)
-        expect(response.status).to eq 204
+      context 'when it is not record for current user' do
+        it 'not add meal' do
+          expect { add_meal(data, token) }.to change(Meal, :count).by(0)
+          expect(response.status).to eq 204
+        end
       end
     end
 
-    context 'when data is invalid' do
-      let(:invalid_data) do
-        {
-          image: image,
-          meal_type: 'breakfast',
-          record_id: record.id += 1
-        }
-      end
-
-      it 'not save meal' do
-        expect { save_meal(invalid_data) }.to change(Meal, :count).by(0)
-        expect(response.status).to eq 204
+    context 'when token is invalid' do
+      it 'raise NoMethodError' do
+        expect { add_meal(data, nil) }.to raise_error(NoMethodError)
       end
     end
   end
