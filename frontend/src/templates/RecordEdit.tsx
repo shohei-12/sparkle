@@ -90,7 +90,10 @@ const RecordEdit: React.FC = () => {
         throw new Error(error);
       });
     const data = new FormData();
-    data.append("record_id", recordId);
+    data.append("id", recordId);
+    data.append("uid", localStorage.getItem("uid")!);
+    data.append("client", localStorage.getItem("client")!);
+    data.append("access_token", localStorage.getItem("access_token")!);
     for (const ele of appearances) {
       data.append("image", ele);
       await axios
