@@ -34,10 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "rgb(170, 46, 37)",
       },
     },
-    text: {
-      fontWeight: 400,
-      color: theme.palette.primary["main"],
-    },
     memo: {
       whiteSpace: "pre-wrap",
       maxWidth: 350,
@@ -45,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0 auto",
       textAlign: "left",
       "& > h3": {
-        fontWeight: 400,
         marginTop: 0,
       },
     },
@@ -67,6 +62,7 @@ const RecordDetails: React.FC<Props> = (props) => {
   const selector = useSelector((state: Store) => state);
   const currentUserId = getUserId(selector);
   const recordId = props.recordId;
+  const urlUid = String(props.urlUid);
   const appearancesContainer: string[] = [];
   const breakfastsContainer: string[] = [];
   const lunchsContainer: string[] = [];
@@ -217,22 +213,24 @@ const RecordDetails: React.FC<Props> = (props) => {
 
   return (
     <div className="wrap record-details-page-wrap">
-      <div className={classes.btnGroup}>
-        <SecondaryButton
-          text="編集する"
-          onClick={() => dispatch(push(`${path}/edit`))}
-        />
-        <Button
-          classes={{
-            root: classes.deleteBtn,
-          }}
-          variant="contained"
-          onClick={deleteRecord}
-        >
-          削除
-        </Button>
-      </div>
-      <h3 className={classes.text}>見た目</h3>
+      {currentUserId === urlUid && (
+        <div className={classes.btnGroup}>
+          <SecondaryButton
+            text="編集する"
+            onClick={() => dispatch(push(`${path}/edit`))}
+          />
+          <Button
+            classes={{
+              root: classes.deleteBtn,
+            }}
+            variant="contained"
+            onClick={deleteRecord}
+          >
+            削除
+          </Button>
+        </div>
+      )}
+      <h3>見た目</h3>
       <div className="record-image-memo">
         {appearances.length > 0 ? (
           <AppearancesGallery appearances={appearances} />
@@ -245,7 +243,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.memo}>
           <h3>メモ</h3>
-          <p>{appearanceMemo}</p>
+          {appearanceMemo ? <p>{appearanceMemo}</p> : <p>なし</p>}
         </div>
       </div>
       {appearanceComment ? (
@@ -283,7 +281,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <h3 className={classes.text}>朝食</h3>
+      <h3>朝食</h3>
       <div className="record-image-memo">
         {breakfasts.length > 0 ? (
           <MealsGallery meals={breakfasts} />
@@ -296,7 +294,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.memo}>
           <h3>メモ</h3>
-          <p>{breakfastMemo}</p>
+          {breakfastMemo ? <p>{breakfastMemo}</p> : <p>なし</p>}
         </div>
       </div>
       {breakfastComment ? (
@@ -334,7 +332,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <h3 className={classes.text}>昼食</h3>
+      <h3>昼食</h3>
       <div className="record-image-memo">
         {lunchs.length > 0 ? (
           <MealsGallery meals={lunchs} />
@@ -347,7 +345,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.memo}>
           <h3>メモ</h3>
-          <p>{lunchMemo}</p>
+          {lunchMemo ? <p>{lunchMemo}</p> : <p>なし</p>}
         </div>
       </div>
       {lunchComment ? (
@@ -385,7 +383,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <h3 className={classes.text}>夕食</h3>
+      <h3>夕食</h3>
       <div className="record-image-memo">
         {dinners.length > 0 ? (
           <MealsGallery meals={dinners} />
@@ -398,7 +396,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.memo}>
           <h3>メモ</h3>
-          <p>{dinnerMemo}</p>
+          {dinnerMemo ? <p>{dinnerMemo}</p> : <p>なし</p>}
         </div>
       </div>
       {dinnerComment ? (
@@ -436,7 +434,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           </div>
         </div>
       )}
-      <h3 className={classes.text}>間食</h3>
+      <h3>間食</h3>
       <div className="record-image-memo">
         {snacks.length > 0 ? (
           <MealsGallery meals={snacks} />
@@ -449,7 +447,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         )}
         <div className={classes.memo}>
           <h3>メモ</h3>
-          <p>{snackMemo}</p>
+          {snackMemo ? <p>{snackMemo}</p> : <p>なし</p>}
         </div>
       </div>
       {snackComment ? (
