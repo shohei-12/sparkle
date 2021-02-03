@@ -19,6 +19,10 @@ module RecordsHelper
     get '/api/v1/records/related', params: data, headers: token
   end
 
+  def get_comment_count(id)
+    get "/api/v1/records/#{id}/comment/count"
+  end
+
   def delete_images(data, token)
     delete '/api/v1/records/images/delete', params: data, headers: token
   end
