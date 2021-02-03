@@ -165,4 +165,20 @@ RSpec.describe Record, type: :model do
       end
     end
   end
+
+  describe '#comment_count' do
+    it 'get comment count' do
+      create(:comment, record_id: record2.id)
+      create(:comment, target: 'breakfast', record_id: record2.id)
+      create(:comment, target: 'lunch', record_id: record2.id)
+      create(:comment, target: 'dinner', record_id: record2.id)
+      create(:comment, target: 'snack', record_id: record2.id)
+      comment_count = record2.comment_count
+      expect(comment_count[:appearance]).to eq 1
+      expect(comment_count[:breakfast]).to eq 1
+      expect(comment_count[:lunch]).to eq 1
+      expect(comment_count[:dinner]).to eq 1
+      expect(comment_count[:snack]).to eq 1
+    end
+  end
 end
