@@ -52,7 +52,7 @@ class Record < ApplicationRecord
     end
   end
 
-  def get_comment_count
+  def comment_count
     {
       appearance: comments.where(target: 'appearance').length,
       breakfast: comments.where(target: 'breakfast').length,
