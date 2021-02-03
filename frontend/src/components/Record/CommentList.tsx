@@ -60,7 +60,9 @@ type Props = {
   recordId: number;
   target: Target;
   commentList: Comment[];
+  commentCount: number;
   setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
+  setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const CommentList: React.FC<Props> = React.memo((props) => {
@@ -71,11 +73,13 @@ const CommentList: React.FC<Props> = React.memo((props) => {
   const recordId = props.recordId;
   const target = props.target;
   const commentList = props.commentList;
+  const commentCount = props.commentCount;
   const setCommentList = props.setCommentList;
+  const setCommentCount = props.setCommentCount;
 
   const [start, setStart] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const [commentId, setCommentId] = useState(0);
+  const [commentsRemaining, setCommentsRemaining] = useState(commentCount);
   const [openReplyComments, setOpenReplyComments] = useState(0);
   const [replyComments, setReplyComments] = useState<Comment[]>([]);
 
@@ -103,6 +107,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
             } else {
               const result = commentList.filter((ele) => ele.comment_id !== id);
               setCommentList(result);
+              setCommentCount(commentCount - 1);
             }
           })
           .catch((error) => {
@@ -110,7 +115,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
           });
       }
     },
-    [commentList, setCommentList, replyComments]
+    [commentList, setCommentList, replyComments, setCommentCount, commentCount]
   );
 
   const get10ReplyComments = useCallback((id: number) => {
@@ -136,18 +141,14 @@ const CommentList: React.FC<Props> = React.memo((props) => {
         },
       })
       .then((res) => {
-        const twentyComments: Comment[] = res.data;
-        if (twentyComments.length === 0) {
-          setHasMore(false);
-          return;
-        }
-        setCommentList([...commentList, ...twentyComments]);
+        setCommentsRemaining(commentsRemaining - 20);
+        setCommentList([...commentList, ...res.data]);
         setStart(start + 20);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [recordId, target, start, commentList, setCommentList]);
+  }, [recordId, target, commentsRemaining, setCommentList, commentList, start]);
 
   useEffect(() => {
     get20Comments();
@@ -249,7 +250,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
             </div>
           </div>
         ))}
-      {hasMore && (
+      {commentsRemaining > 0 && (
         <div className="inline-block pointer-h" onClick={get20Comments}>
           <SubdirectoryArrowRightIcon />
           <span className={classes.otherComment}>他のコメントを表示</span>

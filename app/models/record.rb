@@ -51,4 +51,14 @@ class Record < ApplicationRecord
       meal.destroy if user_id == current_user_id
     end
   end
+
+  def get_comment_count
+    {
+      appearance: comments.where(target: 'appearance').length,
+      breakfast: comments.where(target: 'breakfast').length,
+      lunch: comments.where(target: 'lunch').length,
+      dinner: comments.where(target: 'dinner').length,
+      snack: comments.where(target: 'snack').length
+    }
+  end
 end

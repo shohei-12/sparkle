@@ -21,7 +21,9 @@ type Props = {
   recordId: number;
   target: Target;
   commentList: Comment[];
+  commentCount: number;
   setCommentList: React.Dispatch<React.SetStateAction<Comment[]>>;
+  setCommentCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const CommentForm: React.FC<Props> = React.memo((props) => {
@@ -29,7 +31,9 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
   const recordId = props.recordId;
   const target = props.target;
   const commentList = props.commentList;
+  const commentCount = props.commentCount;
   const setCommentList = props.setCommentList;
+  const setCommentCount = props.setCommentCount;
 
   const [comment, setComment] = useState("");
 
@@ -56,11 +60,20 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
       .then((res) => {
         setComment("");
         setCommentList([...res.data, ...commentList]);
+        setCommentCount(commentCount + 1);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [recordId, target, comment, commentList, setCommentList]);
+  }, [
+    recordId,
+    target,
+    comment,
+    commentList,
+    setCommentList,
+    setCommentCount,
+    commentCount,
+  ]);
 
   return (
     <>

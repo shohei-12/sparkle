@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get '/users/:id/followers', to: 'users#twenty_followers'
       get '/record', to: 'records#show'
       get '/records/related', to: 'records#related'
+      get '/records/:id/comment/count', to: 'records#comment_count'
       delete '/records/images/delete', to: 'records#delete_images'
       get '/users/:id/like-records', to: 'records#twenty_like_records'
       get '/relationships/following/:id', to: 'relationships#following?'

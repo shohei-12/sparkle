@@ -88,6 +88,12 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [dinnerComment, setDinnerComment] = useState(false);
   const [snackComment, setSnackComment] = useState(false);
 
+  const [appearanceCommentCount, setAppearanceCommentCount] = useState(0);
+  const [breakfastCommentCount, setBreakfastCommentCount] = useState(0);
+  const [lunchCommentCount, setLunchCommentCount] = useState(0);
+  const [dinnerCommentCount, setDinnerCommentCount] = useState(0);
+  const [snackCommentCount, setSnackCommentCount] = useState(0);
+
   const [appearanceCommentList, setAppearanceCommentList] = useState<Comment[]>(
     []
   );
@@ -203,6 +209,18 @@ const RecordDetails: React.FC<Props> = (props) => {
       .catch((error) => {
         throw new Error(error);
       });
+    axios
+      .get(`${baseURL}/api/v1/records/${recordId}/comment/count`)
+      .then((res) => {
+        setAppearanceCommentCount(res.data.appearance);
+        setBreakfastCommentCount(res.data.breakfast);
+        setLunchCommentCount(res.data.lunch);
+        setDinnerCommentCount(res.data.dinner);
+        setSnackCommentCount(res.data.snack);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
     setAppearanceComment(false);
     setBreakfastComment(false);
     setLunchComment(false);
@@ -253,7 +271,7 @@ const RecordDetails: React.FC<Props> = (props) => {
               className={classes.openAndCloseCommentAreaText}
               onClick={() => openAndCloseCommentArea("appearance")}
             >
-              <span>コメントを非表示</span>
+              <span>{`${appearanceCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
             </div>
           </div>
@@ -261,13 +279,17 @@ const RecordDetails: React.FC<Props> = (props) => {
             recordId={recordId}
             target="appearance"
             commentList={appearanceCommentList}
+            commentCount={appearanceCommentCount}
             setCommentList={setAppearanceCommentList}
+            setCommentCount={setAppearanceCommentCount}
           />
           <CommentList
             recordId={recordId}
             target="appearance"
             commentList={appearanceCommentList}
+            commentCount={appearanceCommentCount}
             setCommentList={setAppearanceCommentList}
+            setCommentCount={setAppearanceCommentCount}
           />
         </>
       ) : (
@@ -276,7 +298,7 @@ const RecordDetails: React.FC<Props> = (props) => {
             className={classes.openAndCloseCommentAreaText}
             onClick={() => openAndCloseCommentArea("appearance")}
           >
-            <span>コメントを表示</span>
+            <span>{`${appearanceCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
           </div>
         </div>
@@ -304,7 +326,7 @@ const RecordDetails: React.FC<Props> = (props) => {
               className={classes.openAndCloseCommentAreaText}
               onClick={() => openAndCloseCommentArea("breakfast")}
             >
-              <span>コメントを非表示</span>
+              <span>{`${breakfastCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
             </div>
           </div>
@@ -312,13 +334,17 @@ const RecordDetails: React.FC<Props> = (props) => {
             recordId={recordId}
             target="breakfast"
             commentList={breakfastCommentList}
+            commentCount={breakfastCommentCount}
             setCommentList={setBreakfastCommentList}
+            setCommentCount={setBreakfastCommentCount}
           />
           <CommentList
             recordId={recordId}
             target="breakfast"
             commentList={breakfastCommentList}
+            commentCount={breakfastCommentCount}
             setCommentList={setBreakfastCommentList}
+            setCommentCount={setBreakfastCommentCount}
           />
         </>
       ) : (
@@ -327,7 +353,7 @@ const RecordDetails: React.FC<Props> = (props) => {
             className={classes.openAndCloseCommentAreaText}
             onClick={() => openAndCloseCommentArea("breakfast")}
           >
-            <span>コメントを表示</span>
+            <span>{`${breakfastCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
           </div>
         </div>
@@ -355,7 +381,7 @@ const RecordDetails: React.FC<Props> = (props) => {
               className={classes.openAndCloseCommentAreaText}
               onClick={() => openAndCloseCommentArea("lunch")}
             >
-              <span>コメントを非表示</span>
+              <span>{`${lunchCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
             </div>
           </div>
@@ -363,13 +389,17 @@ const RecordDetails: React.FC<Props> = (props) => {
             recordId={recordId}
             target="lunch"
             commentList={lunchCommentList}
+            commentCount={lunchCommentCount}
             setCommentList={setLunchCommentList}
+            setCommentCount={setLunchCommentCount}
           />
           <CommentList
             recordId={recordId}
             target="lunch"
             commentList={lunchCommentList}
+            commentCount={lunchCommentCount}
             setCommentList={setLunchCommentList}
+            setCommentCount={setLunchCommentCount}
           />
         </>
       ) : (
@@ -378,7 +408,7 @@ const RecordDetails: React.FC<Props> = (props) => {
             className={classes.openAndCloseCommentAreaText}
             onClick={() => openAndCloseCommentArea("lunch")}
           >
-            <span>コメントを表示</span>
+            <span>{`${lunchCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
           </div>
         </div>
@@ -406,7 +436,7 @@ const RecordDetails: React.FC<Props> = (props) => {
               className={classes.openAndCloseCommentAreaText}
               onClick={() => openAndCloseCommentArea("dinner")}
             >
-              <span>コメントを非表示</span>
+              <span>{`${dinnerCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
             </div>
           </div>
@@ -414,13 +444,17 @@ const RecordDetails: React.FC<Props> = (props) => {
             recordId={recordId}
             target="dinner"
             commentList={dinnerCommentList}
+            commentCount={dinnerCommentCount}
             setCommentList={setDinnerCommentList}
+            setCommentCount={setDinnerCommentCount}
           />
           <CommentList
             recordId={recordId}
             target="dinner"
             commentList={dinnerCommentList}
+            commentCount={dinnerCommentCount}
             setCommentList={setDinnerCommentList}
+            setCommentCount={setDinnerCommentCount}
           />
         </>
       ) : (
@@ -429,7 +463,7 @@ const RecordDetails: React.FC<Props> = (props) => {
             className={classes.openAndCloseCommentAreaText}
             onClick={() => openAndCloseCommentArea("dinner")}
           >
-            <span>コメントを表示</span>
+            <span>{`${dinnerCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
           </div>
         </div>
@@ -457,7 +491,7 @@ const RecordDetails: React.FC<Props> = (props) => {
               className={classes.openAndCloseCommentAreaText}
               onClick={() => openAndCloseCommentArea("snack")}
             >
-              <span>コメントを非表示</span>
+              <span>{`${snackCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
             </div>
           </div>
@@ -465,13 +499,17 @@ const RecordDetails: React.FC<Props> = (props) => {
             recordId={recordId}
             target="snack"
             commentList={snackCommentList}
+            commentCount={snackCommentCount}
             setCommentList={setSnackCommentList}
+            setCommentCount={setSnackCommentCount}
           />
           <CommentList
             recordId={recordId}
             target="snack"
             commentList={snackCommentList}
+            commentCount={snackCommentCount}
             setCommentList={setSnackCommentList}
+            setCommentCount={setSnackCommentCount}
           />
         </>
       ) : (
@@ -480,7 +518,7 @@ const RecordDetails: React.FC<Props> = (props) => {
             className={classes.openAndCloseCommentAreaText}
             onClick={() => openAndCloseCommentArea("snack")}
           >
-            <span>コメントを表示</span>
+            <span>{`${snackCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
           </div>
         </div>

@@ -35,6 +35,11 @@ class Api::V1::RecordsController < ApplicationController
                    record_id: record.id }
   end
 
+  def comment_count
+    record = Record.find(params[:id])
+    render json: record.get_comment_count
+  end
+
   def delete_images
     Record.delete_images(params[:appearances], params[:meals], current_api_v1_user.id)
   end
