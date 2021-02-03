@@ -251,6 +251,31 @@ RSpec.describe 'Api::V1::Records', type: :request do
     end
   end
 
+  describe 'GET /api/v1/records/:id/comment/count' do
+    context 'when record exists' do
+      it 'get comment count of record' do
+        create(:comment, record_id: record.id)
+        create(:comment, target: 'breakfast', record_id: record.id)
+        create(:comment, target: 'lunch', record_id: record.id)
+        create(:comment, target: 'dinner', record_id: record.id)
+        create(:comment, target: 'snack', record_id: record.id)
+        get_comment_count(record.id)
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)['appearance']).to eq 1
+        expect(JSON.parse(response.body)['breakfast']).to eq 1
+        expect(JSON.parse(response.body)['lunch']).to eq 1
+        expect(JSON.parse(response.body)['dinner']).to eq 1
+        expect(JSON.parse(response.body)['snack']).to eq 1
+      end
+    end
+
+    context 'when record does not exist' do
+      it 'raise ActiveRecord::RecordNotFound' do
+        expect { get_comment_count(record.id + 1) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe 'DELETE /api/v1/records/images/delete' do
     context 'when token is valid' do
       context 'when images belongs to me' do
