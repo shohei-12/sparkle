@@ -49,6 +49,4 @@ test:
 #
 production:
   <<: *default
-  database: sparkle_production
-  username: sparkle
-  password: <%= ENV['SPARKLE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
