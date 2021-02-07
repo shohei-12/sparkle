@@ -1,0 +1,24 @@
+{
+  "name": "sparkle",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cd ..",
+    "deploy": "cp -a frontend/build/ public/",
+    "heroku-postbuild": "npm run build && npm run deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shohei-12/sparkle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shohei-12/sparkle/issues"
+  },
+  "homepage": "https://github.com/shohei-12/sparkle#readme"
+}
