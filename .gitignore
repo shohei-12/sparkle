@@ -28,4 +28,6 @@
 
 .DS_Store
 .env
+/tmp/sockets/*
+!/tmp/sockets/
 !/tmp/sockets/.keep
