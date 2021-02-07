@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "cd frontend && npm install && npm run build && cd ..",
-    "deploy": "cp -a frontend/build/ public/",
+    "deploy": "cp -a frontend/build/. public/",
     "heroku-postbuild": "npm run build && npm run deploy"
   },
   "repository": {

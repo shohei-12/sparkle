@@ -23,4 +23,8 @@ Rails.application.routes.draw do
       resources :comments, only: %i[create destroy]
     end
   end
+
+  get '*path', to: 'application#fallback_index_html', constraints: lambda { |request|
+    !request.xhr? && request.format.html?
+  }
 end
