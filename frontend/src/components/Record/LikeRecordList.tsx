@@ -139,9 +139,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
                 <Avatar>
                   <img
                     className={`${classes.profile} pointer-h`}
-                    src={
-                      ele.profile.url ? baseURL + ele.profile.url : NoProfile
-                    }
+                    src={ele.profile.url ? ele.profile.url : NoProfile}
                     alt="プロフィール画像"
                     onClick={() => goUserDetailsPage(ele.author_id)}
                   />
