@@ -155,9 +155,6 @@ const ImageField: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (imagePath) {
-      for (const ele of imagePath) {
-        ele[1] = baseURL + ele[1];
-      }
       setImages(imagePath);
     }
   }, [imagePath]);
