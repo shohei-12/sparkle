@@ -122,9 +122,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
               <img
                 className={`${classes.profile} pointer-h`}
                 src={
-                  ele.author_profile.url
-                    ? baseURL + ele.author_profile.url
-                    : NoProfile
+                  ele.author_profile.url ? ele.author_profile.url : NoProfile
                 }
                 alt="プロフィール画像"
                 onClick={() => dispatch(push(`/users/${ele.author_id}`))}

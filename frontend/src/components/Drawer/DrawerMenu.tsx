@@ -38,7 +38,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
 
 const drawerWidth = 240;
 
@@ -155,7 +154,7 @@ const DrawerMenu = () => {
       icon: (
         <img
           className={classes.profile}
-          src={profile ? `${baseURL + profile}` : NoProfile}
+          src={profile ? profile : NoProfile}
           alt="プロフィール画像"
         />
       ),

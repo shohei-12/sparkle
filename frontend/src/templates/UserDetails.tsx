@@ -175,7 +175,7 @@ const UserDetails: React.FC = () => {
               <h2 className={classes.name}>{name}</h2>
               <img
                 className={classes.profile}
-                src={profile ? baseURL + profile : NoProfile}
+                src={profile ? profile : NoProfile}
                 alt="プロフィール画像"
               />
             </div>

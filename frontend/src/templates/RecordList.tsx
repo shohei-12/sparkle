@@ -108,9 +108,7 @@ const RecordList: React.FC = () => {
                 <Avatar>
                   <img
                     className={`${classes.profile} pointer-h`}
-                    src={
-                      ele.profile.url ? baseURL + ele.profile.url : NoProfile
-                    }
+                    src={ele.profile.url ? ele.profile.url : NoProfile}
                     alt="プロフィール画像"
                     onClick={() => {
                       dispatch(switchTabAction(0));
