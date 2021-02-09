@@ -150,9 +150,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
             />
             <CardMedia
               className={classes.media}
-              image={
-                ele.appearance ? baseURL + ele.appearance.image.url : NoImage
-              }
+              image={ele.appearance ? ele.appearance.image.url : NoImage}
             />
             <CardContent
               className={`${classes.cardContent} pointer-h`}
