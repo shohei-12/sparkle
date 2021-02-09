@@ -159,7 +159,7 @@ const UserEdit: React.FC = () => {
         text="プロフィール画像（任意）"
         sheets={0}
         profile={true}
-        uprofile={uprofile ? baseURL + uprofile : NoProfile}
+        uprofile={uprofile ? uprofile : NoProfile}
         userEdit={true}
         setProfile={setProfile}
       />
