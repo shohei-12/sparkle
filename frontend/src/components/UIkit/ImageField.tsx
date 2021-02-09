@@ -5,7 +5,6 @@ import { getUserId, getTheme } from "../../re-ducks/users/selectors";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import RemoveIcon from "@material-ui/icons/Remove";
-import { baseURL } from "../../config";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
