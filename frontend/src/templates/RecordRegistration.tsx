@@ -247,6 +247,7 @@ const RecordRegistration: React.FC = () => {
             name="snack"
             onChange={inputSnack}
           />
+          <div className="space-m"></div>
           <SecondaryButton text="記録する" onClick={createRecord} />
         </>
       ) : (
