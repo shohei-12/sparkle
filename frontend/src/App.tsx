@@ -34,7 +34,7 @@ const App: React.FC = () => {
   const lightTheme = createMuiTheme({
     palette: {
       primary: {
-        main: colors.lightBlue[500],
+        main: colors.blue[500],
       },
       secondary: {
         main: colors.yellow[500],
@@ -46,7 +46,7 @@ const App: React.FC = () => {
   const darkTheme = createMuiTheme({
     palette: {
       primary: {
-        main: colors.lightBlue[500],
+        main: colors.blue[500],
       },
       secondary: {
         main: colors.yellow[500],

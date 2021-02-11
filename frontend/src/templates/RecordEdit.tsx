@@ -300,6 +300,7 @@ const RecordEdit: React.FC = () => {
             value={snackMemo}
             onChange={inputSnack}
           />
+          <div className="space-m"></div>
           <SecondaryButton text="更新する" onClick={updateRecord} />
         </>
       ) : (

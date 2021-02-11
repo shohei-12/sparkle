@@ -97,7 +97,7 @@ const RecordList: React.FC = () => {
       loadMore={get20Records}
       hasMore={hasMore}
       loader={
-        <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
+        <ReactLoading key={0} className="loader" type="spin" color="#2196f3" />
       }
     >
       {records.length > 0 &&

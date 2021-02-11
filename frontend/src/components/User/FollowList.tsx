@@ -63,7 +63,7 @@ const FollowList: React.FC<Props> = (props) => {
       loadMore={get20Followings}
       hasMore={hasMore}
       loader={
-        <ReactLoading key={0} className="loader" type="spin" color="#03a9f4" />
+        <ReactLoading key={0} className="loader" type="spin" color="#2196f3" />
       }
     >
       {followings &&
