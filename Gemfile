@@ -30,7 +30,6 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'pry-remote'
   gem 'rspec-rails'
 end
@@ -49,4 +48,5 @@ end
 gem 'carrierwave', '~> 2.0'
 gem 'devise'
 gem 'devise_token_auth'
+gem 'faker'
 gem 'fog-aws'
