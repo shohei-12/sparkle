@@ -5,7 +5,7 @@ User.create!(
   email: 'guest@example.com',
   password: 'password',
   password_confirmation: 'password',
-  theme: 'light'
+  theme: 'light',
   self_introduction: 'ゲストユーザーです。'
 )
 
@@ -17,7 +17,7 @@ User.create!(
     email: "sub#{n + 1}@example.com",
     password: 'password',
     password_confirmation: 'password',
-    theme: 'light'
+    theme: 'light',
     self_introduction: "ユーザー#{n + 1}です。"
   )
 end
@@ -80,7 +80,7 @@ end
 
 # meals
 140.times do |i|
-  rand(0..3).times do |n|
+  rand(0..3).times do
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/meal/meal.jpg"),
       meal_type: 'breakfast',
@@ -88,7 +88,7 @@ end
     )
   end
 
-  rand(0..3).times do |n|
+  rand(0..3).times do
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/meal/meal.jpg"),
       meal_type: 'lunch',
@@ -96,7 +96,7 @@ end
     )
   end
 
-  rand(0..3).times do |n|
+  rand(0..3).times do
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/meal/meal.jpg"),
       meal_type: 'dinner',
@@ -104,7 +104,7 @@ end
     )
   end
 
-  rand(0..3).times do |n|
+  rand(0..3).times do
     Meal.create!(
       image: open("#{Rails.root}/db/fixtures/meal/meal.jpg"),
       meal_type: 'snack',
