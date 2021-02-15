@@ -14,10 +14,10 @@ import Record from "./Record";
 const Router: React.FC = () => {
   return (
     <Switch>
-      <Route exact path="/" component={RecordList} />
       <Route exact path="/signin" component={SignIn} />
       <Route exact path="/signup" component={SignUp} />
       <Auth>
+        <Route exact path="/" component={RecordList} />
         <Route exact path="/record/:id/:year/:month/:day" component={Record} />
         <Route
           exact

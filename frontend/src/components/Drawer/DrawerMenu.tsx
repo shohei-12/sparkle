@@ -85,6 +85,11 @@ const useStyles = makeStyles((theme: Theme) =>
     dark: {
       color: "#ffd600",
     },
+    copyRight: {
+      position: "absolute",
+      bottom: 0,
+      paddingLeft: 16,
+    },
   })
 );
 
@@ -282,6 +287,7 @@ const DrawerMenu = () => {
             }}
           >
             {drawer}
+            <span className={classes.copyRight}>© 2021 MAEDASHOHEI</span>
           </Drawer>
         </Hidden>
         <Hidden smDown>
@@ -293,6 +299,7 @@ const DrawerMenu = () => {
             open
           >
             {drawer}
+            <span className={classes.copyRight}>© 2021 MAEDASHOHEI</span>
           </Drawer>
         </Hidden>
       </nav>
