@@ -4,7 +4,7 @@
 日々の見た目と食事内容を記録し、他の人に共有することで、モチベーションを維持することができます。<br>
 また、体重を記録しないことで、体重に囚われないダイエット・肉体改造をすることができます。
 
-URL <https://sparkle-v.herokuapp.com/>
+URL <https://sparkle-v.herokuapp.com>
 
 # 開発背景
 
@@ -77,7 +77,7 @@ URL <https://sparkle-v.herokuapp.com/>
 
 ### 【本番環境】
   - Heroku
-  - AWS（S3）
+  - AWS（S3、RDS）
   - puma
 
 ### 【テスト】
