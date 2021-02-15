@@ -77,7 +77,7 @@ URL <https://sparkle-v.herokuapp.com>
 
 ### 【本番環境】
   - Heroku
-  - AWS（S3、RDS）
+  - AWS（VPC、RDS、S3）
   - puma
 
 ### 【テスト】
