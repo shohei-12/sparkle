@@ -2,13 +2,24 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
+import ReactLoading from "react-loading";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { flashAction } from "../re-ducks/flash/actions";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { baseURL } from "../config";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    loading: {
+      textAlign: "center",
+    },
+  })
+);
+
 const RecordEdit: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = getUserId(selector);
@@ -39,6 +50,8 @@ const RecordEdit: React.FC = () => {
   const [lunchMemo, setLunchMemo] = useState("");
   const [dinnerMemo, setDinnerMemo] = useState("");
   const [snackMemo, setSnackMemo] = useState("");
+
+  const [isActive, setIsActive] = useState(false);
 
   const inputAppearance = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +88,13 @@ const RecordEdit: React.FC = () => {
     []
   );
 
+  const displayLoading = () => {
+    setIsActive(true);
+    const element = document.documentElement;
+    const bottom = element.scrollHeight - element.clientHeight;
+    window.scroll(0, bottom);
+  };
+
   const updateRecord = useCallback(async () => {
     await axios
       .delete(`${baseURL}/api/v1/records/images/delete`, {
@@ -89,6 +109,7 @@ const RecordEdit: React.FC = () => {
       .catch((error) => {
         throw new Error(error);
       });
+    displayLoading();
     const data = new FormData();
     data.append("id", recordId);
     data.append("uid", localStorage.getItem("uid")!);
@@ -302,6 +323,12 @@ const RecordEdit: React.FC = () => {
           />
           <div className="space-m"></div>
           <SecondaryButton text="更新する" onClick={updateRecord} />
+          {isActive && (
+            <div className={classes.loading}>
+              <ReactLoading className="loader" type="spin" color="#2196f3" />
+              <p>画像更新中</p>
+            </div>
+          )}
         </>
       ) : (
         <p>記録がありません</p>
