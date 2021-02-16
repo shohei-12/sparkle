@@ -272,7 +272,7 @@ const RecordRegistration: React.FC = () => {
           <SecondaryButton text="記録する" onClick={createRecord} />
           {isActive && (
             <div className={classes.loading}>
-              <ReactLoading type="spin" color="#2196f3" />
+              <ReactLoading className="loader" type="spin" color="#2196f3" />
               <p>画像アップロード中</p>
             </div>
           )}
