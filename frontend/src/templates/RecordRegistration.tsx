@@ -2,13 +2,24 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { push } from "connected-react-router";
+import ReactLoading from "react-loading";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { flashAction } from "../re-ducks/flash/actions";
 import { Store } from "../re-ducks/store/types";
 import { getUserId } from "../re-ducks/users/selectors";
 import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
 import { baseURL } from "../config";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    loading: {
+      textAlign: "center",
+    },
+  })
+);
+
 const RecordRegistration: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = getUserId(selector);
@@ -28,6 +39,8 @@ const RecordRegistration: React.FC = () => {
   const [lunchMemo, setLunchMemo] = useState("");
   const [dinnerMemo, setDinnerMemo] = useState("");
   const [snackMemo, setSnackMemo] = useState("");
+
+  const [isActive, setIsActive] = useState(false);
 
   const inputAppearance = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +77,13 @@ const RecordRegistration: React.FC = () => {
     []
   );
 
+  const displayLoading = () => {
+    setIsActive(true);
+    const element = document.documentElement;
+    const bottom = element.scrollHeight - element.clientHeight;
+    window.scroll(0, bottom);
+  };
+
   const createRecord = useCallback(() => {
     axios({
       method: "POST",
@@ -76,6 +96,7 @@ const RecordRegistration: React.FC = () => {
       },
     })
       .then(async (res) => {
+        displayLoading();
         const recordId = String(res.data.id);
         axios({
           method: "POST",
@@ -249,6 +270,12 @@ const RecordRegistration: React.FC = () => {
           />
           <div className="space-m"></div>
           <SecondaryButton text="記録する" onClick={createRecord} />
+          {isActive && (
+            <div className={classes.loading}>
+              <ReactLoading type="spin" color="#2196f3" />
+              <p>画像アップロード中</p>
+            </div>
+          )}
         </>
       ) : (
         <p>記録がありません</p>
