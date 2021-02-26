@@ -38,6 +38,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import NoProfile from "../../assets/img/no-profile.png";
+import Sparkle from "../../assets/img/sparkle.png";
 
 const drawerWidth = 240;
 
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
     drawerPaper: {
       width: drawerWidth,
     },
-    profile: {
+    img: {
       width: 30,
       height: 30,
       objectFit: "cover",
@@ -158,7 +159,7 @@ const DrawerMenu = () => {
       text: "マイページ",
       icon: (
         <img
-          className={classes.profile}
+          className={classes.img}
           src={profile ? profile : NoProfile}
           alt="プロフィール画像"
         />
@@ -210,6 +211,12 @@ const DrawerMenu = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
+        <ListItem button onClick={() => dispatch(push("/"))}>
+          <ListItemIcon>
+            <img className={classes.img} src={Sparkle} alt="画像" />
+          </ListItemIcon>
+          <ListItemText primary="トップページ" />
+        </ListItem>
         {isSignedIn ? (
           <>
             {signInList.map((item, index) => (

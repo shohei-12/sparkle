@@ -102,15 +102,22 @@ const RecordList: React.FC = () => {
     >
       {records.length > 0 &&
         records.map((ele, i) => (
-          <Card key={i} className="inline-block record">
+          <Card
+            key={i}
+            className="inline-block pointer-h record"
+            onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
+          >
             <CardHeader
               avatar={
                 <Avatar>
                   <img
-                    className={`${classes.profile} pointer-h`}
+                    className={classes.profile}
                     src={ele.profile.url ? ele.profile.url : NoProfile}
                     alt="プロフィール画像"
-                    onClick={() => {
+                    onClick={(
+                      e: React.MouseEvent<HTMLImageElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
                       dispatch(switchTabAction(0));
                       dispatch(push(`/users/${ele.author_id}`));
                     }}
@@ -124,10 +131,7 @@ const RecordList: React.FC = () => {
               className={classes.media}
               image={ele.appearance ? ele.appearance.image.url : NoImage}
             />
-            <CardContent
-              className={`${classes.cardContent} pointer-h`}
-              onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
-            >
+            <CardContent className={classes.cardContent}>
               詳細を見る
             </CardContent>
             <div className={classes.iconArea}>
@@ -135,7 +139,12 @@ const RecordList: React.FC = () => {
                 <Tooltip title="いいね解除">
                   <IconButton
                     aria-label="いいね解除"
-                    onClick={() => dispatch(unlikeRecord(ele.record_id, i))}
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
+                      dispatch(unlikeRecord(ele.record_id, i));
+                    }}
                   >
                     <FavoriteIcon className={classes.unlikeIcon} />
                   </IconButton>
@@ -144,7 +153,12 @@ const RecordList: React.FC = () => {
                 <Tooltip title="いいね">
                   <IconButton
                     aria-label="いいね"
-                    onClick={() => dispatch(likeRecord(ele.record_id, i))}
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
+                      dispatch(likeRecord(ele.record_id, i));
+                    }}
                   >
                     <FavoriteIcon />
                   </IconButton>
