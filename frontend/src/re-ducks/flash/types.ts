@@ -1,5 +1,5 @@
 export type FlashState = {
-  type: "" | "success" | "error";
+  type: '' | 'success' | 'error';
   msg: string;
 };
 

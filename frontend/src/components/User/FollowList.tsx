@@ -1,22 +1,18 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import InfiniteScroll from "react-infinite-scroller";
-import ReactLoading from "react-loading";
-import axios from "axios";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { switchTabAction } from "../../re-ducks/users/actions";
-import { getFollowings } from "../../re-ducks/relationships/selectors";
-import { User } from "../../re-ducks/relationships/types";
-import {
-  addFollowings,
-  follow,
-  unfollow,
-} from "../../re-ducks/relationships/operations";
-import Button from "@material-ui/core/Button";
-import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import InfiniteScroll from 'react-infinite-scroller';
+import ReactLoading from 'react-loading';
+import axios from 'axios';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { switchTabAction } from '../../re-ducks/users/actions';
+import { getFollowings } from '../../re-ducks/relationships/selectors';
+import { User } from '../../re-ducks/relationships/types';
+import { addFollowings, follow, unfollow } from '../../re-ducks/relationships/operations';
+import Button from '@material-ui/core/Button';
+import NoProfile from '../../assets/img/no-profile.png';
+import { baseURL } from '../../config';
 
 type Props = {
   uid: number;
@@ -39,9 +35,9 @@ const FollowList: React.FC<Props> = (props) => {
       .get(`${baseURL}/api/v1/users/${uid}/followings`, {
         params: {
           start,
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .then((res) => {
@@ -50,8 +46,7 @@ const FollowList: React.FC<Props> = (props) => {
           setHasMore(false);
           return;
         }
-        start !== undefined &&
-          dispatch(addFollowings(uid, twentyFollowings, start + 20));
+        start !== undefined && dispatch(addFollowings(uid, twentyFollowings, start + 20));
       })
       .catch((error) => {
         throw new Error(error);
@@ -62,9 +57,7 @@ const FollowList: React.FC<Props> = (props) => {
     <InfiniteScroll
       loadMore={get20Followings}
       hasMore={hasMore}
-      loader={
-        <ReactLoading key={0} className="loader" type="spin" color="#2196f3" />
-      }
+      loader={<ReactLoading key={0} className="loader" type="spin" color="#2196f3" />}
     >
       {followings &&
         followings.map((ele, i) => (

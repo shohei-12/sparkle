@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from "react";
-import axios from "axios";
-import { TextInput, SecondaryButton } from "../UIkit";
-import { Target, Comment } from "../../re-ducks/records/types";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import { baseURL } from "../../config";
+import React, { useState, useCallback } from 'react';
+import axios from 'axios';
+import { TextInput, SecondaryButton } from '../UIkit';
+import { Target, Comment } from '../../re-ducks/records/types';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import { baseURL } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     buttonGroup: {
-      textAlign: "right",
+      textAlign: 'right',
     },
     marginRight: {
       marginRight: 10,
@@ -41,7 +41,7 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
   const commentListIndex = props.commentListIndex;
   const userId = props.userId;
 
-  const [reply, setReply] = useState("");
+  const [reply, setReply] = useState('');
 
   const inputReply = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setReply(e.target.value);
@@ -59,9 +59,9 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
         content: reply,
         reply_comment_id: commentId,
         reply_user_id: userId,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       })
       .then((res) => {
         setCommentId(0);
@@ -109,11 +109,7 @@ const ReplyCommentForm: React.FC<Props> = (props) => {
         >
           キャンセル
         </Button>
-        <SecondaryButton
-          text="返信"
-          disabled={reply ? false : true}
-          onClick={replyComment}
-        />
+        <SecondaryButton text="返信" disabled={reply ? false : true} onClick={replyComment} />
       </div>
     </>
   );

@@ -1,11 +1,8 @@
-import * as Actions from "./actions";
-import { initialState } from "../store/initialState";
-import { RelationshipAction } from "./types";
+import * as Actions from './actions';
+import { initialState } from '../store/initialState';
+import { RelationshipAction } from './types';
 
-export const RelationshipsReducer = (
-  state = initialState.relationships,
-  action: RelationshipAction
-) => {
+export const RelationshipsReducer = (state = initialState.relationships, action: RelationshipAction) => {
   switch (action.type) {
     case Actions.NON_PAYLOAD:
       return {

@@ -1,38 +1,38 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { push } from "connected-react-router";
-import { Target, Comment } from "../../re-ducks/records/types";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { ReplyCommentForm, ReplyCommentList } from "../Record";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import Tooltip from "@material-ui/core/Tooltip";
-import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import { Target, Comment } from '../../re-ducks/records/types';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { ReplyCommentForm, ReplyCommentList } from '../Record';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import Tooltip from '@material-ui/core/Tooltip';
+import NoProfile from '../../assets/img/no-profile.png';
+import { baseURL } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     comment: {
-      display: "flex",
+      display: 'flex',
       marginTop: 30,
     },
     left: {
       marginRight: 20,
     },
     right: {
-      width: "100%",
+      width: '100%',
     },
     profile: {
       width: 40,
       height: 40,
-      borderRadius: "50%",
-      objectFit: "cover",
+      borderRadius: '50%',
+      objectFit: 'cover',
     },
     content: {
       marginTop: 2,
@@ -40,17 +40,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     date: {
       marginLeft: 5,
-      color: "#9e9e9e",
+      color: '#9e9e9e',
     },
     commentTrigger: {
       height: 43,
     },
     alignItemsCenter: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     otherComment: {
-      position: "relative",
+      position: 'relative',
       top: -3,
     },
   })
@@ -85,13 +85,13 @@ const CommentList: React.FC<Props> = React.memo((props) => {
 
   const deleteComment = useCallback(
     (id: number, replyComment: boolean, commentListIndex?: number) => {
-      if (window.confirm("本当に削除しますか？")) {
+      if (window.confirm('本当に削除しますか？')) {
         axios
           .delete(`${baseURL}/api/v1/comments/${id}`, {
             data: {
-              uid: localStorage.getItem("uid"),
-              client: localStorage.getItem("client"),
-              access_token: localStorage.getItem("access_token"),
+              uid: localStorage.getItem('uid'),
+              client: localStorage.getItem('client'),
+              access_token: localStorage.getItem('access_token'),
             },
           })
           .then(() => {
@@ -100,9 +100,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                 setOpenReplyComments(0);
               }
               commentList[commentListIndex].reply_count--;
-              const result = replyComments.filter(
-                (ele) => ele.comment_id !== id
-              );
+              const result = replyComments.filter((ele) => ele.comment_id !== id);
               setReplyComments(result);
             } else {
               const result = commentList.filter((ele) => ele.comment_id !== id);
@@ -164,9 +162,7 @@ const CommentList: React.FC<Props> = React.memo((props) => {
               <div className={classes.left}>
                 <img
                   className={`${classes.profile} pointer-h`}
-                  src={
-                    ele.author_profile.url ? ele.author_profile.url : NoProfile
-                  }
+                  src={ele.author_profile.url ? ele.author_profile.url : NoProfile}
                   alt="プロフィール画像"
                   onClick={() => dispatch(push(`/users/${ele.author_id}`))}
                 />
@@ -175,21 +171,13 @@ const CommentList: React.FC<Props> = React.memo((props) => {
                 <span>{ele.author_name}</span>
                 <span className={classes.date}>{ele.created_at}</span>
                 <p className={classes.content}>{ele.content}</p>
-                <div
-                  className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
-                >
-                  <span
-                    className="pointer-h"
-                    onClick={() => setCommentId(ele.comment_id)}
-                  >
+                <div className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}>
+                  <span className="pointer-h" onClick={() => setCommentId(ele.comment_id)}>
                     返信
                   </span>
                   {ele.author_id === currentUserId && (
                     <Tooltip title="削除" placement="right">
-                      <IconButton
-                        aria-label="コメントを削除する"
-                        onClick={() => deleteComment(ele.comment_id, false)}
-                      >
+                      <IconButton aria-label="コメントを削除する" onClick={() => deleteComment(ele.comment_id, false)}>
                         <DeleteIcon style={{ fontSize: 19 }} />
                       </IconButton>
                     </Tooltip>

@@ -1,13 +1,9 @@
-import axios from "axios";
-import { User, Followings, Followers } from "./types";
-import { nonPayloadAction } from "./actions";
-import { baseURL } from "../../config";
+import axios from 'axios';
+import { User, Followings, Followers } from './types';
+import { nonPayloadAction } from './actions';
+import { baseURL } from '../../config';
 
-export const addFollowings = (
-  uid: number,
-  twentyFollowings: User[],
-  nextStart: number
-) => {
+export const addFollowings = (uid: number, twentyFollowings: User[], nextStart: number) => {
   return (dispatch: any, getState: any) => {
     const followings = getState().relationships.followings as Followings[];
     const found = followings.find((ele) => ele.id === uid)!;
@@ -17,11 +13,7 @@ export const addFollowings = (
   };
 };
 
-export const addFollowers = (
-  uid: number,
-  twentyFollowers: User[],
-  nextStart: number
-) => {
+export const addFollowers = (uid: number, twentyFollowers: User[], nextStart: number) => {
   return (dispatch: any, getState: any) => {
     const followers = getState().relationships.followers as Followers[];
     const found = followers.find((ele) => ele.id === uid)!;
@@ -36,9 +28,9 @@ export const follow = (id: number, i: number) => {
     axios
       .post(`${baseURL}/api/v1/relationships`, {
         id,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       })
       .then(() => {
         const followings = getState().relationships.followings as Followings[];
@@ -56,9 +48,7 @@ export const follow = (id: number, i: number) => {
           }
         }
         dispatch(nonPayloadAction());
-        document.getElementById(
-          `unfollow-btn${i}`
-        )!.firstElementChild!.innerHTML = "フォロー解除";
+        document.getElementById(`unfollow-btn${i}`)!.firstElementChild!.innerHTML = 'フォロー解除';
       })
       .catch((error) => {
         throw new Error(error);
@@ -71,9 +61,9 @@ export const unfollow = (id: number, i: number) => {
     axios
       .delete(`${baseURL}/api/v1/relationships/${id}`, {
         data: {
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .then(() => {
@@ -92,9 +82,7 @@ export const unfollow = (id: number, i: number) => {
           }
         }
         dispatch(nonPayloadAction());
-        document.getElementById(
-          `follow-btn${i}`
-        )!.firstElementChild!.innerHTML = "フォロー";
+        document.getElementById(`follow-btn${i}`)!.firstElementChild!.innerHTML = 'フォロー';
       })
       .catch((error) => {
         throw new Error(error);

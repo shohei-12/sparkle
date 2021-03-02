@@ -1,5 +1,5 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
+import React from 'react';
+import Button from '@material-ui/core/Button';
 
 type Props = {
   text: string;
@@ -9,12 +9,7 @@ type Props = {
 
 const SecondaryButton: React.FC<Props> = React.memo((props) => {
   return (
-    <Button
-      color="secondary"
-      variant="contained"
-      disabled={props.disabled}
-      onClick={props.onClick}
-    >
+    <Button color="secondary" variant="contained" disabled={props.disabled} onClick={props.onClick}>
       {props.text}
     </Button>
   );

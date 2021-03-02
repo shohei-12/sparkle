@@ -1,41 +1,41 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { push } from "connected-react-router";
-import { Target, Comment } from "../../re-ducks/records/types";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { ReplyCommentForm } from "../Record";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
-import Tooltip from "@material-ui/core/Tooltip";
-import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import { Target, Comment } from '../../re-ducks/records/types';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { ReplyCommentForm } from '../Record';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import Tooltip from '@material-ui/core/Tooltip';
+import NoProfile from '../../assets/img/no-profile.png';
+import { baseURL } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     scrollY: {
-      width: "100%",
+      width: '100%',
       height: 200,
-      overflowY: "scroll",
+      overflowY: 'scroll',
     },
     comment: {
-      display: "flex",
+      display: 'flex',
       marginTop: 30,
     },
     left: {
       marginRight: 20,
     },
     right: {
-      width: "100%",
+      width: '100%',
     },
     profile: {
       width: 40,
       height: 40,
-      borderRadius: "50%",
-      objectFit: "cover",
+      borderRadius: '50%',
+      objectFit: 'cover',
     },
     content: {
       marginTop: 2,
@@ -43,17 +43,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     date: {
       marginLeft: 5,
-      color: "#9e9e9e",
+      color: '#9e9e9e',
     },
     commentTrigger: {
       height: 43,
     },
     alignItemsCenter: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     otherReply: {
-      position: "relative",
+      position: 'relative',
       top: -3,
     },
   })
@@ -66,11 +66,7 @@ type Props = {
   setReplyComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   commentList: Comment[];
   commentListIndex: number;
-  deleteComment: (
-    id: number,
-    replyComment: boolean,
-    commentListIndex?: number
-  ) => void;
+  deleteComment: (id: number, replyComment: boolean, commentListIndex?: number) => void;
   replyCount: number;
   commentId: number;
 };
@@ -121,9 +117,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
             <div className={classes.left}>
               <img
                 className={`${classes.profile} pointer-h`}
-                src={
-                  ele.author_profile.url ? ele.author_profile.url : NoProfile
-                }
+                src={ele.author_profile.url ? ele.author_profile.url : NoProfile}
                 alt="プロフィール画像"
                 onClick={() => dispatch(push(`/users/${ele.author_id}`))}
               />
@@ -133,33 +127,21 @@ const ReplyCommentList: React.FC<Props> = (props) => {
               <span className={classes.date}>{ele.created_at}</span>
               <p className={classes.content}>
                 {ele.reply_user_id && ele.reply_user_name && (
-                  <span
-                    className="link"
-                    onClick={() =>
-                      dispatch(push(`/users/${ele.reply_user_id}`))
-                    }
-                  >
-                    {`@${ele.reply_user_name}`}{" "}
+                  <span className="link" onClick={() => dispatch(push(`/users/${ele.reply_user_id}`))}>
+                    {`@${ele.reply_user_name}`}{' '}
                   </span>
                 )}
                 {ele.content}
               </p>
-              <div
-                className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}
-              >
-                <span
-                  className="pointer-h"
-                  onClick={() => setReplyCommentId(ele.comment_id)}
-                >
+              <div className={`${classes.commentTrigger} ${classes.alignItemsCenter}`}>
+                <span className="pointer-h" onClick={() => setReplyCommentId(ele.comment_id)}>
                   返信
                 </span>
                 {ele.author_id === currentUserId && (
                   <Tooltip title="削除" placement="right">
                     <IconButton
                       aria-label="コメントを削除する"
-                      onClick={() =>
-                        deleteComment(ele.comment_id, true, commentListIndex)
-                      }
+                      onClick={() => deleteComment(ele.comment_id, true, commentListIndex)}
                     >
                       <DeleteIcon style={{ fontSize: 19 }} />
                     </IconButton>
@@ -184,10 +166,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
         </div>
       ))}
       {replyCount > 0 && (
-        <div
-          className="inline-block pointer-h"
-          onClick={() => get10ReplyComments(commentId)}
-        >
+        <div className="inline-block pointer-h" onClick={() => get10ReplyComments(commentId)}>
           <SubdirectoryArrowRightIcon />
           <span className={classes.otherReply}>他の返信を表示</span>
         </div>

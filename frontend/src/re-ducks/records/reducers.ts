@@ -1,11 +1,8 @@
-import * as Actions from "./actions";
-import { initialState } from "../store/initialState";
-import { RecordAction } from "./types";
+import * as Actions from './actions';
+import { initialState } from '../store/initialState';
+import { RecordAction } from './types';
 
-export const RecordsReducer = (
-  state = initialState.records,
-  action: RecordAction
-) => {
+export const RecordsReducer = (state = initialState.records, action: RecordAction) => {
   switch (action.type) {
     case Actions.ADD_RECORDS:
       return {

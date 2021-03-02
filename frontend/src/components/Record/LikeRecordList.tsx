@@ -1,53 +1,49 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import InfiniteScroll from "react-infinite-scroller";
-import ReactLoading from "react-loading";
-import axios from "axios";
-import { push } from "connected-react-router";
-import { switchTabAction } from "../../re-ducks/users/actions";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { Store } from "../../re-ducks/store/types";
-import { Record } from "../../re-ducks/records/types";
-import { getLikeRecords } from "../../re-ducks/records/selectors";
-import {
-  addLikeRecords,
-  likeRecord,
-  unlikeRecord,
-} from "../../re-ducks/records/operations";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import Tooltip from "@material-ui/core/Tooltip";
-import { baseURL } from "../../config";
-import NoImage from "../../assets/img/no-image.png";
-import NoProfile from "../../assets/img/no-profile.png";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroller';
+import ReactLoading from 'react-loading';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import { switchTabAction } from '../../re-ducks/users/actions';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { Store } from '../../re-ducks/store/types';
+import { Record } from '../../re-ducks/records/types';
+import { getLikeRecords } from '../../re-ducks/records/selectors';
+import { addLikeRecords, likeRecord, unlikeRecord } from '../../re-ducks/records/operations';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import Tooltip from '@material-ui/core/Tooltip';
+import { baseURL } from '../../config';
+import NoImage from '../../assets/img/no-image.png';
+import NoProfile from '../../assets/img/no-profile.png';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     profile: {
       width: 40,
       height: 40,
-      objectFit: "cover",
+      objectFit: 'cover',
     },
     media: {
       height: 0,
-      paddingTop: "56.25%", // 16:9
+      paddingTop: '56.25%', // 16:9
     },
     cardContent: {
-      display: "inline-block",
+      display: 'inline-block',
       padding: 0,
       margin: 16,
     },
     iconArea: {
-      padding: "0 8px 8px",
+      padding: '0 8px 8px',
     },
     unlikeIcon: {
-      color: "#f44336",
+      color: '#f44336',
     },
   })
 );
@@ -74,7 +70,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
   const goUserDetailsPage = useCallback(
     (author_id: number) => {
       dispatch(switchTabAction(0));
-      localStorage.setItem("scrollY-like_records", String(window.scrollY));
+      localStorage.setItem('scrollY-like_records', String(window.scrollY));
       dispatch(push(`/users/${author_id}`));
     },
     [dispatch]
@@ -82,7 +78,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
 
   const goRecordDetailsPage = useCallback(
     (author_id: number, dateString: string) => {
-      localStorage.setItem("scrollY-like_records", String(window.scrollY));
+      localStorage.setItem('scrollY-like_records', String(window.scrollY));
       const date = new Date(dateString);
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -98,9 +94,9 @@ const LikeRecordList: React.FC<Props> = (props) => {
         .get(`${baseURL}/api/v1/users/${uid}/like-records`, {
           params: {
             start,
-            uid: localStorage.getItem("uid"),
-            client: localStorage.getItem("client"),
-            access_token: localStorage.getItem("access_token"),
+            uid: localStorage.getItem('uid'),
+            client: localStorage.getItem('client'),
+            access_token: localStorage.getItem('access_token'),
           },
         })
         .then((res) => {
@@ -109,8 +105,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
             setHasMore(false);
             return;
           }
-          start !== undefined &&
-            dispatch(addLikeRecords(uid, twentyLikeRecords, start + 20));
+          start !== undefined && dispatch(addLikeRecords(uid, twentyLikeRecords, start + 20));
         })
         .catch((error) => {
           throw new Error(error);
@@ -126,9 +121,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
     <InfiniteScroll
       loadMore={get20LikeRecords}
       hasMore={hasMore}
-      loader={
-        <ReactLoading key={0} className="loader" type="spin" color="#2196f3" />
-      }
+      loader={<ReactLoading key={0} className="loader" type="spin" color="#2196f3" />}
     >
       {likeRecords &&
         likeRecords.length > 0 &&
@@ -148,10 +141,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
               title={ele.author}
               subheader={ele.date}
             />
-            <CardMedia
-              className={classes.media}
-              image={ele.appearance ? ele.appearance.image.url : NoImage}
-            />
+            <CardMedia className={classes.media} image={ele.appearance ? ele.appearance.image.url : NoImage} />
             <CardContent
               className={`${classes.cardContent} pointer-h`}
               onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
@@ -173,10 +163,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
                 </Tooltip>
               ) : (
                 <Tooltip title="いいね">
-                  <IconButton
-                    aria-label="いいね"
-                    onClick={() => dispatch(likeRecord(ele.record_id, i, uid))}
-                  >
+                  <IconButton aria-label="いいね" onClick={() => dispatch(likeRecord(ele.record_id, i, uid))}>
                     <FavoriteIcon />
                   </IconButton>
                 </Tooltip>
