@@ -1,9 +1,9 @@
-import { FlashState } from "./types";
+import { FlashState } from './types';
 
-export const FLASH = "FLASH";
+export const FLASH = 'FLASH';
 export const flashAction = (flashState: FlashState) => {
   return {
-    type: "FLASH",
+    type: 'FLASH',
     payload: {
       ...flashState,
     },

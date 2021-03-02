@@ -15,7 +15,7 @@ export type LikeRecords = {
   start: number;
 };
 
-export type Target = "appearance" | "breakfast" | "lunch" | "dinner" | "snack";
+export type Target = 'appearance' | 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
 export type Comment = {
   comment_id: number;

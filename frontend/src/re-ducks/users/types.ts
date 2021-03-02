@@ -5,7 +5,7 @@ export type UserState = {
   email: string;
   selfIntroduction: string;
   profile: string;
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   tabIndex: number;
 };
 
@@ -17,7 +17,7 @@ export type UserUpdate = {
 };
 
 export type ThemeToggle = {
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
 };
 
 export type UserAction = {

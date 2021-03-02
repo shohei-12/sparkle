@@ -1,5 +1,5 @@
-import { createSelector } from "reselect";
-import { Store } from "../store/types";
+import { createSelector } from 'reselect';
+import { Store } from '../store/types';
 
 const flashSelector = (state: Store) => state.flash;
 

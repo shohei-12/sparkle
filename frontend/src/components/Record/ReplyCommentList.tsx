@@ -1,41 +1,41 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { push } from "connected-react-router";
-import { Target, Comment } from "../../re-ducks/records/types";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { ReplyCommentForm } from "../Record";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
-import Tooltip from "@material-ui/core/Tooltip";
-import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import { Target, Comment } from '../../re-ducks/records/types';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { ReplyCommentForm } from '../Record';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import Tooltip from '@material-ui/core/Tooltip';
+import NoProfile from '../../assets/img/no-profile.png';
+import { baseURL } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     scrollY: {
-      width: "100%",
+      width: '100%',
       height: 200,
-      overflowY: "scroll",
+      overflowY: 'scroll',
     },
     comment: {
-      display: "flex",
+      display: 'flex',
       marginTop: 30,
     },
     left: {
       marginRight: 20,
     },
     right: {
-      width: "100%",
+      width: '100%',
     },
     profile: {
       width: 40,
       height: 40,
-      borderRadius: "50%",
-      objectFit: "cover",
+      borderRadius: '50%',
+      objectFit: 'cover',
     },
     content: {
       marginTop: 2,
@@ -43,17 +43,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     date: {
       marginLeft: 5,
-      color: "#9e9e9e",
+      color: '#9e9e9e',
     },
     commentTrigger: {
       height: 43,
     },
     alignItemsCenter: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     otherReply: {
-      position: "relative",
+      position: 'relative',
       top: -3,
     },
   })
@@ -139,7 +139,7 @@ const ReplyCommentList: React.FC<Props> = (props) => {
                       dispatch(push(`/users/${ele.reply_user_id}`))
                     }
                   >
-                    {`@${ele.reply_user_name}`}{" "}
+                    {`@${ele.reply_user_name}`}{' '}
                   </span>
                 )}
                 {ele.content}

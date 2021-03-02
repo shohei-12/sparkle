@@ -1,81 +1,81 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId, getTheme } from "../../re-ducks/users/selectors";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import RemoveIcon from "@material-ui/icons/Remove";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId, getTheme } from '../../re-ducks/users/selectors';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textLight: {
-      color: "rgba(0, 0, 0, 0.54)",
+      color: 'rgba(0, 0, 0, 0.54)',
     },
     textDark: {
-      color: "rgba(255, 255, 255, 0.7)",
+      color: 'rgba(255, 255, 255, 0.7)',
     },
     text: {
       fontSize: 16,
     },
     previews: {
-      display: "flex",
-      flexWrap: "wrap",
+      display: 'flex',
+      flexWrap: 'wrap',
     },
     imageSize: {
       width: 100,
       height: 100,
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up('sm')]: {
         width: 150,
         height: 150,
       },
     },
     preview: {
-      position: "relative",
+      position: 'relative',
       margin: 10,
     },
     deletePreview: {
-      position: "absolute",
+      position: 'absolute',
       top: -15,
       right: -15,
-      backgroundColor: "#fff",
-      border: "1px solid #bdbdbd",
+      backgroundColor: '#fff',
+      border: '1px solid #bdbdbd',
       width: 30,
       height: 30,
-      borderRadius: "50%",
+      borderRadius: '50%',
     },
     image: {
-      objectFit: "cover",
+      objectFit: 'cover',
     },
     addImage: {
-      display: "inline-block",
-      backgroundColor: "#bdbdbd",
+      display: 'inline-block',
+      backgroundColor: '#bdbdbd',
       margin: 10,
     },
     wrapIcon: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      "&:hover": {
-        cursor: "pointer",
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      '&:hover': {
+        cursor: 'pointer',
       },
     },
     icon: {
       width: 40,
       height: 40,
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up('sm')]: {
         width: 50,
         height: 50,
       },
-      color: "#fff",
+      color: '#fff',
     },
     none: {
-      display: "none",
+      display: 'none',
     },
     profile: {
-      borderRadius: "50%",
+      borderRadius: '50%',
     },
     removeIcon: {
-      color: "#000",
+      color: '#000',
     },
   })
 );
@@ -135,7 +135,7 @@ const ImageField: React.FC<Props> = (props) => {
   };
 
   const deletePreview = (image: [File | number, string]) => {
-    if (typeof image[0] === "number") {
+    if (typeof image[0] === 'number') {
       const imageId = image[0] as number;
       setAppearancesId && setAppearancesId((prev) => [...prev, imageId]);
       setMealsId && setMealsId((prev) => [...prev, imageId]);
@@ -162,7 +162,7 @@ const ImageField: React.FC<Props> = (props) => {
     <div>
       {userEdit || signUp ? (
         <>
-          {theme === "light" ? (
+          {theme === 'light' ? (
             <p className={classes.textLight}>{text}</p>
           ) : (
             <p className={classes.textDark}>{text}</p>
@@ -176,11 +176,11 @@ const ImageField: React.FC<Props> = (props) => {
           images.map((ele, index) => (
             <div
               key={index}
-              className={classes.preview + " " + classes.imageSize}
+              className={classes.preview + ' ' + classes.imageSize}
             >
               <span
                 id="delete-preview"
-                className={classes.deletePreview + " " + classes.wrapIcon}
+                className={classes.deletePreview + ' ' + classes.wrapIcon}
                 onClick={() => deletePreview(ele)}
               >
                 <RemoveIcon className={classes.removeIcon} />
@@ -189,9 +189,9 @@ const ImageField: React.FC<Props> = (props) => {
                 <img
                   className={
                     classes.image +
-                    " " +
+                    ' ' +
                     classes.imageSize +
-                    " " +
+                    ' ' +
                     classes.profile
                   }
                   src={ele[1]}
@@ -199,7 +199,7 @@ const ImageField: React.FC<Props> = (props) => {
                 />
               ) : (
                 <img
-                  className={classes.image + " " + classes.imageSize}
+                  className={classes.image + ' ' + classes.imageSize}
                   src={ele[1]}
                   alt="プレビュー"
                 />
@@ -210,14 +210,14 @@ const ImageField: React.FC<Props> = (props) => {
           <>
             {uprofile ? (
               <label>
-                {uid === "1" ? (
+                {uid === '1' ? (
                   <>
                     <img
                       className={
                         classes.image +
-                        " " +
+                        ' ' +
                         classes.imageSize +
-                        " " +
+                        ' ' +
                         classes.profile
                       }
                       src={uprofile}
@@ -253,15 +253,15 @@ const ImageField: React.FC<Props> = (props) => {
                   <div
                     className={
                       classes.addImage +
-                      " " +
+                      ' ' +
                       classes.imageSize +
-                      " " +
+                      ' ' +
                       classes.profile
                     }
                   >
                     <label>
                       <div
-                        className={classes.wrapIcon + " " + classes.imageSize}
+                        className={classes.wrapIcon + ' ' + classes.imageSize}
                       >
                         <AddAPhotoIcon className={classes.icon} />
                       </div>
@@ -274,10 +274,10 @@ const ImageField: React.FC<Props> = (props) => {
                     </label>
                   </div>
                 ) : (
-                  <div className={classes.addImage + " " + classes.imageSize}>
+                  <div className={classes.addImage + ' ' + classes.imageSize}>
                     <label>
                       <div
-                        className={classes.wrapIcon + " " + classes.imageSize}
+                        className={classes.wrapIcon + ' ' + classes.imageSize}
                       >
                         <AddAPhotoIcon className={classes.icon} />
                       </div>

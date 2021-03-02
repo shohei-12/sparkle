@@ -1,37 +1,37 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import axios from "axios";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import { Store } from "../re-ducks/store/types";
-import { getUserId } from "../re-ducks/users/selectors";
-import { getLikeRecords } from "../re-ducks/records/selectors";
-import { createLikeRecordsContainerAction } from "../re-ducks/records/actions";
-import { getFollowings } from "../re-ducks/relationships/selectors";
-import { follow, unfollow } from "../re-ducks/relationships/operations";
-import { createRelationshipContainerAction } from "../re-ducks/relationships/actions";
-import { SecondaryButton } from "../components/UIkit";
-import { DetailsTab } from "../components/User";
-import NoProfile from "../assets/img/no-profile.png";
-import { baseURL } from "../config";
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import axios from 'axios';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import { Store } from '../re-ducks/store/types';
+import { getUserId } from '../re-ducks/users/selectors';
+import { getLikeRecords } from '../re-ducks/records/selectors';
+import { createLikeRecordsContainerAction } from '../re-ducks/records/actions';
+import { getFollowings } from '../re-ducks/relationships/selectors';
+import { follow, unfollow } from '../re-ducks/relationships/operations';
+import { createRelationshipContainerAction } from '../re-ducks/relationships/actions';
+import { SecondaryButton } from '../components/UIkit';
+import { DetailsTab } from '../components/User';
+import NoProfile from '../assets/img/no-profile.png';
+import { baseURL } from '../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flex: {
       marginBottom: 20,
-      textAlign: "center",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        alignItems: "center",
-        textAlign: "start",
+      textAlign: 'center',
+      [theme.breakpoints.up('sm')]: {
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'start',
       },
     },
     left: {
-      display: "flex",
-      flexDirection: "column",
-      [theme.breakpoints.up("sm")]: {
-        display: "block",
+      display: 'flex',
+      flexDirection: 'column',
+      [theme.breakpoints.up('sm')]: {
+        display: 'block',
       },
     },
     name: {
@@ -39,27 +39,27 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 400,
     },
     profile: {
-      margin: "0 auto",
+      margin: '0 auto',
       order: 1,
       width: 200,
       height: 200,
-      objectFit: "cover",
-      borderRadius: "50%",
+      objectFit: 'cover',
+      borderRadius: '50%',
     },
     right: {
-      whiteSpace: "pre-wrap",
-      textAlign: "left",
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
+      whiteSpace: 'pre-wrap',
+      textAlign: 'left',
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
         marginLeft: 15,
       },
-      "& > p": {
+      '& > p': {
         margin: 0,
       },
     },
     unfollowBtn: {
-      "&:hover": {
-        backgroundColor: "#f44336",
+      '&:hover': {
+        backgroundColor: '#f44336',
       },
     },
   })
@@ -70,14 +70,14 @@ const UserDetails: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = Number(getUserId(selector));
-  const uid = Number(window.location.pathname.split("/")[2]);
+  const uid = Number(window.location.pathname.split('/')[2]);
   const likeRecords = getLikeRecords(selector).find((ele) => ele.uid === uid);
   const followings = getFollowings(selector).find((ele) => ele.id === uid);
   const isBrowserBack = useRef(false);
 
-  const [name, setName] = useState("");
-  const [selfIntroduction, setSelfIntroduction] = useState("");
-  const [profile, setProfile] = useState<string | null>("");
+  const [name, setName] = useState('');
+  const [selfIntroduction, setSelfIntroduction] = useState('');
+  const [profile, setProfile] = useState<string | null>('');
   const [following, setFollowing] = useState(false);
   const [followingsLength, setFollowingsLength] = useState(0);
   const [followersLength, setFollowersLength] = useState(0);
@@ -103,12 +103,12 @@ const UserDetails: React.FC = () => {
 
   const over = useCallback((n: number) => {
     document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
-      "フォロー解除";
+      'フォロー解除';
   }, []);
 
   const leave = useCallback((n: number) => {
     document.getElementById(`unfollow-btn${n}`)!.firstElementChild!.innerHTML =
-      "フォロー中";
+      'フォロー中';
   }, []);
 
   useEffect(() => {
@@ -118,18 +118,18 @@ const UserDetails: React.FC = () => {
       axios
         .get(`${baseURL}/api/v1/users/${uid}`, {
           params: {
-            uid: localStorage.getItem("uid"),
-            client: localStorage.getItem("client"),
-            access_token: localStorage.getItem("access_token"),
+            uid: localStorage.getItem('uid'),
+            client: localStorage.getItem('client'),
+            access_token: localStorage.getItem('access_token'),
           },
         })
         .then((res) => {
           axios
             .get(`${baseURL}/api/v1/relationships/following/${uid}`, {
               params: {
-                uid: localStorage.getItem("uid"),
-                client: localStorage.getItem("client"),
-                access_token: localStorage.getItem("access_token"),
+                uid: localStorage.getItem('uid'),
+                client: localStorage.getItem('client'),
+                access_token: localStorage.getItem('access_token'),
               },
             })
             .then((res) => {
@@ -141,23 +141,23 @@ const UserDetails: React.FC = () => {
           setName(res.data.user.name);
           res.data.user.self_introduction
             ? setSelfIntroduction(res.data.user.self_introduction)
-            : setSelfIntroduction("");
+            : setSelfIntroduction('');
           setProfile(res.data.user.profile.url);
           setFollowingsLength(res.data.followings);
           setFollowersLength(res.data.followers);
           setLikes(res.data.likes);
           const scrollYLikeRecords = Number(
-            localStorage.getItem("scrollY-like_records")
+            localStorage.getItem('scrollY-like_records')
           );
           if (isBrowserBack.current) {
             if (scrollYLikeRecords) {
               window.scrollTo(0, scrollYLikeRecords);
-              localStorage.removeItem("scrollY-like_records");
+              localStorage.removeItem('scrollY-like_records');
             }
             isBrowserBack.current = false;
           }
           if (scrollYLikeRecords) {
-            localStorage.removeItem("scrollY-like_records");
+            localStorage.removeItem('scrollY-like_records');
           }
         })
         .catch((error) => {

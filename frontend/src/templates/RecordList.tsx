@@ -1,49 +1,49 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { push } from "connected-react-router";
-import InfiniteScroll from "react-infinite-scroller";
-import ReactLoading from "react-loading";
-import { switchTabAction } from "../re-ducks/users/actions";
-import { likeRecord, unlikeRecord } from "../re-ducks/records/operations";
-import { addRecordsAction } from "../re-ducks/records/actions";
-import { getRecords, getStart } from "../re-ducks/records/selectors";
-import { Record } from "../re-ducks/records/types";
-import { Store } from "../re-ducks/store/types";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import Tooltip from "@material-ui/core/Tooltip";
-import { baseURL } from "../config";
-import NoImage from "../assets/img/no-image.png";
-import NoProfile from "../assets/img/no-profile.png";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import InfiniteScroll from 'react-infinite-scroller';
+import ReactLoading from 'react-loading';
+import { switchTabAction } from '../re-ducks/users/actions';
+import { likeRecord, unlikeRecord } from '../re-ducks/records/operations';
+import { addRecordsAction } from '../re-ducks/records/actions';
+import { getRecords, getStart } from '../re-ducks/records/selectors';
+import { Record } from '../re-ducks/records/types';
+import { Store } from '../re-ducks/store/types';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import Tooltip from '@material-ui/core/Tooltip';
+import { baseURL } from '../config';
+import NoImage from '../assets/img/no-image.png';
+import NoProfile from '../assets/img/no-profile.png';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     profile: {
       width: 40,
       height: 40,
-      objectFit: "cover",
+      objectFit: 'cover',
     },
     media: {
       height: 0,
-      paddingTop: "56.25%", // 16:9
+      paddingTop: '56.25%', // 16:9
     },
     cardContent: {
-      display: "inline-block",
+      display: 'inline-block',
       padding: 0,
       margin: 16,
     },
     iconArea: {
-      padding: "0 8px 8px",
+      padding: '0 8px 8px',
     },
     unlikeIcon: {
-      color: "#f44336",
+      color: '#f44336',
     },
   })
 );
@@ -69,13 +69,13 @@ const RecordList: React.FC = () => {
 
   const get20Records = useCallback(() => {
     axios({
-      method: "GET",
+      method: 'GET',
       url: `${baseURL}/api/v1/records`,
       params: {
         start,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       },
     })
       .then((res) => {

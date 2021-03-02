@@ -1,17 +1,17 @@
-import axios from "axios";
-import { push } from "connected-react-router";
-import { signInAction, signOutAction, toggleThemeAction } from "./actions";
-import { flashAction } from "../flash/actions";
-import { baseURL } from "../../config";
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import { signInAction, signOutAction, toggleThemeAction } from './actions';
+import { flashAction } from '../flash/actions';
+import { baseURL } from '../../config';
 
 const signInAfterSavingToken = (
   dispatch: any,
   responseData: any,
   responseHeaders: any
 ) => {
-  localStorage.setItem("uid", responseHeaders.uid);
-  localStorage.setItem("client", responseHeaders.client);
-  localStorage.setItem("access_token", responseHeaders.access_token);
+  localStorage.setItem('uid', responseHeaders.uid);
+  localStorage.setItem('client', responseHeaders.client);
+  localStorage.setItem('access_token', responseHeaders.access_token);
   dispatch(
     signInAction({
       isSignedIn: true,
@@ -24,18 +24,18 @@ const signInAfterSavingToken = (
       tabIndex: 0,
     })
   );
-  dispatch(push("/"));
+  dispatch(push('/'));
 };
 
 export const listenAuthState = (tabIndex: number) => {
   return async (dispatch: any) => {
     axios({
-      method: "GET",
+      method: 'GET',
       url: `${baseURL}/api/v1/auth/validate_token`,
       params: {
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       },
     })
       .then((res) => {
@@ -54,7 +54,7 @@ export const listenAuthState = (tabIndex: number) => {
         );
       })
       .catch(() => {
-        dispatch(push("/signin"));
+        dispatch(push('/signin'));
       });
   };
 };
@@ -62,7 +62,7 @@ export const listenAuthState = (tabIndex: number) => {
 export const signIn = (email: string, password: string, newUser: boolean) => {
   return async (dispatch: any) => {
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${baseURL}/api/v1/auth/sign_in`,
       data: {
         email,
@@ -71,7 +71,7 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
     })
       .then((res) => {
         newUser ||
-          dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
+          dispatch(flashAction({ type: 'success', msg: 'ログインしました！' }));
         const responseData = res.data.data;
         const responseHeaders = res.headers;
         signInAfterSavingToken(dispatch, responseData, responseHeaders);
@@ -79,8 +79,8 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
       .catch(() => {
         dispatch(
           flashAction({
-            type: "error",
-            msg: "入力されたメールアドレスまたはパスワードに誤りがあります。",
+            type: 'error',
+            msg: '入力されたメールアドレスまたはパスワードに誤りがあります。',
           })
         );
       });
@@ -90,15 +90,15 @@ export const signIn = (email: string, password: string, newUser: boolean) => {
 export const signInAsGuestUser = () => {
   return async (dispatch: any) => {
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${baseURL}/api/v1/auth/sign_in`,
       data: {
-        email: "guest@example.com",
-        password: "password",
+        email: 'guest@example.com',
+        password: 'password',
       },
     })
       .then((res) => {
-        dispatch(flashAction({ type: "success", msg: "ログインしました！" }));
+        dispatch(flashAction({ type: 'success', msg: 'ログインしました！' }));
         const responseData = res.data.data;
         const responseHeaders = res.headers;
         signInAfterSavingToken(dispatch, responseData, responseHeaders);
@@ -112,21 +112,21 @@ export const signInAsGuestUser = () => {
 export const signOut = () => {
   return async (dispatch: any) => {
     axios({
-      method: "DELETE",
+      method: 'DELETE',
       url: `${baseURL}/api/v1/auth/sign_out`,
       data: {
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       },
     })
       .then(() => {
-        dispatch(flashAction({ type: "success", msg: "ログアウトしました！" }));
-        localStorage.removeItem("uid");
-        localStorage.removeItem("client");
-        localStorage.removeItem("access_token");
+        dispatch(flashAction({ type: 'success', msg: 'ログアウトしました！' }));
+        localStorage.removeItem('uid');
+        localStorage.removeItem('client');
+        localStorage.removeItem('access_token');
         dispatch(signOutAction());
-        dispatch(push("/signin"));
+        dispatch(push('/signin'));
       })
       .catch((error) => {
         throw new Error(error);
@@ -137,26 +137,26 @@ export const signOut = () => {
 export const deleteUser = () => {
   return async (dispatch: any) => {
     axios({
-      method: "DELETE",
+      method: 'DELETE',
       url: `${baseURL}/api/v1/auth`,
       data: {
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       },
     })
       .then(() => {
         dispatch(
           flashAction({
-            type: "success",
-            msg: "アカウントを削除しました。またのご利用をお待ちしております。",
+            type: 'success',
+            msg: 'アカウントを削除しました。またのご利用をお待ちしております。',
           })
         );
-        localStorage.removeItem("uid");
-        localStorage.removeItem("client");
-        localStorage.removeItem("access_token");
+        localStorage.removeItem('uid');
+        localStorage.removeItem('client');
+        localStorage.removeItem('access_token');
         dispatch(signOutAction());
-        dispatch(push("/signin"));
+        dispatch(push('/signin'));
       })
       .catch((error) => {
         throw new Error(error);
@@ -164,16 +164,16 @@ export const deleteUser = () => {
   };
 };
 
-export const toggleTheme = (theme: "light" | "dark") => {
+export const toggleTheme = (theme: 'light' | 'dark') => {
   return async (dispatch: any) => {
     axios({
-      method: "PUT",
+      method: 'PUT',
       url: `${baseURL}/api/v1/toggle-theme`,
       data: {
         theme,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       },
     })
       .then(() => {

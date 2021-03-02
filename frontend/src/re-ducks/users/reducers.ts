@@ -1,6 +1,6 @@
-import * as Actions from "./actions";
-import { initialState } from "../store/initialState";
-import { UserAction } from "./types";
+import * as Actions from './actions';
+import { initialState } from '../store/initialState';
+import { UserAction } from './types';
 
 export const UsersReducer = (
   state = initialState.users,
