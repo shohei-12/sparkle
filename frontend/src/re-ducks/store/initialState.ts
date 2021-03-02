@@ -1,16 +1,16 @@
-import { UserState } from "../users/types";
-import { RecordState } from "../records/types";
-import { RelationshipState } from "../relationships/types";
-import { FlashState } from "../flash/types";
+import { UserState } from '../users/types';
+import { RecordState } from '../records/types';
+import { RelationshipState } from '../relationships/types';
+import { FlashState } from '../flash/types';
 
 const initialUserState: UserState = {
   isSignedIn: false,
-  id: "",
-  name: "",
-  email: "",
-  selfIntroduction: "",
-  profile: "",
-  theme: "light",
+  id: '',
+  name: '',
+  email: '',
+  selfIntroduction: '',
+  profile: '',
+  theme: 'light',
   tabIndex: 0,
 };
 
@@ -26,8 +26,8 @@ const initialRelationshipState: RelationshipState = {
 };
 
 const initialFlashState: FlashState = {
-  type: "",
-  msg: "",
+  type: '',
+  msg: '',
 };
 
 export const initialState = {

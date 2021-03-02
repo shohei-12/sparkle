@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
-import { createBrowserHistory } from "history";
-import { createStore } from "./re-ducks/store/store";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import { createStore } from './re-ducks/store/store';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
 const history = createBrowserHistory();
 const store = createStore(history);
@@ -18,7 +18,7 @@ ReactDOM.render(
       </React.StrictMode>
     </ConnectedRouter>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

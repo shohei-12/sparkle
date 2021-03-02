@@ -1,1 +1,1 @@
-export const baseURL = "https://sparkle-v.herokuapp.com/api";
+export const baseURL = 'https://sparkle-v.herokuapp.com/api';

@@ -1,19 +1,19 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { push } from "connected-react-router";
-import ReactLoading from "react-loading";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { flashAction } from "../re-ducks/flash/actions";
-import { Store } from "../re-ducks/store/types";
-import { getUserId } from "../re-ducks/users/selectors";
-import { ImageField, SecondaryButton, TextInput } from "../components/UIkit";
-import { baseURL } from "../config";
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { push } from 'connected-react-router';
+import ReactLoading from 'react-loading';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { flashAction } from '../re-ducks/flash/actions';
+import { Store } from '../re-ducks/store/types';
+import { getUserId } from '../re-ducks/users/selectors';
+import { ImageField, SecondaryButton, TextInput } from '../components/UIkit';
+import { baseURL } from '../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     loading: {
-      textAlign: "center",
+      textAlign: 'center',
     },
   })
 );
@@ -23,12 +23,12 @@ const RecordEdit: React.FC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const currentUserId = getUserId(selector);
-  const uid = window.location.pathname.split("/")[2];
-  const year = Number(window.location.pathname.split("/")[3]);
-  const month = Number(window.location.pathname.split("/")[4]);
-  const day = Number(window.location.pathname.split("/")[5]);
+  const uid = window.location.pathname.split('/')[2];
+  const year = Number(window.location.pathname.split('/')[3]);
+  const month = Number(window.location.pathname.split('/')[4]);
+  const day = Number(window.location.pathname.split('/')[5]);
 
-  const [recordId, setRecordId] = useState("");
+  const [recordId, setRecordId] = useState('');
 
   const [appearancesId, setAppearancesId] = useState<number[]>([]);
   const [mealsId, setMealsId] = useState<number[]>([]);
@@ -45,48 +45,33 @@ const RecordEdit: React.FC = () => {
   const [dinnerPath, setDinnerPath] = useState<[number, string][]>([]);
   const [snackPath, setSnackPath] = useState<[number, string][]>([]);
 
-  const [appearanceMemo, setAppearanceMemo] = useState("");
-  const [breakfastMemo, setBreakfastMemo] = useState("");
-  const [lunchMemo, setLunchMemo] = useState("");
-  const [dinnerMemo, setDinnerMemo] = useState("");
-  const [snackMemo, setSnackMemo] = useState("");
+  const [appearanceMemo, setAppearanceMemo] = useState('');
+  const [breakfastMemo, setBreakfastMemo] = useState('');
+  const [lunchMemo, setLunchMemo] = useState('');
+  const [dinnerMemo, setDinnerMemo] = useState('');
+  const [snackMemo, setSnackMemo] = useState('');
 
   const [isActive, setIsActive] = useState(false);
 
-  const inputAppearance = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setAppearanceMemo(event.target.value);
-    },
-    []
-  );
+  const inputAppearance = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setAppearanceMemo(event.target.value);
+  }, []);
 
-  const inputBreakfast = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setBreakfastMemo(event.target.value);
-    },
-    []
-  );
+  const inputBreakfast = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setBreakfastMemo(event.target.value);
+  }, []);
 
-  const inputLunch = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setLunchMemo(event.target.value);
-    },
-    []
-  );
+  const inputLunch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setLunchMemo(event.target.value);
+  }, []);
 
-  const inputDinner = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDinnerMemo(event.target.value);
-    },
-    []
-  );
+  const inputDinner = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setDinnerMemo(event.target.value);
+  }, []);
 
-  const inputSnack = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSnackMemo(event.target.value);
-    },
-    []
-  );
+  const inputSnack = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSnackMemo(event.target.value);
+  }, []);
 
   const displayLoading = () => {
     setIsActive(true);
@@ -101,9 +86,9 @@ const RecordEdit: React.FC = () => {
         data: {
           appearances: appearancesId,
           meals: mealsId,
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .catch((error) => {
@@ -111,49 +96,49 @@ const RecordEdit: React.FC = () => {
       });
     displayLoading();
     const data = new FormData();
-    data.append("id", recordId);
-    data.append("uid", localStorage.getItem("uid")!);
-    data.append("client", localStorage.getItem("client")!);
-    data.append("access_token", localStorage.getItem("access_token")!);
+    data.append('id', recordId);
+    data.append('uid', localStorage.getItem('uid')!);
+    data.append('client', localStorage.getItem('client')!);
+    data.append('access_token', localStorage.getItem('access_token')!);
     for (const ele of appearances) {
-      data.append("image", ele);
+      data.append('image', ele);
       await axios
         .post(`${baseURL}/api/v1/appearances`, data, {
           headers: {
-            "content-type": "multipart/form-data",
+            'content-type': 'multipart/form-data',
           },
         })
         .then(() => {
-          data.delete("image");
+          data.delete('image');
         })
         .catch((error) => {
           throw new Error(error);
         });
     }
     const meals = [
-      { meal_type: "breakfast", meal: breakfasts },
-      { meal_type: "lunch", meal: lunchs },
-      { meal_type: "dinner", meal: dinners },
-      { meal_type: "snack", meal: snacks },
+      { meal_type: 'breakfast', meal: breakfasts },
+      { meal_type: 'lunch', meal: lunchs },
+      { meal_type: 'dinner', meal: dinners },
+      { meal_type: 'snack', meal: snacks },
     ];
     for (const ele of meals) {
-      data.append("meal_type", ele.meal_type);
+      data.append('meal_type', ele.meal_type);
       for (const meal of ele.meal) {
-        data.append("image", meal);
+        data.append('image', meal);
         await axios
           .post(`${baseURL}/api/v1/meals`, data, {
             headers: {
-              "content-type": "multipart/form-data",
+              'content-type': 'multipart/form-data',
             },
           })
           .then(() => {
-            data.delete("image");
+            data.delete('image');
           })
           .catch((error) => {
             throw new Error(error);
           });
       }
-      data.delete("meal_type");
+      data.delete('meal_type');
     }
     axios
       .put(`${baseURL}/api/v1/memos/${recordId}`, {
@@ -162,14 +147,14 @@ const RecordEdit: React.FC = () => {
         lunch: lunchMemo,
         dinner: dinnerMemo,
         snack: snackMemo,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       })
       .catch((error) => {
         throw new Error(error);
       });
-    dispatch(flashAction({ type: "success", msg: "更新しました！" }));
+    dispatch(flashAction({ type: 'success', msg: '更新しました！' }));
     dispatch(push(`/record/${currentUserId}/${year}/${month}/${day}`));
   }, [
     recordId,
@@ -197,9 +182,9 @@ const RecordEdit: React.FC = () => {
       .get(`${baseURL}/api/v1/records/related`, {
         params: {
           date: new Date(year, month - 1, day + 1),
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .then((res) => {

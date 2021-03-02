@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from "react";
-import axios from "axios";
-import { TextInput, SecondaryButton } from "../UIkit";
-import { Target, Comment } from "../../re-ducks/records/types";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import { baseURL } from "../../config";
+import React, { useState, useCallback } from 'react';
+import axios from 'axios';
+import { TextInput, SecondaryButton } from '../UIkit';
+import { Target, Comment } from '../../re-ducks/records/types';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import { baseURL } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     buttonGroup: {
-      textAlign: "right",
+      textAlign: 'right',
     },
     marginRight: {
       marginRight: 10,
@@ -35,14 +35,14 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
   const setCommentList = props.setCommentList;
   const setCommentCount = props.setCommentCount;
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const inputComment = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   }, []);
 
   const cancelComment = useCallback(() => {
-    setComment("");
+    setComment('');
   }, []);
 
   const createComment = useCallback(() => {
@@ -53,27 +53,19 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
         content: comment,
         reply_comment_id: null,
         reply_user_id: null,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       })
       .then((res) => {
-        setComment("");
+        setComment('');
         setCommentList([...res.data, ...commentList]);
         setCommentCount(commentCount + 1);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, [
-    recordId,
-    target,
-    comment,
-    commentList,
-    setCommentList,
-    setCommentCount,
-    commentCount,
-  ]);
+  }, [recordId, target, comment, commentList, setCommentList, setCommentCount, commentCount]);
 
   return (
     <>
@@ -100,11 +92,7 @@ const CommentForm: React.FC<Props> = React.memo((props) => {
         >
           キャンセル
         </Button>
-        <SecondaryButton
-          text="コメント"
-          disabled={comment ? false : true}
-          onClick={createComment}
-        />
+        <SecondaryButton text="コメント" disabled={comment ? false : true} onClick={createComment} />
       </div>
     </>
   );

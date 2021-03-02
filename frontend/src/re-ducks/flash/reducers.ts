@@ -1,11 +1,8 @@
-import * as Actions from "./actions";
-import { initialState } from "../store/initialState";
-import { FlashAction } from "./types";
+import * as Actions from './actions';
+import { initialState } from '../store/initialState';
+import { FlashAction } from './types';
 
-export const FlashReducer = (
-  state = initialState.flash,
-  action: FlashAction
-) => {
+export const FlashReducer = (state = initialState.flash, action: FlashAction) => {
   switch (action.type) {
     case Actions.FLASH:
       return {

@@ -1,7 +1,7 @@
-import { UserState } from "../users/types";
-import { RecordState } from "../records/types";
-import { RelationshipState } from "../relationships/types";
-import { FlashState } from "../flash/types";
+import { UserState } from '../users/types';
+import { RecordState } from '../records/types';
+import { RelationshipState } from '../relationships/types';
+import { FlashState } from '../flash/types';
 
 export type Store = {
   users: UserState;
