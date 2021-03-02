@@ -85,6 +85,7 @@ URL <https://sparkle-v.herokuapp.com>
   - FactoryBot
 
 ### 【その他】
+  - Prettier
   - RuboCop
   - CircleCI
   - hadolint
