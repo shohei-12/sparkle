@@ -1,52 +1,52 @@
-import React, { useState, useCallback, useEffect } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Target, Comment } from "../re-ducks/records/types";
-import { Store } from "../re-ducks/store/types";
-import { getUserId } from "../re-ducks/users/selectors";
-import { flashAction } from "../re-ducks/flash/actions";
+import React, { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Target, Comment } from '../re-ducks/records/types';
+import { Store } from '../re-ducks/store/types';
+import { getUserId } from '../re-ducks/users/selectors';
+import { flashAction } from '../re-ducks/flash/actions';
 import {
   AppearancesGallery,
   MealsGallery,
   CommentForm,
   CommentList,
-} from "../components/Record";
-import { SecondaryButton } from "../components/UIkit";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import Button from "@material-ui/core/Button";
-import NoImage from "../assets/img/no-image.png";
-import { baseURL } from "../config";
+} from '../components/Record';
+import { SecondaryButton } from '../components/UIkit';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import Button from '@material-ui/core/Button';
+import NoImage from '../assets/img/no-image.png';
+import { baseURL } from '../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     btnGroup: {
       marginTop: 10,
-      textAlign: "right",
+      textAlign: 'right',
     },
     deleteBtn: {
       marginLeft: 10,
-      color: "#fff",
-      backgroundColor: "#f44336",
-      "&:hover": {
-        backgroundColor: "rgb(170, 46, 37)",
+      color: '#fff',
+      backgroundColor: '#f44336',
+      '&:hover': {
+        backgroundColor: 'rgb(170, 46, 37)',
       },
     },
     memo: {
-      whiteSpace: "pre-wrap",
+      whiteSpace: 'pre-wrap',
       maxWidth: 350,
-      width: "100%",
-      margin: "0 auto",
-      textAlign: "left",
-      "& > h3": {
+      width: '100%',
+      margin: '0 auto',
+      textAlign: 'left',
+      '& > h3': {
         marginTop: 0,
       },
     },
     openAndCloseCommentAreaText: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
   })
 );
@@ -76,11 +76,11 @@ const RecordDetails: React.FC<Props> = (props) => {
   const [dinners, setDinners] = useState<string[]>([]);
   const [snacks, setSnacks] = useState<string[]>([]);
 
-  const [appearanceMemo, setAppearanceMemo] = useState("");
-  const [breakfastMemo, setBreakfastMemo] = useState("");
-  const [lunchMemo, setLunchMemo] = useState("");
-  const [dinnerMemo, setDinnerMemo] = useState("");
-  const [snackMemo, setSnackMemo] = useState("");
+  const [appearanceMemo, setAppearanceMemo] = useState('');
+  const [breakfastMemo, setBreakfastMemo] = useState('');
+  const [lunchMemo, setLunchMemo] = useState('');
+  const [dinnerMemo, setDinnerMemo] = useState('');
+  const [snackMemo, setSnackMemo] = useState('');
 
   const [appearanceComment, setAppearanceComment] = useState(false);
   const [breakfastComment, setBreakfastComment] = useState(false);
@@ -107,23 +107,23 @@ const RecordDetails: React.FC<Props> = (props) => {
   const openAndCloseCommentArea = useCallback(
     (target: Target) => {
       switch (target) {
-        case "appearance":
+        case 'appearance':
           setAppearanceCommentList([]);
           setAppearanceComment(!appearanceComment);
           break;
-        case "breakfast":
+        case 'breakfast':
           setBreakfastCommentList([]);
           setBreakfastComment(!breakfastComment);
           break;
-        case "lunch":
+        case 'lunch':
           setLunchCommentList([]);
           setLunchComment(!lunchComment);
           break;
-        case "dinner":
+        case 'dinner':
           setDinnerCommentList([]);
           setDinnerComment(!dinnerComment);
           break;
-        case "snack":
+        case 'snack':
           setSnackCommentList([]);
           setSnackComment(!snackComment);
       }
@@ -138,18 +138,18 @@ const RecordDetails: React.FC<Props> = (props) => {
   );
 
   const deleteRecord = useCallback(() => {
-    if (window.confirm("本当に削除しますか？")) {
+    if (window.confirm('本当に削除しますか？')) {
       axios
         .delete(`${baseURL}/api/v1/records/${recordId}`, {
           data: {
-            uid: localStorage.getItem("uid"),
-            client: localStorage.getItem("client"),
-            access_token: localStorage.getItem("access_token"),
+            uid: localStorage.getItem('uid'),
+            client: localStorage.getItem('client'),
+            access_token: localStorage.getItem('access_token'),
           },
         })
         .then(() => {
           dispatch(push(`/users/${currentUserId}`));
-          dispatch(flashAction({ type: "success", msg: "削除しました！" }));
+          dispatch(flashAction({ type: 'success', msg: '削除しました！' }));
         })
         .catch((error) => {
           throw new Error(error);
@@ -174,16 +174,16 @@ const RecordDetails: React.FC<Props> = (props) => {
       .then((res) => {
         for (const ele of res.data) {
           switch (ele.meal_type) {
-            case "breakfast":
+            case 'breakfast':
               breakfastsContainer.push(ele.image.url);
               break;
-            case "lunch":
+            case 'lunch':
               lunchsContainer.push(ele.image.url);
               break;
-            case "dinner":
+            case 'dinner':
               dinnersContainer.push(ele.image.url);
               break;
-            case "snack":
+            case 'snack':
               snacksContainer.push(ele.image.url);
           }
         }
@@ -269,7 +269,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <div className="inline-block pointer-h">
             <div
               className={classes.openAndCloseCommentAreaText}
-              onClick={() => openAndCloseCommentArea("appearance")}
+              onClick={() => openAndCloseCommentArea('appearance')}
             >
               <span>{`${appearanceCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
@@ -296,7 +296,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         <div className="inline-block pointer-h">
           <div
             className={classes.openAndCloseCommentAreaText}
-            onClick={() => openAndCloseCommentArea("appearance")}
+            onClick={() => openAndCloseCommentArea('appearance')}
           >
             <span>{`${appearanceCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
@@ -324,7 +324,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <div className="inline-block pointer-h">
             <div
               className={classes.openAndCloseCommentAreaText}
-              onClick={() => openAndCloseCommentArea("breakfast")}
+              onClick={() => openAndCloseCommentArea('breakfast')}
             >
               <span>{`${breakfastCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
@@ -351,7 +351,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         <div className="inline-block pointer-h">
           <div
             className={classes.openAndCloseCommentAreaText}
-            onClick={() => openAndCloseCommentArea("breakfast")}
+            onClick={() => openAndCloseCommentArea('breakfast')}
           >
             <span>{`${breakfastCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
@@ -379,7 +379,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <div className="inline-block pointer-h">
             <div
               className={classes.openAndCloseCommentAreaText}
-              onClick={() => openAndCloseCommentArea("lunch")}
+              onClick={() => openAndCloseCommentArea('lunch')}
             >
               <span>{`${lunchCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
@@ -406,7 +406,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         <div className="inline-block pointer-h">
           <div
             className={classes.openAndCloseCommentAreaText}
-            onClick={() => openAndCloseCommentArea("lunch")}
+            onClick={() => openAndCloseCommentArea('lunch')}
           >
             <span>{`${lunchCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
@@ -434,7 +434,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <div className="inline-block pointer-h">
             <div
               className={classes.openAndCloseCommentAreaText}
-              onClick={() => openAndCloseCommentArea("dinner")}
+              onClick={() => openAndCloseCommentArea('dinner')}
             >
               <span>{`${dinnerCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
@@ -461,7 +461,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         <div className="inline-block pointer-h">
           <div
             className={classes.openAndCloseCommentAreaText}
-            onClick={() => openAndCloseCommentArea("dinner")}
+            onClick={() => openAndCloseCommentArea('dinner')}
           >
             <span>{`${dinnerCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />
@@ -489,7 +489,7 @@ const RecordDetails: React.FC<Props> = (props) => {
           <div className="inline-block pointer-h">
             <div
               className={classes.openAndCloseCommentAreaText}
-              onClick={() => openAndCloseCommentArea("snack")}
+              onClick={() => openAndCloseCommentArea('snack')}
             >
               <span>{`${snackCommentCount}件のコメントを非表示`}</span>
               <ArrowDropUpIcon />
@@ -516,7 +516,7 @@ const RecordDetails: React.FC<Props> = (props) => {
         <div className="inline-block pointer-h">
           <div
             className={classes.openAndCloseCommentAreaText}
-            onClick={() => openAndCloseCommentArea("snack")}
+            onClick={() => openAndCloseCommentArea('snack')}
           >
             <span>{`${snackCommentCount}件のコメントを表示`}</span>
             <ArrowDropDownIcon />

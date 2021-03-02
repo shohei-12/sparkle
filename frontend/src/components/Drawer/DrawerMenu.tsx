@@ -1,68 +1,68 @@
-import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import { DrawerMenuListItem } from ".";
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import { DrawerMenuListItem } from '.';
 import {
   getIsSignedIn,
   getUserId,
   getUserProfile,
   getTheme,
-} from "../../re-ducks/users/selectors";
+} from '../../re-ducks/users/selectors';
 import {
   signOut,
   deleteUser,
   toggleTheme,
-} from "../../re-ducks/users/operations";
-import { Store } from "../../re-ducks/store/types";
-import { flashAction } from "../../re-ducks/flash/actions";
-import { toggleThemeAction } from "../../re-ducks/users/actions";
-import { getFlashMessageType } from "../../re-ducks/flash/selectors";
-import AppBar from "@material-ui/core/AppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import WarningIcon from "@material-ui/icons/Warning";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MenuIcon from "@material-ui/icons/Menu";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
-import Brightness3Icon from "@material-ui/icons/Brightness3";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import NoProfile from "../../assets/img/no-profile.png";
-import Sparkle from "../../assets/img/sparkle.png";
+} from '../../re-ducks/users/operations';
+import { Store } from '../../re-ducks/store/types';
+import { flashAction } from '../../re-ducks/flash/actions';
+import { toggleThemeAction } from '../../re-ducks/users/actions';
+import { getFlashMessageType } from '../../re-ducks/flash/selectors';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import WarningIcon from '@material-ui/icons/Warning';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
+import Brightness3Icon from '@material-ui/icons/Brightness3';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import NoProfile from '../../assets/img/no-profile.png';
+import Sparkle from '../../assets/img/sparkle.png';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
+      display: 'flex',
     },
     drawer: {
-      [theme.breakpoints.up("md")]: {
+      [theme.breakpoints.up('md')]: {
         width: drawerWidth,
         flexShrink: 0,
       },
     },
     appBar: {
-      [theme.breakpoints.up("md")]: {
+      [theme.breakpoints.up('md')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
       },
     },
     menuButton: {
       marginRight: theme.spacing(2),
-      [theme.breakpoints.up("md")]: {
-        display: "none",
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
       },
     },
     toolbar: theme.mixins.toolbar,
@@ -72,22 +72,22 @@ const useStyles = makeStyles((theme: Theme) =>
     img: {
       width: 30,
       height: 30,
-      objectFit: "cover",
-      borderRadius: "50%",
+      objectFit: 'cover',
+      borderRadius: '50%',
     },
     close: {
-      position: "relative",
+      position: 'relative',
       top: 4,
       left: 3,
     },
     light: {
-      color: "#ff9800",
+      color: '#ff9800',
     },
     dark: {
-      color: "#ffd600",
+      color: '#ffd600',
     },
     copyRight: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       paddingLeft: 16,
     },
@@ -111,12 +111,12 @@ const DrawerMenu = () => {
   }, [setMobileOpen, mobileOpen]);
 
   const goTop = useCallback(() => {
-    type && dispatch(flashAction({ type: "", msg: "" }));
-    dispatch(push("/"));
+    type && dispatch(flashAction({ type: '', msg: '' }));
+    dispatch(push('/'));
   }, [dispatch, type]);
 
   const dispatchSignOut = useCallback(() => {
-    type && dispatch(flashAction({ type: "", msg: "" }));
+    type && dispatch(flashAction({ type: '', msg: '' }));
     dispatch(signOut());
     if (window.innerWidth < 960) {
       handleDrawerToggle();
@@ -125,8 +125,8 @@ const DrawerMenu = () => {
 
   const dispatchToggleLightTheme = useCallback(() => {
     isSignedIn
-      ? dispatch(toggleTheme("light"))
-      : dispatch(toggleThemeAction({ theme: "light" }));
+      ? dispatch(toggleTheme('light'))
+      : dispatch(toggleThemeAction({ theme: 'light' }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
@@ -134,17 +134,17 @@ const DrawerMenu = () => {
 
   const dispatchToggleDarkTheme = useCallback(() => {
     isSignedIn
-      ? dispatch(toggleTheme("dark"))
-      : dispatch(toggleThemeAction({ theme: "dark" }));
+      ? dispatch(toggleTheme('dark'))
+      : dispatch(toggleThemeAction({ theme: 'dark' }));
     if (window.innerWidth < 960) {
       handleDrawerToggle();
     }
   }, [dispatch, handleDrawerToggle, isSignedIn]);
 
   const dispatchDeleteUser = useCallback(() => {
-    if (window.confirm("アカウントを削除しますか？")) {
-      if (uid === "1") {
-        alert("ゲストユーザーはアカウントを削除できません！");
+    if (window.confirm('アカウントを削除しますか？')) {
+      if (uid === '1') {
+        alert('ゲストユーザーはアカウントを削除できません！');
         return;
       }
       dispatch(deleteUser());
@@ -156,7 +156,7 @@ const DrawerMenu = () => {
 
   const signInList = [
     {
-      text: "マイページ",
+      text: 'マイページ',
       icon: (
         <img
           className={classes.img}
@@ -170,20 +170,20 @@ const DrawerMenu = () => {
 
   const notSignInList = [
     {
-      text: "ユーザーの登録",
+      text: 'ユーザーの登録',
       icon: <PersonAddIcon />,
-      path: "/signup",
+      path: '/signup',
     },
     {
-      text: "ログイン",
+      text: 'ログイン',
       icon: <ExitToAppIcon />,
-      path: "/signin",
+      path: '/signin',
     },
   ];
 
   const themeListItem = (
     <>
-      {theme === "light" ? (
+      {theme === 'light' ? (
         <ListItem button onClick={dispatchToggleDarkTheme}>
           <ListItemIcon>
             <Brightness3Icon className={classes.dark} />
@@ -211,7 +211,7 @@ const DrawerMenu = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItem button onClick={() => dispatch(push("/"))}>
+        <ListItem button onClick={() => dispatch(push('/'))}>
           <ListItemIcon>
             <img className={classes.img} src={Sparkle} alt="画像" />
           </ListItemIcon>

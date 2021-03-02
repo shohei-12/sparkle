@@ -1,7 +1,7 @@
-import axios from "axios";
-import { User, Followings, Followers } from "./types";
-import { nonPayloadAction } from "./actions";
-import { baseURL } from "../../config";
+import axios from 'axios';
+import { User, Followings, Followers } from './types';
+import { nonPayloadAction } from './actions';
+import { baseURL } from '../../config';
 
 export const addFollowings = (
   uid: number,
@@ -36,9 +36,9 @@ export const follow = (id: number, i: number) => {
     axios
       .post(`${baseURL}/api/v1/relationships`, {
         id,
-        uid: localStorage.getItem("uid"),
-        client: localStorage.getItem("client"),
-        access_token: localStorage.getItem("access_token"),
+        uid: localStorage.getItem('uid'),
+        client: localStorage.getItem('client'),
+        access_token: localStorage.getItem('access_token'),
       })
       .then(() => {
         const followings = getState().relationships.followings as Followings[];
@@ -58,7 +58,7 @@ export const follow = (id: number, i: number) => {
         dispatch(nonPayloadAction());
         document.getElementById(
           `unfollow-btn${i}`
-        )!.firstElementChild!.innerHTML = "フォロー解除";
+        )!.firstElementChild!.innerHTML = 'フォロー解除';
       })
       .catch((error) => {
         throw new Error(error);
@@ -71,9 +71,9 @@ export const unfollow = (id: number, i: number) => {
     axios
       .delete(`${baseURL}/api/v1/relationships/${id}`, {
         data: {
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .then(() => {
@@ -94,7 +94,7 @@ export const unfollow = (id: number, i: number) => {
         dispatch(nonPayloadAction());
         document.getElementById(
           `follow-btn${i}`
-        )!.firstElementChild!.innerHTML = "フォロー";
+        )!.firstElementChild!.innerHTML = 'フォロー';
       })
       .catch((error) => {
         throw new Error(error);

@@ -1,6 +1,6 @@
-import * as Actions from "./actions";
-import { initialState } from "../store/initialState";
-import { RecordAction } from "./types";
+import * as Actions from './actions';
+import { initialState } from '../store/initialState';
+import { RecordAction } from './types';
 
 export const RecordsReducer = (
   state = initialState.records,

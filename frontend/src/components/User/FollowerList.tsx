@@ -1,22 +1,22 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import InfiniteScroll from "react-infinite-scroller";
-import ReactLoading from "react-loading";
-import axios from "axios";
-import { Store } from "../../re-ducks/store/types";
-import { getUserId } from "../../re-ducks/users/selectors";
-import { switchTabAction } from "../../re-ducks/users/actions";
-import { getFollowers } from "../../re-ducks/relationships/selectors";
-import { User } from "../../re-ducks/relationships/types";
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import InfiniteScroll from 'react-infinite-scroller';
+import ReactLoading from 'react-loading';
+import axios from 'axios';
+import { Store } from '../../re-ducks/store/types';
+import { getUserId } from '../../re-ducks/users/selectors';
+import { switchTabAction } from '../../re-ducks/users/actions';
+import { getFollowers } from '../../re-ducks/relationships/selectors';
+import { User } from '../../re-ducks/relationships/types';
 import {
   addFollowers,
   follow,
   unfollow,
-} from "../../re-ducks/relationships/operations";
-import Button from "@material-ui/core/Button";
-import NoProfile from "../../assets/img/no-profile.png";
-import { baseURL } from "../../config";
+} from '../../re-ducks/relationships/operations';
+import Button from '@material-ui/core/Button';
+import NoProfile from '../../assets/img/no-profile.png';
+import { baseURL } from '../../config';
 
 type Props = {
   uid: number;
@@ -39,9 +39,9 @@ const FollowerList: React.FC<Props> = (props) => {
       .get(`${baseURL}/api/v1/users/${uid}/followers`, {
         params: {
           start,
-          uid: localStorage.getItem("uid"),
-          client: localStorage.getItem("client"),
-          access_token: localStorage.getItem("access_token"),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client'),
+          access_token: localStorage.getItem('access_token'),
         },
       })
       .then((res) => {

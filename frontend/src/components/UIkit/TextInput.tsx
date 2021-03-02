@@ -1,5 +1,5 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 
 type Props = {
   fullWidth: boolean;
@@ -17,7 +17,7 @@ type Props = {
   InputLabelProps?: object;
   value?: string;
   rowsMax?: number;
-  variant?: "filled" | "outlined" | "standard";
+  variant?: 'filled' | 'outlined' | 'standard';
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 

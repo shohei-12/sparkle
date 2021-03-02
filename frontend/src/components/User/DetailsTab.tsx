@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
-import Calendar from "react-calendar";
-import { FollowList, FollowerList } from ".";
-import { LikeRecordList } from "../Record";
-import { switchTabAction } from "../../re-ducks/users/actions";
-import { getTabIndex } from "../../re-ducks/users/selectors";
-import { Store } from "../../re-ducks/store/types";
-import "react-calendar/dist/Calendar.css";
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import Calendar from 'react-calendar';
+import { FollowList, FollowerList } from '.';
+import { LikeRecordList } from '../Record';
+import { switchTabAction } from '../../re-ducks/users/actions';
+import { getTabIndex } from '../../re-ducks/users/selectors';
+import { Store } from '../../re-ducks/store/types';
+import 'react-calendar/dist/Calendar.css';
 
 type Props = {
   uid: number;

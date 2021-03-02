@@ -1,5 +1,5 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import {
   RecordEdit,
   RecordList,
@@ -7,9 +7,9 @@ import {
   SignUp,
   UserDetails,
   UserEdit,
-} from "./templates";
-import Auth from "./Auth";
-import Record from "./Record";
+} from './templates';
+import Auth from './Auth';
+import Record from './Record';
 
 const Router: React.FC = () => {
   return (

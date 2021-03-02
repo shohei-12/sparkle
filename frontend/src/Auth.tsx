@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Store } from "./re-ducks/store/types";
-import { getIsSignedIn, getTabIndex } from "./re-ducks/users/selectors";
-import { listenAuthState } from "./re-ducks/users/operations";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Store } from './re-ducks/store/types';
+import { getIsSignedIn, getTabIndex } from './re-ducks/users/selectors';
+import { listenAuthState } from './re-ducks/users/operations';
 
 const Auth: React.FC = ({ children }: any) => {
   const dispatch = useDispatch();
