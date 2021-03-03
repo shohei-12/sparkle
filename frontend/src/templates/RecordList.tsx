@@ -4,6 +4,7 @@ import axios from 'axios';
 import { push } from 'connected-react-router';
 import InfiniteScroll from 'react-infinite-scroller';
 import ReactLoading from 'react-loading';
+import BackToTopButton from '../components/BackToTopButton';
 import { switchTabAction } from '../re-ducks/users/actions';
 import { likeRecord, unlikeRecord } from '../re-ducks/records/operations';
 import { addRecordsAction } from '../re-ducks/records/actions';
@@ -54,7 +55,13 @@ const RecordList: React.FC = () => {
   const records = getRecords(selector);
   const start = getStart(selector);
   const dispatch = useDispatch();
+
   const [hasMore, setHasMore] = useState(true);
+  const [hidden, setHidden] = useState(true);
+
+  window.onscroll = () => {
+    window.pageYOffset > 200 ? setHidden(false) : setHidden(true);
+  };
 
   const goRecordDetailsPage = useCallback(
     (author_id: number, dateString: string) => {
@@ -93,82 +100,90 @@ const RecordList: React.FC = () => {
   }, [start, dispatch]);
 
   return (
-    <InfiniteScroll
-      loadMore={get20Records}
-      hasMore={hasMore}
-      loader={
-        <ReactLoading key={0} className="loader" type="spin" color="#2196f3" />
-      }
-    >
-      {records.length > 0 &&
-        records.map((ele, i) => (
-          <Card
-            key={i}
-            className="inline-block pointer-h record"
-            onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
-          >
-            <CardHeader
-              avatar={
-                <Avatar>
-                  <img
-                    className={classes.profile}
-                    src={ele.profile.url ? ele.profile.url : NoProfile}
-                    alt="プロフィール画像"
-                    onClick={(
-                      e: React.MouseEvent<HTMLImageElement, MouseEvent>
-                    ) => {
-                      e.stopPropagation();
-                      dispatch(switchTabAction(0));
-                      dispatch(push(`/users/${ele.author_id}`));
-                    }}
-                  />
-                </Avatar>
-              }
-              title={ele.author}
-              subheader={ele.date}
-            />
-            <CardMedia
-              className={classes.media}
-              image={ele.appearance ? ele.appearance.image.url : NoImage}
-            />
-            <CardContent className={classes.cardContent}>
-              詳細を見る
-            </CardContent>
-            <div className={classes.iconArea}>
-              {ele.liking ? (
-                <Tooltip title="いいね解除">
-                  <IconButton
-                    aria-label="いいね解除"
-                    onClick={(
-                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                    ) => {
-                      e.stopPropagation();
-                      dispatch(unlikeRecord(ele.record_id, i));
-                    }}
-                  >
-                    <FavoriteIcon className={classes.unlikeIcon} />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Tooltip title="いいね">
-                  <IconButton
-                    aria-label="いいね"
-                    onClick={(
-                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                    ) => {
-                      e.stopPropagation();
-                      dispatch(likeRecord(ele.record_id, i));
-                    }}
-                  >
-                    <FavoriteIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <span>{ele.likes}</span>
-            </div>
-          </Card>
-        ))}
-    </InfiniteScroll>
+    <>
+      <InfiniteScroll
+        loadMore={get20Records}
+        hasMore={hasMore}
+        loader={
+          <ReactLoading
+            key={0}
+            className="loader"
+            type="spin"
+            color="#2196f3"
+          />
+        }
+      >
+        {records.length > 0 &&
+          records.map((ele, i) => (
+            <Card
+              key={i}
+              className="inline-block pointer-h record"
+              onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
+            >
+              <CardHeader
+                avatar={
+                  <Avatar>
+                    <img
+                      className={classes.profile}
+                      src={ele.profile.url ? ele.profile.url : NoProfile}
+                      alt="プロフィール画像"
+                      onClick={(
+                        e: React.MouseEvent<HTMLImageElement, MouseEvent>
+                      ) => {
+                        e.stopPropagation();
+                        dispatch(switchTabAction(0));
+                        dispatch(push(`/users/${ele.author_id}`));
+                      }}
+                    />
+                  </Avatar>
+                }
+                title={ele.author}
+                subheader={ele.date}
+              />
+              <CardMedia
+                className={classes.media}
+                image={ele.appearance ? ele.appearance.image.url : NoImage}
+              />
+              <CardContent className={classes.cardContent}>
+                詳細を見る
+              </CardContent>
+              <div className={classes.iconArea}>
+                {ele.liking ? (
+                  <Tooltip title="いいね解除">
+                    <IconButton
+                      aria-label="いいね解除"
+                      onClick={(
+                        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                      ) => {
+                        e.stopPropagation();
+                        dispatch(unlikeRecord(ele.record_id, i));
+                      }}
+                    >
+                      <FavoriteIcon className={classes.unlikeIcon} />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="いいね">
+                    <IconButton
+                      aria-label="いいね"
+                      onClick={(
+                        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                      ) => {
+                        e.stopPropagation();
+                        dispatch(likeRecord(ele.record_id, i));
+                      }}
+                    >
+                      <FavoriteIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                <span>{ele.likes}</span>
+              </div>
+            </Card>
+          ))}
+      </InfiniteScroll>
+      {hidden || <BackToTopButton />}
+    </>
   );
 };
 
