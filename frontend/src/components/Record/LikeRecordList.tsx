@@ -133,15 +133,24 @@ const LikeRecordList: React.FC<Props> = (props) => {
       {likeRecords &&
         likeRecords.length > 0 &&
         likeRecords.map((ele, i) => (
-          <Card key={i} className="inline-block like-record">
+          <Card
+            key={i}
+            className="inline-block pointer-h like-record"
+            onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
+          >
             <CardHeader
               avatar={
                 <Avatar>
                   <img
-                    className={`${classes.profile} pointer-h`}
+                    className={classes.profile}
                     src={ele.profile.url ? ele.profile.url : NoProfile}
                     alt="プロフィール画像"
-                    onClick={() => goUserDetailsPage(ele.author_id)}
+                    onClick={(
+                      e: React.MouseEvent<HTMLImageElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
+                      goUserDetailsPage(ele.author_id);
+                    }}
                   />
                 </Avatar>
               }
@@ -152,10 +161,7 @@ const LikeRecordList: React.FC<Props> = (props) => {
               className={classes.media}
               image={ele.appearance ? ele.appearance.image.url : NoImage}
             />
-            <CardContent
-              className={`${classes.cardContent} pointer-h`}
-              onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
-            >
+            <CardContent className={classes.cardContent}>
               詳細を見る
             </CardContent>
             <div className={classes.iconArea}>
@@ -163,7 +169,10 @@ const LikeRecordList: React.FC<Props> = (props) => {
                 <Tooltip title="いいね解除">
                   <IconButton
                     aria-label="いいね解除"
-                    onClick={() => {
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
                       dispatch(unlikeRecord(ele.record_id, i, uid));
                       uid === currentUserId && decreaseLikes();
                     }}
@@ -175,7 +184,12 @@ const LikeRecordList: React.FC<Props> = (props) => {
                 <Tooltip title="いいね">
                   <IconButton
                     aria-label="いいね"
-                    onClick={() => dispatch(likeRecord(ele.record_id, i, uid))}
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
+                      dispatch(likeRecord(ele.record_id, i, uid));
+                    }}
                   >
                     <FavoriteIcon />
                   </IconButton>
