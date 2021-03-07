@@ -138,25 +138,29 @@ const LikeRecordList: React.FC<Props> = (props) => {
             className="inline-block pointer-h like-record"
             onClick={() => goRecordDetailsPage(ele.author_id, ele.date)}
           >
-            <CardHeader
-              avatar={
-                <Avatar>
-                  <img
-                    className={classes.profile}
-                    src={ele.profile.url ? ele.profile.url : NoProfile}
-                    alt="プロフィール画像"
-                    onClick={(
-                      e: React.MouseEvent<HTMLImageElement, MouseEvent>
-                    ) => {
-                      e.stopPropagation();
-                      goUserDetailsPage(ele.author_id);
-                    }}
-                  />
-                </Avatar>
-              }
-              title={ele.author}
-              subheader={ele.date}
-            />
+            <Tooltip title="ユーザー詳細" placement="bottom-start">
+              <div>
+                <CardHeader
+                  avatar={
+                    <Avatar>
+                      <img
+                        className={classes.profile}
+                        src={ele.profile.url ? ele.profile.url : NoProfile}
+                        alt="プロフィール画像"
+                      />
+                    </Avatar>
+                  }
+                  title={ele.author}
+                  subheader={ele.date}
+                  onClick={(
+                    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+                  ) => {
+                    e.stopPropagation();
+                    goUserDetailsPage(ele.author_id);
+                  }}
+                />
+              </div>
+            </Tooltip>
             <CardMedia
               className={classes.media}
               image={ele.appearance ? ele.appearance.image.url : NoImage}
