@@ -44,10 +44,10 @@ const DetailsTab: React.FC<Props> = (props) => {
     <>
       <ul className="tabs">
         {tabIndex === 0 ? (
-          <li className="tab tab-selected">カレンダー</li>
+          <li className="tab tab-selected">記録</li>
         ) : (
           <li className="tab" onClick={() => dispatch(switchTabAction(0))}>
-            カレンダー
+            記録
           </li>
         )}
         {tabIndex === 1 ? (
