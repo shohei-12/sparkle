@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 20px',
     },
     switch: {
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
   })
 );
