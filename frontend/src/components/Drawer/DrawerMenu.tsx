@@ -211,7 +211,15 @@ const DrawerMenu = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItem button onClick={() => dispatch(push('/'))}>
+        <ListItem
+          button
+          onClick={() => {
+            dispatch(push('/'));
+            if (window.innerWidth < 960) {
+              handleDrawerToggle();
+            }
+          }}
+        >
           <ListItemIcon>
             <img className={classes.img} src={Sparkle} alt="画像" />
           </ListItemIcon>
