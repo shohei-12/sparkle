@@ -4,6 +4,7 @@ import axios from 'axios';
 import { push } from 'connected-react-router';
 import ReactLoading from 'react-loading';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import { flashAction } from '../re-ducks/flash/actions';
 import { Store } from '../re-ducks/store/types';
 import { getUserId } from '../re-ducks/users/selectors';
@@ -14,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     loading: {
       textAlign: 'center',
+    },
+    marginLeft: {
+      marginLeft: 10,
     },
   })
 );
@@ -323,6 +327,17 @@ const RecordEdit: React.FC = () => {
           />
           <div className="space-m"></div>
           <SecondaryButton text="更新する" onClick={updateRecord} />
+          <Button
+            classes={{
+              root: classes.marginLeft,
+            }}
+            variant="contained"
+            onClick={() =>
+              dispatch(push(`/record/${uid}/${year}/${month}/${day}`))
+            }
+          >
+            キャンセル
+          </Button>
           {isActive && (
             <div className={classes.loading}>
               <ReactLoading className="loader" type="spin" color="#2196f3" />

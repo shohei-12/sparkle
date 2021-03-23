@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
+import Button from '@material-ui/core/Button';
 import { ImageField, SecondaryButton, TextInput } from '../components/UIkit';
 import {
   getUserId,
@@ -18,6 +20,14 @@ import { flashAction } from '../re-ducks/flash/actions';
 import NoProfile from '../assets/img/no-profile.png';
 import { baseURL } from '../config';
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    marginLeft: {
+      marginLeft: 10,
+    },
+  })
+);
+
 type Inputs = {
   name: string;
   email: string;
@@ -27,6 +37,7 @@ type Inputs = {
 };
 
 const UserEdit: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: Store) => state);
   const uid = getUserId(selector);
@@ -346,6 +357,15 @@ const UserEdit: React.FC = () => {
         disabled={name && email && currentPassword ? false : true}
         onClick={handleSubmit(updateUser)}
       />
+      <Button
+        classes={{
+          root: classes.marginLeft,
+        }}
+        variant="contained"
+        onClick={() => dispatch(push(`/users/${uid}`))}
+      >
+        キャンセル
+      </Button>
     </div>
   );
 };
